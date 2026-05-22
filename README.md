@@ -3,11 +3,10 @@ Launch termianl..
 RUN.. 
 - cd '/Users/???/???/blank/' && exec ./start.sh
 ______
-built to be developed on live while terminal is running
+built for live develop and iteration workflows while terminal AI cli is running
 ______
 <img width="971" height="769" alt="Screenshot 2026-05-22 at 9 06 50 am" src="https://github.com/user-attachments/assets/417f5244-4102-4c82-969e-06b0428b42c0" />
 <img width="1178" height="852" alt="Screenshot 2026-05-22 at 9 49 11 am" src="https://github.com/user-attachments/assets/06a3f7f2-2f23-4c5d-8c1d-1fb72e9ec4a8" />
-______
 # blank
 
 Double-click **`Launch Blank.app`** or **`Launch.command`** in this folder to open Terminal, start the server, and open your browser.
