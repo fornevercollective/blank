@@ -633,6 +633,124 @@ function shellSingleQuote(inner) {
   return `'${String(inner).replace(/'/g, "'\\''")}'`;
 }
 
+/** @typedef {{ label: string, cmd: string, note?: string }} PlaybackCommand */
+
+export const MACOS_CAMERA_FFPLAY = 'ffplay -f avfoundation -i "0:none"';
+
+/** Local capture — no embed ads. @returns {PlaybackCommand[]} */
+export function cameraPlaybackOptions() {
+  return [
+    {
+      label: "macOS camera (ffplay)",
+      cmd: MACOS_CAMERA_FFPLAY,
+      note: "Terminal playback — not a watch-page embed",
+    },
+    {
+      label: "Camera · titled window",
+      cmd: `${MACOS_CAMERA_FFPLAY} -window_title blank-camera`,
+      note: "Same capture with a named ffplay window",
+    },
+  ];
+}
+
+/**
+ * Sample feeds from videos.json as direct ffplay (no browser player).
+ * @param {Array<{ title?: string, url: string }>} presets
+ * @returns {PlaybackCommand[]}
+ */
+export function feedPlaybackOptions(presets) {
+  const rows = [];
+  for (const preset of presets) {
+    const norm = normalizeUrl(preset.url);
+    if (!norm) continue;
+    const kind = classifyUrl(norm);
+    const tag = kind === "hls" ? "HLS · no ads" : "Direct · no embed";
+    rows.push({
+      label: `${preset.title || "Feed"} — ffplay`,
+      cmd: `ffplay -autoexit -window_title blank ${shellSingleQuote(norm)}`,
+      note: tag,
+    });
+  }
+  return rows;
+}
+
+/**
+ * ffplay / mustream / pipe paths that avoid YouTube/Vimeo embed commercial breaks.
+ * @param {VideoKind} kind
+ * @param {string} raw
+ * @param {Paths} paths
+ * @returns {PlaybackCommand[]}
+ */
+export function adFreePlaybackCommands(kind, raw, paths) {
+  const u = normalizeUrl(raw);
+  const q = shellSingleQuote(u);
+  const vf = getYtdlpVideoFormat();
+  /** @type {PlaybackCommand[]} */
+  const rows = [];
+
+  if (kind === "hls" || kind === "direct") {
+    rows.push({
+      label: "ffplay stream (recommended)",
+      cmd: `ffplay -autoexit -window_title blank ${q}`,
+      note: "Plays URL in ffplay — no iframe or site player",
+    });
+  }
+
+  if (
+    kind === "youtube" ||
+    kind === "vimeo" ||
+    kind === "tiktok" ||
+    kind === "page" ||
+    kind === "unknown"
+  ) {
+    rows.push({
+      label: "mustream → ffplay",
+      cmd: `mustream ${q}`,
+      note: "Resolves watch page; Terminal player — skips embed ads",
+    });
+    const openSh = `${paths.mustreamDesktop}/extras/open-in-mustream.sh`;
+    rows.push({
+      label: "open-in-mustream.sh (GUI)",
+      cmd: `bash ${shellSingleQuote(openSh)} ${u}`,
+      note: "MuStream app player — not the site embed",
+    });
+    rows.push({
+      label: "yt-dlp pipe → ffplay",
+      cmd: `yt-dlp -f "${vf}" -o - --no-playlist --quiet ${q} 2>/dev/null | ffplay -autoexit -window_title blank -`,
+      note: "Decoded stream to ffplay; no browser watch UI",
+    });
+  }
+
+  rows.push({
+    label: "mueee launch-mustream play",
+    cmd: `bash ${shellSingleQuote(`${paths.mueeeRoot}/launch-mustream.sh`)} play ${u}`,
+    note: "CLI resolve + ffplay via launch script",
+  });
+  rows.push({
+    label: "open-in-mustream CLI",
+    cmd: `MUSTREAM_USE_CLI=1 bash ${shellSingleQuote(`${paths.mustreamDesktop}/extras/open-in-mustream.sh`)} ${u}`,
+    note: "Terminal ffplay path from MuStream extras",
+  });
+
+  return rows;
+}
+
+/**
+ * @param {VideoKind} kind
+ * @param {string} raw
+ * @param {Paths} paths
+ * @returns {Array<{ section: string, items: PlaybackCommand[] }>}
+ */
+export function controlsPlaybackSections(kind, raw, paths) {
+  const adFree = adFreePlaybackCommands(kind, raw, paths);
+  const adCmds = new Set(adFree.map((r) => r.cmd));
+  const archive = commandsFor(kind, raw, paths).filter((r) => !adCmds.has(r.cmd));
+  return [
+    { section: "Play without embed ads", items: adFree },
+    { section: "Archive, probe, extras", items: archive },
+  ];
+}
+
 /** @param {VideoKind} kind @param {string} raw @param {Paths} paths */
 export function commandsFor(kind, raw, paths) {
   const u = normalizeUrl(raw);

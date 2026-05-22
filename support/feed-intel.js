@@ -2,8 +2,38 @@
  * Feed card intel: IA+ (program meta + scene segments) and Implementation (full transcript).
  */
 
-import { escapeHtml } from "./video-ingest.js";
+import { escapeHtml, getIngestApiOk, refreshIngestApiCheck } from "./video-ingest.js";
 import { qualityPayloadForApi } from "./ingest-settings.js";
+
+/** True on GitHub Pages / static hosts with no Node ingest API. */
+export function isStaticPreviewHost() {
+  const host = globalThis.location?.hostname || "";
+  return host.endsWith(".github.io") || host === "github.io";
+}
+
+/** @returns {string} */
+export function staticIntelNoticeHtml() {
+  const pages = isStaticPreviewHost();
+  const hostHint = pages
+    ? "This GitHub Pages build is UI-only."
+    : "Run <code>./start.sh</code> or <code>node support/server.mjs</code> from the repo.";
+  return `${hostHint} Video intel (scenes, captions, thumbnails) needs that server. The <strong>finished work</strong> for each card stays in the collapsible body below.`;
+}
+
+/** @param {HTMLElement} slot */
+export function renderStaticIntelNotice(slot) {
+  slot.dataset.state = "static";
+  slot.innerHTML = `<p class="card-intel-muted">${staticIntelNoticeHtml()}</p>`;
+}
+
+/**
+ * @param {{ iaSlot: HTMLElement|null, implSlot: HTMLElement|null, uxSlot?: HTMLElement|null, staggerSlot?: HTMLElement|null }} slots
+ */
+export function fillIntelSlotsUnavailable(slots) {
+  for (const slot of [slots.iaSlot, slots.implSlot, slots.uxSlot, slots.staggerSlot]) {
+    if (slot) renderStaticIntelNotice(slot);
+  }
+}
 
 /** @param {number} sec */
 export function formatIntelClock(sec) {
@@ -781,6 +811,9 @@ function bindSceneCards(root, pageUrl) {
 
 /** @param {string} pageUrl */
 export async function requestVideoIntel(pageUrl) {
+  if (getIngestApiOk() === false) {
+    throw new Error("Intel API unavailable (static preview)");
+  }
   const res = await fetch("/api/ingest/intel", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -788,6 +821,11 @@ export async function requestVideoIntel(pageUrl) {
   });
   const data = await res.json().catch(() => ({}));
   if (!res.ok || !data.ok) {
+    if (res.status === 405) {
+      throw new Error(
+        "Intel API not running — restart with ./start.sh (POST /api/ingest/intel)",
+      );
+    }
     throw new Error(data.error || `intel failed (${res.status})`);
   }
   return data;
@@ -1027,6 +1065,17 @@ export function renderImplIntel(slot, intel) {
  * @param {{ onIntel?: (intel: object) => void }} [hooks]
  */
 export async function refreshFeedIntel(pageUrl, slots, hooks = {}) {
+  const apiOk =
+    getIngestApiOk() === true
+      ? true
+      : getIngestApiOk() === false
+        ? false
+        : await refreshIngestApiCheck();
+  if (!apiOk) {
+    fillIntelSlotsUnavailable(slots);
+    return null;
+  }
+
   for (const slot of [slots.iaSlot, slots.implSlot, slots.uxSlot, slots.staggerSlot]) {
     if (slot) setSlotState(slot, "loading");
   }
@@ -1041,6 +1090,14 @@ export async function refreshFeedIntel(pageUrl, slots, hooks = {}) {
     return intel;
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
+    const staticPreview =
+      msg.includes("static preview") ||
+      msg.includes("Intel API not running") ||
+      msg.includes("405");
+    if (staticPreview) {
+      fillIntelSlotsUnavailable(slots);
+      return null;
+    }
     for (const slot of [slots.iaSlot, slots.implSlot, slots.uxSlot, slots.staggerSlot]) {
       if (slot) setSlotState(slot, "error", msg);
     }

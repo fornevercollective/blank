@@ -233,8 +233,26 @@
             </div>
           </div>
           <div class="ffplay-toolbar" role="toolbar" aria-label="Playback controls">
-            <button type="button" class="ffplay-tool-btn" id="ffplay-camera">camera</button>
-            <button type="button" class="ffplay-tool-btn" id="ffplay-feed">feed</button>
+            <button
+              type="button"
+              class="ffplay-tool-btn"
+              id="ffplay-camera"
+              title="Local camera ffplay — no embed ads"
+              aria-haspopup="menu"
+              aria-controls="ffplay-popout"
+            >
+              camera
+            </button>
+            <button
+              type="button"
+              class="ffplay-tool-btn"
+              id="ffplay-feed"
+              title="Ad-free feed streams (ffplay); double-click to queue default"
+              aria-haspopup="menu"
+              aria-controls="ffplay-popout"
+            >
+              feed
+            </button>
             <button
               type="button"
               class="ffplay-tool-btn"
@@ -242,6 +260,7 @@
               aria-expanded="false"
               aria-haspopup="menu"
               aria-controls="ffplay-popout"
+              title="ffplay / mustream / yt-dlp — play without site commercials"
             >
               controls
             </button>

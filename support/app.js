@@ -20,6 +20,11 @@ import {
   renderIngestActions,
   buildIngestChecklist,
   commandsFor,
+  cameraPlaybackOptions,
+  feedPlaybackOptions,
+  adFreePlaybackCommands,
+  controlsPlaybackSections,
+  MACOS_CAMERA_FFPLAY,
   kindLabel,
   readQueue,
   writeQueue,
@@ -42,6 +47,7 @@ import {
   feedIntelSlotKind,
   refreshFeedIntel,
   deriveShowFromIntel,
+  fillIntelSlotsUnavailable,
 } from "./feed-intel.js";
 import {
   initPhraseSearch,
@@ -138,7 +144,7 @@ function initQualitySettings() {
 }
 
 const STAGGER_MS = 480;
-const CAMERA_CMD = 'ffplay -f avfoundation -i "0:none"';
+const CAMERA_CMD = MACOS_CAMERA_FFPLAY;
 const STORAGE_KEY = "blank.collab.live.v1";
 
 /** Fallback when thread.json cannot be fetched (offline or file missing) */
@@ -715,7 +721,7 @@ function syncFeedIntelFromQueue() {
   intelSyncTimer = window.setTimeout(() => void syncFeedIntelNow(), 500);
 }
 
-function syncFeedIntelNow() {
+async function syncFeedIntelNow() {
   const slots = getFeedIntelSlots();
   if (!slots.iaSlot && !slots.implSlot && !slots.uxSlot && !slots.staggerSlot) return;
   const pageUrl = getWatchUrlForIntel();
@@ -736,6 +742,13 @@ function syncFeedIntelNow() {
   ) {
     return;
   }
+  const apiOk = await refreshIngestApiCheck();
+  if (!apiOk) {
+    lastIntelSyncUrl = pageUrl;
+    fillIntelSlotsUnavailable(slots);
+    return;
+  }
+
   lastIntelSyncUrl = pageUrl;
   void refreshFeedIntel(pageUrl, slots, {
     onIntel(intel) {
@@ -1134,6 +1147,8 @@ function initLiveProgram() {
   window.setInterval(advanceGuide, 5200);
 }
 
+/** @typedef {'camera' | 'feed' | 'controls'} FfplayToolbarMode */
+
 function initFfplayMenu(ingest) {
   const wrap = document.getElementById("ffplay-wrap");
   const controlsBtn = document.getElementById("ffplay-controls");
@@ -1144,47 +1159,50 @@ function initFfplayMenu(ingest) {
   const hint = document.getElementById("ffplay-popout-hint");
   if (!wrap || !controlsBtn || !pop || !menu) return;
 
+  /** @type {FfplayToolbarMode} */
+  let toolbarMode = "controls";
+
+  const toolbarBtns = /** @type {Record<FfplayToolbarMode, HTMLButtonElement | null>} */ ({
+    camera: cameraBtn instanceof HTMLButtonElement ? cameraBtn : null,
+    feed: feedBtn instanceof HTMLButtonElement ? feedBtn : null,
+    controls: controlsBtn,
+  });
+
+  function setToolbarActive(mode) {
+    for (const [key, btn] of Object.entries(toolbarBtns)) {
+      if (!btn) continue;
+      const on = key === mode && !pop.hidden;
+      btn.classList.toggle("is-active", on);
+      btn.classList.toggle("is-open", on);
+      if (key === "controls") {
+        btn.setAttribute("aria-expanded", on ? "true" : "false");
+      }
+    }
+  }
+
   function closeFfplay() {
     pop.hidden = true;
+    setToolbarActive(toolbarMode);
     controlsBtn.classList.remove("is-open");
     controlsBtn.setAttribute("aria-expanded", "false");
+    for (const btn of Object.values(toolbarBtns)) {
+      btn?.classList.remove("is-open", "is-active");
+    }
   }
 
-  function fillPopout() {
-    menu.innerHTML = "";
-    const active = ingest.getActive();
-    if (!active) {
-      if (hint) hint.textContent = "Queue a URL in Video ingest — or use camera / feed shortcuts.";
-      const fallback = [
-        { label: "macOS camera", cmd: CAMERA_CMD },
-        {
-          label: "Sample HLS (Apple)",
-          cmd: 'ffplay -autoexit "https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_fmp4/master.m3u8"',
-        },
-      ];
-      fallback.forEach(({ label, cmd }) => menu.appendChild(makeFfplayItem(label, cmd)));
-      return;
-    }
-    const norm = normalizeUrl(active.url);
-    const kind = classifyUrl(norm);
-    if (hint) {
-      hint.textContent = `${kindLabel(kind)} · click to copy Terminal commands.`;
-    }
-    const paths = ingest.getPaths();
-    commandsFor(kind, norm, paths).forEach(({ label, cmd }) => {
-      menu.appendChild(makeFfplayItem(label, cmd));
-    });
-    menu.appendChild(makeFfplayItem("macOS camera", CAMERA_CMD));
-  }
-
-  function makeFfplayItem(title, cmd) {
+  /** @param {{ label: string, cmd: string, note?: string }} row */
+  function makeFfplayItem(row) {
+    const { label, cmd, note } = row;
     const li = document.createElement("li");
     li.setAttribute("role", "none");
     const btn = document.createElement("button");
     btn.type = "button";
     btn.setAttribute("role", "menuitem");
     btn.className = "ffplay-item";
-    btn.innerHTML = `<span class="ffplay-item-title">${escapeHtml(title)}</span><code class="ffplay-item-cmd">${escapeHtml(cmd)}</code>`;
+    const noteHtml = note
+      ? `<span class="ffplay-item-note">${escapeHtml(note)}</span>`
+      : "";
+    btn.innerHTML = `<span class="ffplay-item-title">${escapeHtml(label)}</span>${noteHtml}<code class="ffplay-item-cmd">${escapeHtml(cmd)}</code>`;
     btn.addEventListener("click", async (ev) => {
       ev.stopPropagation();
       await copyText(btn, cmd);
@@ -1193,32 +1211,120 @@ function initFfplayMenu(ingest) {
     return li;
   }
 
-  function openFfplay() {
-    fillPopout();
+  /** @param {string} title */
+  function appendSection(title) {
+    const li = document.createElement("li");
+    li.className = "ffplay-menu-section";
+    li.setAttribute("role", "presentation");
+    li.textContent = title;
+    menu.appendChild(li);
+  }
+
+  /** @param {FfplayToolbarMode} mode */
+  function fillPopout(mode) {
+    menu.innerHTML = "";
+    const active = ingest.getActive();
+    const paths = ingest.getPaths();
+    const presets = ingest.getPresets?.() || [];
+
+    if (mode === "camera") {
+      if (hint) {
+        hint.textContent =
+          "Local ffplay capture — no watch-page embed or commercials. Click a line to copy, then run in Terminal.";
+      }
+      appendSection("Camera");
+      cameraPlaybackOptions().forEach((row) => menu.appendChild(makeFfplayItem(row)));
+      return;
+    }
+
+    if (mode === "feed") {
+      if (hint) {
+        hint.textContent =
+          "Ad-free sample streams (ffplay) plus queued URL. Queue a row to refresh active-stream commands.";
+      }
+      const feedRows = feedPlaybackOptions(presets);
+      if (feedRows.length) {
+        appendSection("Sample feeds (no embed)");
+        feedRows.forEach((row) => menu.appendChild(makeFfplayItem(row)));
+      }
+      if (active?.url) {
+        const norm = normalizeUrl(active.url);
+        const kind = classifyUrl(norm);
+        appendSection(`Active queue · ${kindLabel(kind)}`);
+        adFreePlaybackCommands(kind, norm, paths).forEach((row) =>
+          menu.appendChild(makeFfplayItem(row)),
+        );
+      } else if (!feedRows.length) {
+        const li = document.createElement("li");
+        li.className = "ffplay-menu-empty";
+        li.textContent = "Queue a URL in Video ingest for active-stream ffplay commands.";
+        menu.appendChild(li);
+      }
+      return;
+    }
+
+    if (!active?.url) {
+      if (hint) {
+        hint.textContent =
+          "Queue a URL for ad-free ffplay/mustream commands — or use camera / feed.";
+      }
+      appendSection("No queue — samples");
+      feedPlaybackOptions(presets).forEach((row) => menu.appendChild(makeFfplayItem(row)));
+      cameraPlaybackOptions().forEach((row) => menu.appendChild(makeFfplayItem(row)));
+      return;
+    }
+
+    const norm = normalizeUrl(active.url);
+    const kind = classifyUrl(norm);
+    if (hint) {
+      hint.textContent = `${kindLabel(kind)} · ffplay/mustream/ffmpeg — play without site embed ads. Click to copy.`;
+    }
+    for (const { section, items } of controlsPlaybackSections(kind, norm, paths)) {
+      appendSection(section);
+      items.forEach((row) => menu.appendChild(makeFfplayItem(row)));
+    }
+  }
+
+  /** @param {FfplayToolbarMode} mode */
+  function openFfplay(mode) {
+    toolbarMode = mode;
+    fillPopout(mode);
     pop.hidden = false;
-    controlsBtn.classList.add("is-open");
-    controlsBtn.setAttribute("aria-expanded", "true");
+    setToolbarActive(mode);
+    if (mode === "controls") {
+      controlsBtn.setAttribute("aria-expanded", "true");
+    }
+  }
+
+  function toggleFfplay(mode, btn) {
+    if (!pop.hidden && toolbarMode === mode) {
+      closeFfplay();
+      btn?.focus();
+      return;
+    }
+    openFfplay(mode);
   }
 
   controlsBtn.addEventListener("click", (e) => {
     e.stopPropagation();
-    if (pop.hidden) openFfplay();
-    else closeFfplay();
+    toggleFfplay("controls", controlsBtn);
   });
 
   cameraBtn?.addEventListener("click", (e) => {
     e.stopPropagation();
-    closeFfplay();
-    copyText(cameraBtn, CAMERA_CMD);
+    toggleFfplay("camera", cameraBtn);
   });
 
-  feedBtn?.addEventListener("click", async (e) => {
+  feedBtn?.addEventListener("click", (e) => {
+    e.stopPropagation();
+    toggleFfplay("feed", feedBtn);
+  });
+
+  feedBtn?.addEventListener("dblclick", async (e) => {
     e.stopPropagation();
     closeFfplay();
     const mainInput = document.getElementById("header-prompt-input");
-    if (mainInput instanceof HTMLInputElement) {
-      mainInput.focus();
-    }
+    if (mainInput instanceof HTMLInputElement) mainInput.focus();
     const preset = ingest.getDefaultFeedUrl();
     if (preset) {
       ingest.queueUrl(preset.url, { title: preset.title, notesHtml: preset.notesHtml });
@@ -1246,8 +1352,9 @@ function initFfplayMenu(ingest) {
   document.addEventListener("keydown", (e) => {
     if (e.key !== "Escape" || pop.hidden) return;
     e.preventDefault();
+    const btn = toolbarBtns[toolbarMode] || controlsBtn;
     closeFfplay();
-    controlsBtn.focus();
+    btn?.focus();
   });
 }
 
@@ -1669,6 +1776,7 @@ function initVideoIngest() {
     queueUrl,
     getActive: () => resolveActiveItem(readQueue()),
     getPaths,
+    getPresets: () => presets,
     async reload() {
       await mountPresets();
       redraw(readQueue());
@@ -1718,6 +1826,7 @@ async function main() {
   initQualitySettings();
   initHeaderPromptScroll();
   initHeaderPromptsMeta();
+  await refreshIngestApiCheck();
   const ingest = initVideoIngest();
   initHeaderRail(ingest);
   const { merged, activeIndex } = await loadThread();

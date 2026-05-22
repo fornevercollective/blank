@@ -683,6 +683,24 @@ body.drawer-open .app {
   border-bottom: 1px solid var(--line-subtle);
 }
 
+.ffplay-menu-section {
+  padding: 0.4rem 0.75rem 0.25rem;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  background: var(--bone-wash);
+  border-bottom: 1px solid var(--line-subtle);
+}
+
+.ffplay-menu-empty {
+  padding: 0.55rem 0.75rem;
+  font-size: 0.68rem;
+  line-height: 1.4;
+  color: var(--ink-mute);
+}
+
 .ffplay-menu li:last-child {
   border-bottom: none;
 }
@@ -713,11 +731,24 @@ body.drawer-open .app {
 }
 
 .ffplay-item-title {
+  display: block;
   font-size: 0.72rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: var(--stamp);
+  margin-bottom: 0.15rem;
+}
+
+.ffplay-item-note {
+  display: block;
+  font-size: 0.62rem;
+  line-height: 1.35;
+  color: var(--ink-mute);
+  margin-bottom: 0.25rem;
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 400;
 }
 
 .ffplay-item-cmd {
