@@ -2,6 +2,8 @@
 
 Static **index.html** and **server.mjs** live here. The web root for the server is this directory.
 
+**Prerequisites, download vs deploy, and live capability matrix:** see **[../README.md](../README.md)** (root).
+
 **Run from project root:**
 
 ```bash

@@ -368,6 +368,69 @@ export function findCrossLayoutOverlaps(query, index) {
   };
 }
 
+/**
+ * Per-layout word-overlap % for the layout picker (shadow lexicon + corpus cross-ref).
+ * @param {string} query
+ * @param {Array<{ text: string, source?: string }>} index
+ * @returns {Record<string, number | null>}
+ */
+export function layoutWordOverlapPercents(query, index) {
+  /** @type {Record<string, number | null>} */
+  const none = Object.fromEntries(LAYOUT_RING_ORDER.map((id) => [id, null]));
+  const q = query.trim();
+  if (!q || q.length < 2) return none;
+
+  const hasIndex = Array.isArray(index) && index.length > 0;
+  const { layouts } = crossLayoutTransliterations(q);
+  const vocab = hasIndex ? vocabularyFromIndex(index) : new Map();
+  const dicts = buildLayoutDictionaries(vocab);
+  const cross = hasIndex
+    ? findCrossLayoutOverlaps(q, index)
+    : { overlaps: [], shadowHits: [] };
+
+  /** @type {Record<string, number>} */
+  const corpusHits = Object.fromEntries(LAYOUT_RING_ORDER.map((id) => [id, 0]));
+  for (const h of cross.shadowHits || []) {
+    for (const id of LAYOUT_RING_ORDER) {
+      if (KEYBOARD_LAYOUTS[id].name === h.layout) corpusHits[id] += 1;
+    }
+  }
+  for (const o of cross.overlaps || []) {
+    for (const id of LAYOUT_RING_ORDER) {
+      if (String(o.detail || "").includes(KEYBOARD_LAYOUTS[id].name)) {
+        corpusHits[id] += o.count || 1;
+      }
+    }
+  }
+
+  const vocabN = Math.max(1, vocab.size);
+  /** @type {Record<string, number | null>} */
+  const out = { ...none };
+
+  for (const id of LAYOUT_RING_ORDER) {
+    const shadow = layouts[id].text.replace(/·/g, "");
+    if (shadow.length < 2) {
+      out[id] = 0;
+      continue;
+    }
+
+    const lexHits = extractWordsFromShadow(shadow, dicts[id]);
+    let covered = 0;
+    for (const h of lexHits) covered += h.word.length;
+    const shadowPct = Math.round((covered / shadow.length) * 100);
+
+    if (!hasIndex) {
+      out[id] = Math.min(100, shadowPct);
+      continue;
+    }
+
+    const corpusPct = Math.min(100, Math.round((corpusHits[id] / vocabN) * 100));
+    out[id] = Math.min(100, Math.round(shadowPct * 0.55 + corpusPct * 0.45));
+  }
+
+  return out;
+}
+
 /** @param {string} q */
 function parseQueryTerms(q) {
   const trimmed = q.trim();

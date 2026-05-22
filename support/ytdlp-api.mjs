@@ -228,10 +228,16 @@ function fetchUpstream(url, headers = {}) {
 
 /** @param {import("node:http").IncomingMessage} req @param {import("node:http").ServerResponse} res */
 export async function handleIngestApi(req, res, urlPath) {
-  const { handleIntelApi, handleSceneThumbApi, handleSceneAudioApi, handlePoseThumbApi } =
-    await import("./video-intel.mjs");
+  const {
+    handleIntelApi,
+    handleSceneThumbApi,
+    handleSceneAudioApi,
+    handlePoseThumbApi,
+    handleSceneAnalysisThumbApi,
+  } = await import("./video-intel.mjs");
   if (await handleSceneThumbApi(req, res)) return true;
   if (await handlePoseThumbApi(req, res)) return true;
+  if (await handleSceneAnalysisThumbApi(req, res)) return true;
   if (await handleSceneAudioApi(req, res)) return true;
   if (await handleIntelApi(req, res, urlPath)) return true;
 

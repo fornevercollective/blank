@@ -469,6 +469,13 @@ function keyHeat(key, heatmap) {
   return heatmap[key] ?? heatmap[key.toLowerCase()] ?? heatmap[key.toUpperCase()] ?? 0;
 }
 
+/** Minimum main keyboard canvas height (css px); matches --kb-viz-h (6.5rem). */
+const MAIN_KB_MIN_H = 88;
+/** kbatch.html thermal/contrails key row pitch: keyH = canvasH / 4.5 */
+const KBATCH_KEY_ROW_DIV = 4.5;
+const KBATCH_KEY_TOP_PAD = 4;
+const KBATCH_KEY_ROW_GAP = 3;
+
 /**
  * @param {number} W @param {number} H @param {string} layoutId
  */
@@ -478,8 +485,8 @@ function layoutGridMetrics(W, H, layoutId) {
   const maxCols = Math.max(...grid.map((row) => row.length));
   const rowCount = grid.length;
   const keyW = W / (maxCols + 1.1);
-  const keyH = (H - 18) / rowCount;
-  const padL = (W - maxCols * keyW - 0.38 * keyW * (rowCount - 1)) / 2;
+  const keyH = Math.max(12, (H - KBATCH_KEY_TOP_PAD - 2) / KBATCH_KEY_ROW_DIV);
+  const padL = (W - maxCols * keyW - 0.4 * keyW * (rowCount - 1)) / 2;
   return { keyW, keyH, padL, displayRows, grid, maxCols, rowCount };
 }
 
@@ -545,7 +552,8 @@ function drawLayoutSpiral(
 
   for (const p of nodes) {
     const count = keyHeat(p.key, heatmap);
-    const nodeR = large ? 3.5 + p.intensity * 7 : 1.8 + p.intensity * 3;
+    const mini = !large && maxR < 11;
+    const nodeR = large ? 3.5 + p.intensity * 7 : (mini ? 0.9 : 1.8) + p.intensity * (mini ? 1.5 : 3);
     if (count > 0) {
       ctx.fillStyle = KB_THEME.spiral(0.12 + p.intensity * 0.22);
       ctx.beginPath();
@@ -559,7 +567,7 @@ function drawLayoutSpiral(
 
     const label = p.key.length > 1 ? p.key : p.key;
     ctx.fillStyle = count > 0 ? "#ffffff" : KB_THEME.inkMute;
-    ctx.font = `${large ? Math.max(13, 11 + p.intensity * 10) : Math.max(6, 5 + p.intensity * 4)}px ui-monospace, monospace`;
+    ctx.font = `${large ? Math.max(13, 11 + p.intensity * 10) : Math.max(mini ? 4 : 6, (mini ? 4 : 5) + p.intensity * (mini ? 2 : 4))}px ui-monospace, monospace`;
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     ctx.fillText(label, p.x, p.y);
@@ -634,7 +642,7 @@ export function renderGeometricOverlay(canvas, heatmap, keyRectsOut, opts = {}) 
   const layoutName = KEYBOARD_LAYOUTS[layoutId]?.name || layoutId;
   const host = canvas.parentElement;
   const W = host?.clientWidth || 400;
-  const H = Math.max(220, host?.clientHeight || 220);
+  const H = Math.max(MAIN_KB_MIN_H, host?.clientHeight || MAIN_KB_MIN_H);
   const dpr = Math.min(2, devicePixelRatio || 1);
   canvas.width = Math.floor(W * dpr);
   canvas.height = Math.floor(H * dpr);
@@ -652,13 +660,15 @@ export function renderGeometricOverlay(canvas, heatmap, keyRectsOut, opts = {}) 
   /** @type {KeyRect[]} */
   const rects = [];
 
+  const compact = H < 140;
+
   grid.forEach((gridRow, ri) => {
-    const stagger = ri * 0.38 * keyW;
+    const stagger = ri * 0.4 * keyW;
     gridRow.forEach((_slot, ci) => {
       const baseKey = displayRows[ri]?.[ci];
       if (!baseKey) return;
       const x = padL + stagger + ci * keyW;
-      const y = 8 + ri * keyH;
+      const y = KBATCH_KEY_TOP_PAD + ri * (keyH + KBATCH_KEY_ROW_GAP);
       const glyphs = glyphsAtKeyPosition(ri, ci);
       const cellHeat = Math.max(
         keyHeat(baseKey, heatmap),
@@ -666,11 +676,11 @@ export function renderGeometricOverlay(canvas, heatmap, keyRectsOut, opts = {}) 
       );
       const intensity = cellHeat / maxCount;
       const iw = keyW - 4;
-      const ih = keyH - 5;
+      const ih = keyH - 4;
       const kx = x + 2;
       const ky = y + 2;
-      const spiralCy = ky + ih * 0.4;
-      const labelCy = ky + ih * 0.84;
+      const spiralCy = ky + ih * (compact ? 0.34 : 0.4);
+      const labelCy = ky + ih * (compact ? 0.8 : 0.84);
       const centerX = kx + iw / 2;
 
       rects.push({ x: kx, y: ky, w: iw, h: ih, r: ri, c: ci, baseKey });
@@ -691,15 +701,16 @@ export function renderGeometricOverlay(canvas, heatmap, keyRectsOut, opts = {}) 
       ctx.lineWidth = cellHeat > 0 ? 1.2 : 0.5;
       ctx.strokeRect(kx, ky, iw, ih);
 
-      const spiralR = Math.min(iw, ih * 0.72) * 0.44;
+      const spiralR = Math.min(iw, ih * 0.55) * (compact ? 0.34 : 0.44);
       drawLayoutSpiral(ctx, centerX, spiralCy, spiralR, glyphs, heatmap, maxCount);
 
       const baseLabel =
         baseKey.length > 1 ? baseKey.slice(0, 2) : baseKey.toUpperCase();
+      const labelStripH = ih * (compact ? 0.22 : 0.26);
       ctx.fillStyle = KB_THEME.keyLabelStrip;
-      ctx.fillRect(kx + 1, ky + ih - ih * 0.28, iw - 2, ih * 0.26);
+      ctx.fillRect(kx + 1, ky + ih - labelStripH, iw - 2, labelStripH);
       ctx.fillStyle = KB_THEME.ink;
-      ctx.font = `bold ${Math.max(10, ih * 0.22)}px ui-monospace, monospace`;
+      ctx.font = `bold ${Math.max(compact ? 7 : 10, ih * (compact ? 0.38 : 0.22))}px ui-monospace, monospace`;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       ctx.fillText(baseLabel, centerX, labelCy);
@@ -713,22 +724,24 @@ export function renderGeometricOverlay(canvas, heatmap, keyRectsOut, opts = {}) 
     keyRectsOut.push(...rects);
   }
 
-  ctx.fillStyle = KB_THEME.footnote;
-  ctx.font = "9px ui-monospace, monospace";
-  ctx.textAlign = "center";
-  ctx.fillText(
-    `${layoutName} · ${LAYOUT_RING_ORDER.length} layouts/key · click to enlarge`,
-    W / 2,
-    H - 5,
-  );
-  ctx.textAlign = "start";
+  if (!compact) {
+    ctx.fillStyle = KB_THEME.footnote;
+    ctx.font = "9px ui-monospace, monospace";
+    ctx.textAlign = "center";
+    ctx.fillText(
+      `${layoutName} · ${LAYOUT_RING_ORDER.length} layouts/key · click to enlarge`,
+      W / 2,
+      H - 5,
+    );
+    ctx.textAlign = "start";
+  }
 
   return rects;
 }
 
 /**
  * @param {HTMLElement} host
- * @param {{ getQuery: () => string, getIndexHits: () => object[] }} hooks
+ * @param {{ getQuery: () => string, getIndexHits: () => object[], getLayoutOverlapPercents?: () => Record<string, number | null> }} hooks
  */
 export function mountPhraseKeyboardViz(host, hooks) {
   if (!host || host.dataset.kbViz) return null;
@@ -736,27 +749,24 @@ export function mountPhraseKeyboardViz(host, hooks) {
 
   const wrap = document.createElement("div");
   wrap.className = "feed-phrase-kb";
+  const layoutOptionLabel = (id, pct) => {
+    const name = KEYBOARD_LAYOUTS[id].name;
+    return pct == null ? name : `${name} ${pct}%`;
+  };
   const layoutOptions = LAYOUT_RING_ORDER.map(
     (id) =>
-      `<option value="${escapeHtml(id)}"${id === BASE_LAYOUT_ID ? " selected" : ""}>${escapeHtml(KEYBOARD_LAYOUTS[id].name)}</option>`,
+      `<option value="${escapeHtml(id)}"${id === BASE_LAYOUT_ID ? " selected" : ""}>${escapeHtml(layoutOptionLabel(id, null))}</option>`,
   ).join("");
 
   wrap.innerHTML = `
     <div class="feed-phrase-kb-head">
       <span class="feed-phrase-kb-title">Geometric pattern</span>
-      <label class="feed-phrase-kb-layout-label">
-        <span class="sr-only">Keyboard layout</span>
-        <select id="feed-phrase-layout-select" class="feed-phrase-layout-select" aria-label="Keyboard layout mapping">${layoutOptions}</select>
-      </label>
-      <span class="feed-phrase-kb-meta" id="feed-phrase-kb-meta">QWERTY · spiral per key</span>
-    </div>
-    <div class="feed-phrase-kb-stage">
-      <aside class="feed-phrase-kb-rail" aria-label="Contrails and kbatch metrics">
-        <div class="feed-phrase-kb-rail-title">Contrails</div>
-        <div class="feed-phrase-kb-contrail-wrap">
-          <canvas id="feed-phrase-contrails" class="feed-phrase-kb-canvas feed-phrase-kb-canvas--contrail" aria-label="Typing path contrails for active layout"></canvas>
-        </div>
-        <dl class="feed-phrase-kb-stats">
+      <div class="feed-phrase-kb-toolbar">
+        <label class="feed-phrase-kb-layout-label">
+          <span class="sr-only">Keyboard layout</span>
+          <select id="feed-phrase-layout-select" class="feed-phrase-layout-select" aria-label="Keyboard layout mapping">${layoutOptions}</select>
+        </label>
+        <dl class="feed-phrase-kb-stats" aria-label="Typing metrics">
           <div><dt>WPM</dt><dd id="kb-s-wpm">0</dd></div>
           <div><dt>Efficiency</dt><dd id="kb-s-eff">0%</dd></div>
           <div><dt>Complexity</dt><dd id="kb-s-cpx">0%</dd></div>
@@ -770,6 +780,15 @@ export function mountPhraseKeyboardViz(host, hooks) {
           <div><dt>Stack</dt><dd id="kb-s-stack">idle</dd></div>
           <div><dt>Stream</dt><dd id="kb-s-stream">idle</dd></div>
         </dl>
+      </div>
+      <span class="feed-phrase-kb-meta" id="feed-phrase-kb-meta">QWERTY · spiral per key</span>
+    </div>
+    <div class="feed-phrase-kb-stage">
+      <aside class="feed-phrase-kb-rail" aria-label="Contrails">
+        <div class="feed-phrase-kb-rail-title">Contrails</div>
+        <div class="feed-phrase-kb-contrail-wrap">
+          <canvas id="feed-phrase-contrails" class="feed-phrase-kb-canvas feed-phrase-kb-canvas--contrail" aria-label="Typing path contrails for active layout"></canvas>
+        </div>
       </aside>
       <div class="feed-phrase-kb-canvas-wrap feed-phrase-kb-canvas-wrap--main">
         <canvas id="feed-phrase-geometric" class="feed-phrase-kb-canvas" aria-label="Keyboard with per-key multi-layout letter spirals. Click a key to enlarge."></canvas>
@@ -897,6 +916,7 @@ export function mountPhraseKeyboardViz(host, hooks) {
   const paint = () => {
     const q = hooks.getQuery().trim();
     const hits = hooks.getIndexHits();
+    refreshLayoutSelect(hooks.getLayoutOverlapPercents?.() ?? {});
     const phraseHm = buildPhraseLetterHeatmap(q, hits);
     lastAnalysis = analyzePhraseTyping(q || " ", activeLayoutId, phraseHm);
     lastHeatmap = lastAnalysis.heatmap;
@@ -939,6 +959,17 @@ export function mountPhraseKeyboardViz(host, hooks) {
           <span class="feed-phrase-xr-layouts">${escapeHtml(layouts)}</span></li>`;
       })
       .join("")}</ul>`;
+  };
+
+  const refreshLayoutSelect = (percents) => {
+    if (!(layoutSelect instanceof HTMLSelectElement)) return;
+    const selected = layoutSelect.value || activeLayoutId || BASE_LAYOUT_ID;
+    layoutSelect.innerHTML = LAYOUT_RING_ORDER.map(
+      (id) =>
+        `<option value="${escapeHtml(id)}">${escapeHtml(layoutOptionLabel(id, percents?.[id] ?? null))}</option>`,
+    ).join("");
+    layoutSelect.value = LAYOUT_RING_ORDER.includes(selected) ? selected : BASE_LAYOUT_ID;
+    activeLayoutId = layoutSelect.value;
   };
 
   if (layoutSelect instanceof HTMLSelectElement) {

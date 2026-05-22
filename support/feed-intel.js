@@ -4,6 +4,7 @@
 
 import { escapeHtml, getIngestApiOk, refreshIngestApiCheck } from "./video-ingest.js";
 import { qualityPayloadForApi } from "./ingest-settings.js";
+import { sceneAnalysisThumbApiUrl } from "./scene-analysis-api.js";
 
 /** True on GitHub Pages / static hosts with no Node ingest API. */
 export function isStaticPreviewHost() {
@@ -411,16 +412,27 @@ function enrichScenes(scenes, intel, pageUrl = "") {
           : parseVttStart(row.time);
       return Number.isFinite(t) && t >= sc.start && t < sc.end;
     });
-    return { ...sc, lines };
+    const analysis =
+      sc.analysis && typeof sc.analysis === "object"
+        ? sc.analysis
+        : pageUrl
+          ? {
+              sam: sceneAnalysisThumbApiUrl(pageUrl, sc.start, "sam"),
+              alpha: sceneAnalysisThumbApiUrl(pageUrl, sc.start, "alpha"),
+              watermark: sceneAnalysisThumbApiUrl(pageUrl, sc.start, "watermark"),
+              vectorscope: sceneAnalysisThumbApiUrl(pageUrl, sc.start, "vectorscope"),
+            }
+          : undefined;
+    return analysis ? { ...sc, lines, analysis } : { ...sc, lines };
   });
 }
 
-/** Light-track waveform: white surface, dark or multi-hue ribbon. */
-const WAVE_TRACK = "#ffffff";
-const WAVE_AXIS = "rgba(23, 23, 23, 0.12)";
-const WAVE_STROKE = "#171717";
-const WAVE_STROKE_PLACEHOLDER = "#737373";
-const WAVE_PLAYHEAD = "#171717";
+/** Light-track waveform on card surface. */
+const WAVE_TRACK = "#eceae6";
+const WAVE_AXIS = "rgba(23, 23, 23, 0.22)";
+const WAVE_STROKE = "#262626";
+const WAVE_STROKE_PLACEHOLDER = "#525252";
+const WAVE_PLAYHEAD = "#0a0a0a";
 
 /** @param {HTMLCanvasElement} canvas */
 function waveCanvasMetrics(canvas) {
@@ -465,9 +477,13 @@ function envelopeFromChannel(channel, pointCount) {
       const v = Math.abs(channel[j]);
       if (v > peak) peak = v;
     }
-    out.push(Math.min(1, peak * 1.15));
+    out.push(peak);
   }
-  return smoothWaveEnvelope(out);
+  const smoothed = smoothWaveEnvelope(out);
+  let max = 0;
+  for (const v of smoothed) if (v > max) max = v;
+  const gain = max > 1e-5 ? 0.92 / max : 1;
+  return smoothed.map((v) => Math.max(0.07, Math.min(1, v * gain)));
 }
 
 /** @param {number} pointCount */
@@ -587,14 +603,29 @@ function drawPeaks(canvas, channel) {
  * @param {number} startSec
  * @param {number} durSec
  */
+/** @param {HTMLCanvasElement} canvas @param {() => void} paint */
+function scheduleSceneWavePaints(canvas, paint) {
+  paint();
+  requestAnimationFrame(() => {
+    paint();
+    requestAnimationFrame(paint);
+  });
+  for (const ms of [0, 48, 160, 480]) {
+    window.setTimeout(paint, ms);
+  }
+}
+
 async function mountSceneWaveform(canvas, pageUrl, startSec, durSec) {
+  if (canvas.dataset.waveMounted === "1") return;
+  canvas.dataset.waveMounted = "1";
+
   const dur = Math.max(8, Math.min(45, durSec));
   const q = new URLSearchParams({
     url: pageUrl,
     t: String(Math.floor(startSec)),
     d: String(Math.floor(dur)),
   });
-  canvas.classList.add("card-scene-wave");
+  canvas.classList.add("card-scene-wave", "card-scene-wave--placeholder");
   canvas.setAttribute("role", "slider");
   canvas.setAttribute("aria-label", `Audio waveform ${formatIntelClock(startSec)} – click to scrub`);
   canvas.title = "Click waveform to scrub preview";
@@ -606,8 +637,8 @@ async function mountSceneWaveform(canvas, pageUrl, startSec, durSec) {
   let ro = null;
 
   const paint = () => {
-    const { w } = waveCanvasMetrics(canvas);
-    if (w < 4) return;
+    const { w, cssW } = waveCanvasMetrics(canvas);
+    if (cssW < 8) return;
     const env =
       envelope ?? placeholderWaveEnvelope(Math.max(32, Math.floor(w / 3)));
     drawSceneWave(canvas, env, { playhead, placeholder });
@@ -631,33 +662,41 @@ async function mountSceneWaveform(canvas, pageUrl, startSec, durSec) {
   if (typeof ResizeObserver !== "undefined") {
     ro = new ResizeObserver(() => paint());
     ro.observe(canvas);
+    const panel = canvas.closest(".card-scene-panel");
+    if (panel instanceof HTMLElement) ro.observe(panel);
   }
 
   const details = canvas.closest("details");
   details?.addEventListener("toggle", () => {
-    if (details.open) requestAnimationFrame(() => paint());
+    if (details.open) scheduleSceneWavePaints(canvas, paint);
   });
 
-  paint();
-  requestAnimationFrame(() => paint());
+  scheduleSceneWavePaints(canvas, paint);
 
   try {
     const res = await fetch(`/api/ingest/scene-audio?${q}`);
-    if (!res.ok) throw new Error("no audio");
+    if (!res.ok) throw new Error(`scene-audio ${res.status}`);
     const buf = await res.arrayBuffer();
-    const ctx = new AudioContext();
+    if (buf.byteLength < 128) throw new Error("scene-audio empty");
+    const Ctx = globalThis.AudioContext || globalThis.webkitAudioContext;
+    if (!Ctx) throw new Error("AudioContext unavailable");
+    const ctx = new Ctx();
+    if (ctx.state === "suspended") await ctx.resume();
     const audio = await ctx.decodeAudioData(buf.slice(0));
     await ctx.close();
     const { w } = waveCanvasMetrics(canvas);
-    envelope = envelopeFromChannel(audio.getChannelData(0), Math.max(32, Math.floor(w / 3)));
+    const ch = audio.getChannelData(0);
+    if (!ch?.length) throw new Error("no audio samples");
+    envelope = envelopeFromChannel(ch, Math.max(32, Math.floor(w / 3)));
     placeholder = false;
     canvas.classList.remove("card-scene-wave--placeholder");
     paint();
+    scheduleSceneWavePaints(canvas, paint);
   } catch {
     placeholder = true;
     envelope = null;
     canvas.classList.add("card-scene-wave--placeholder");
-    paint();
+    scheduleSceneWavePaints(canvas, paint);
   }
 }
 
@@ -671,7 +710,7 @@ function videoPosterFallback(pageUrl, intel) {
 
 /** @param {HTMLElement} root */
 function preloadSceneMedia(root) {
-  root.querySelectorAll(".card-scene-frame-img").forEach((el) => {
+  root.querySelectorAll(".card-scene-frame-img, .card-scene-analysis-img").forEach((el) => {
     if (!(el instanceof HTMLImageElement)) return;
     const mark = () => el.classList.add("is-loaded");
     el.addEventListener("load", mark, { once: true });
@@ -685,6 +724,37 @@ function preloadSceneMedia(root) {
     });
     if (el.complete && el.naturalWidth > 0) mark();
   });
+}
+
+/** @type {Array<{ id: string, cap: string }>} */
+const SCENE_ANALYSIS_SLOTS = [
+  { id: "sam", cap: "SAM" },
+  { id: "alpha", cap: "Alpha" },
+  { id: "watermark", cap: "WM" },
+  { id: "vectorscope", cap: "Scope" },
+];
+
+/** @param {object} sc */
+function sceneAnalysisStripHtml(sc) {
+  const analysis = sc.analysis && typeof sc.analysis === "object" ? sc.analysis : {};
+  const figures = SCENE_ANALYSIS_SLOTS.map(({ id, cap }) => {
+    const src = analysis[id];
+    if (!src) return "";
+    const label =
+      id === "sam"
+        ? "SegmentAnything"
+        : id === "alpha"
+          ? "Alpha Channels"
+          : id === "watermark"
+            ? "Watermark"
+            : "RGB Parade · Vectorscope";
+    return `<figure class="card-scene-media card-scene-media--analysis card-scene-media--${id}" aria-label="${escapeHtml(label)}">
+        <img class="card-scene-analysis-img" src="${escapeHtml(String(src))}" alt="" width="92" height="52" loading="lazy" decoding="async" />
+        <figcaption class="card-scene-media-cap" title="${escapeHtml(label)}"><span>${escapeHtml(cap)}</span></figcaption>
+      </figure>`;
+  }).join("");
+  if (!figures) return "";
+  return `<div class="card-scene-analysis-strip" role="group" aria-label="Scene analysis previews">${figures}</div>`;
 }
 
 /**
@@ -752,8 +822,9 @@ function sceneCardHtml(sc, i, capLabel, capAuto, posterFallback) {
       <div class="card-head card-scene-head">
         <h2 class="card-title">${escapeHtml(label)}</h2>
       </div>
+      ${sceneAnalysisStripHtml(sc)}
       <figure class="card-scene-media card-scene-media--pose" aria-label="IK pose placement estimate">
-        ${poseImg}
+        ${poseSvg}
         <figcaption class="card-scene-media-cap"><span>IK pose</span></figcaption>
       </figure>
       <span class="card-cta">${Math.round(dur)}s</span>
@@ -801,9 +872,9 @@ function bindSceneCards(root, pageUrl) {
 
     const canvas = seg.querySelector("canvas.card-scene-wave");
     if (canvas instanceof HTMLCanvasElement && pageUrl) {
-      requestAnimationFrame(() => {
-        void mountSceneWaveform(canvas, pageUrl, start, dur);
-      });
+      void mountSceneWaveform(canvas, pageUrl, start, dur);
+    } else if (canvas instanceof HTMLCanvasElement) {
+      drawPlaceholderWave(canvas);
     }
     mountPoseFromFrame(seg, pageUrl, start);
   });

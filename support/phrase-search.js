@@ -13,6 +13,7 @@ import {
   findCrossLayoutOverlaps,
   searchIndexWithCrossLayout,
   crossLayoutShadowMeanings,
+  layoutWordOverlapPercents,
 } from "./phrase-keyboard-cross.js";
 
 const WATCH_KEY = "blank.phrase.watch.v1";
@@ -281,42 +282,47 @@ export function initPhraseSearch(feedEl, hooks) {
   /** @type {{ repaint: () => void } | null} */
   let kbViz = null;
 
-  const section = document.createElement("section");
+  const section = document.createElement("details");
   section.id = "feed-phrase-search";
   section.className = "feed-phrase-search";
+  section.setAttribute("open", "");
   section.setAttribute("aria-label", "Phrase search across transcript, scenes, and queue");
   section.innerHTML = `
-    <form class="feed-phrase-form" id="feed-phrase-form">
-      <div class="feed-phrase-form-head">
-        <label class="feed-phrase-label" for="feed-phrase-input">Phrase search</label>
-        <span class="feed-phrase-hint">Transcript · scenes · queue · prompts</span>
-      </div>
-      <div class="feed-phrase-row">
-        <input
-          type="search"
-          id="feed-phrase-input"
-          class="feed-phrase-input"
-          name="phrase"
-          placeholder='e.g. "Nvidia" or balance of power'
-          autocomplete="off"
-          spellcheck="false"
-          enterkeyhint="search"
-        />
-        <button type="submit" class="feed-phrase-submit">Search</button>
-      </div>
-    </form>
-    <div id="feed-phrase-kb-host" class="feed-phrase-kb-host"></div>
-    <details class="feed-phrase-watch">
-      <summary>Listen for phrases</summary>
-      <p class="feed-phrase-watch-hint">One phrase per line — alerts when a match appears in loaded captions or new intel.</p>
-      <textarea id="feed-phrase-watch" class="feed-phrase-watch-input" rows="3" spellcheck="true"></textarea>
-    </details>
-    <div id="feed-phrase-alerts" class="feed-phrase-alerts" hidden></div>
-    <details id="feed-phrase-results" class="feed-phrase-results" hidden>
-      <summary id="feed-phrase-results-summary" class="feed-phrase-results-summary">Search results</summary>
-      <div id="feed-phrase-results-body" class="feed-phrase-results-body" role="list"></div>
-    </details>
-    <div id="feed-phrase-cross-overlaps" class="feed-phrase-cross-overlaps" hidden></div>
+    <summary class="feed-phrase-search-summary">
+      <span class="feed-phrase-search-chevron" aria-hidden="true"></span>
+      <span class="feed-phrase-label">Phrase search</span>
+      <span class="feed-phrase-hint">Transcript · scenes · queue · prompts</span>
+    </summary>
+    <div class="feed-phrase-search-inner">
+      <form class="feed-phrase-form" id="feed-phrase-form">
+        <div class="feed-phrase-row">
+          <label class="sr-only" for="feed-phrase-input">Phrase search</label>
+          <input
+            type="search"
+            id="feed-phrase-input"
+            class="feed-phrase-input"
+            name="phrase"
+            placeholder='e.g. "Nvidia" or balance of power'
+            autocomplete="off"
+            spellcheck="false"
+            enterkeyhint="search"
+          />
+          <button type="submit" class="feed-phrase-submit">Search</button>
+        </div>
+      </form>
+      <div id="feed-phrase-kb-host" class="feed-phrase-kb-host"></div>
+      <details class="feed-phrase-watch">
+        <summary>Listen for phrases</summary>
+        <p class="feed-phrase-watch-hint">One phrase per line — alerts when a match appears in loaded captions or new intel.</p>
+        <textarea id="feed-phrase-watch" class="feed-phrase-watch-input" rows="3" spellcheck="true"></textarea>
+      </details>
+      <div id="feed-phrase-alerts" class="feed-phrase-alerts" hidden></div>
+      <details id="feed-phrase-results" class="feed-phrase-results" hidden>
+        <summary id="feed-phrase-results-summary" class="feed-phrase-results-summary">Search results</summary>
+        <div id="feed-phrase-results-body" class="feed-phrase-results-body" role="list"></div>
+      </details>
+      <div id="feed-phrase-cross-overlaps" class="feed-phrase-cross-overlaps" hidden></div>
+    </div>
   `;
 
   const intro = feedEl.querySelector(".feed-intro");
@@ -348,6 +354,8 @@ export function initPhraseSearch(feedEl, hooks) {
     kbViz = mountPhraseKeyboardViz(kbHost, {
       getQuery: () => input.value,
       getIndexHits: () => lastSearchHits,
+      getLayoutOverlapPercents: () =>
+        layoutWordOverlapPercents(input.value.trim(), getIndex()),
     });
   }
 

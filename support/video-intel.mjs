@@ -32,6 +32,13 @@ function scenePoseThumbApiUrl(pageUrl, startSec) {
   return `/api/ingest/pose-thumb?${q}`;
 }
 
+import {
+  sceneAnalysisThumbApiUrl,
+  SCENE_ANALYSIS_KINDS,
+} from "./scene-analysis-api.js";
+
+export { sceneAnalysisThumbApiUrl, SCENE_ANALYSIS_KINDS };
+
 /** @param {string} s */
 function hashSeed(s) {
   let h = 2166136261;
@@ -129,8 +136,102 @@ export function buildPoseEstimateSvg(pageUrl, tSec) {
 </svg>`;
 }
 
-/** @param {object} sc @param {{ startSec: number, text: string }[]} segLines @param {object} data */
-function estimateSceneExtras(sc, segLines, data) {
+/**
+ * Deterministic analysis preview thumbnails (SAM / alpha / watermark / vectorscope).
+ * @param {string} pageUrl
+ * @param {number} tSec
+ * @param {string} kind
+ */
+export function buildSceneAnalysisSvg(pageUrl, tSec, kind) {
+  let seed = hashSeed(`${pageUrl}\0${Math.floor(tSec)}\0${kind}`);
+  const rnd = () => {
+    seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0;
+    return seed / 0xffffffff;
+  };
+
+  if (kind === "sam") {
+    const blobs = [];
+    for (let i = 0; i < 7; i++) {
+      const cx = 12 + rnd() * 80;
+      const cy = 10 + rnd() * 68;
+      const rx = 8 + rnd() * 18;
+      const ry = 6 + rnd() * 14;
+      const hue = Math.floor(rnd() * 300);
+      blobs.push(
+        `<ellipse cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" rx="${rx.toFixed(1)}" ry="${ry.toFixed(1)}" fill="hsla(${hue},72%,52%,0.72)" stroke="hsla(${hue},80%,28%,0.9)" stroke-width="1.2"/>`,
+      );
+    }
+    return `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 104 88" width="104" height="88">
+  <rect width="104" height="88" fill="#1a1a1a"/>
+  <g opacity="0.35">${blobs.join("\n  ")}</g>
+  <rect x="1" y="1" width="102" height="86" fill="none" stroke="#404040" stroke-width="0.5"/>
+  <text x="52" y="84" text-anchor="middle" fill="#a3a3a3" font-size="6" font-family="ui-monospace,monospace">SAM mask</text>
+</svg>`;
+  }
+
+  if (kind === "alpha") {
+    const checker = [];
+    for (let y = 0; y < 11; y++) {
+      for (let x = 0; x < 13; x++) {
+        if ((x + y) % 2 === 0) {
+          checker.push(
+            `<rect x="${x * 8}" y="${y * 8}" width="8" height="8" fill="#c8c8c8"/>`,
+          );
+        }
+      }
+    }
+    const alpha = 0.35 + rnd() * 0.45;
+    return `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 104 88" width="104" height="88">
+  <g>${checker.join("\n  ")}</g>
+  <ellipse cx="52" cy="42" rx="28" ry="22" fill="rgba(250,250,250,${alpha.toFixed(2)})"/>
+  <ellipse cx="52" cy="42" rx="28" ry="22" fill="none" stroke="#525252" stroke-width="1"/>
+  <text x="52" y="84" text-anchor="middle" fill="#525252" font-size="6" font-family="ui-monospace,monospace">alpha</text>
+</svg>`;
+  }
+
+  if (kind === "watermark") {
+    const x = 58 + rnd() * 8;
+    const y = 52 + rnd() * 8;
+    return `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 104 88" width="104" height="88">
+  <rect width="104" height="88" fill="#2a2a2a"/>
+  <rect x="8" y="12" width="88" height="52" fill="#3f3f46" opacity="0.5"/>
+  <g opacity="0.55" transform="translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(-12 52 44)">
+    <rect x="0" y="0" width="44" height="18" rx="3" fill="rgba(255,255,255,0.22)" stroke="rgba(255,255,255,0.45)"/>
+    <text x="22" y="12" text-anchor="middle" fill="rgba(255,255,255,0.85)" font-size="7" font-weight="700" font-family="ui-sans-serif,system-ui,sans-serif">WM</text>
+  </g>
+  <text x="52" y="84" text-anchor="middle" fill="#a3a3a3" font-size="6" font-family="ui-monospace,monospace">watermark</text>
+</svg>`;
+  }
+
+  if (kind === "vectorscope") {
+    const bars = [];
+    const colors = ["#ef4444", "#22c55e", "#3b82f6"];
+    for (let c = 0; c < 3; c++) {
+      for (let i = 0; i < 10; i++) {
+        const h = 4 + rnd() * 20;
+        bars.push(
+          `<rect x="${58 + c * 14 + i * 1.2}" y="${40 - h}" width="1.1" height="${h}" fill="${colors[c]}" opacity="0.9"/>`,
+        );
+      }
+    }
+    return `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 104 88" width="104" height="88">
+  <rect width="104" height="88" fill="#0f0f0f"/>
+  ${bars.join("\n  ")}
+  <circle cx="26" cy="36" r="20" fill="#141414" stroke="#525252" stroke-width="1"/>
+  <circle cx="26" cy="36" r="12" fill="none" stroke="#404040" stroke-width="0.6"/>
+  <ellipse cx="26" cy="36" rx="9" ry="5" fill="none" stroke="#eab308" stroke-width="1.2" opacity="0.9"/>
+  <line x1="26" y1="16" x2="26" y2="56" stroke="#404040" stroke-width="0.5"/>
+  <line x1="6" y1="36" x2="46" y2="36" stroke="#404040" stroke-width="0.5"/>
+  <text x="52" y="84" text-anchor="middle" fill="#a3a3a3" font-size="5.5" font-family="ui-monospace,monospace">RGB parade · vectorscope</text>
+</svg>`;
+  }
+
+  return buildPoseEstimateSvg(pageUrl, tSec);
+}
   const blob = `${sc.title} ${segLines.map((l) => l.text).join(" ")}`.toLowerCase();
   let shot = "Medium";
   let angle = "Eye-level";
@@ -196,6 +297,12 @@ function attachSceneEstimates(pageUrl, scenes, captions, data) {
       ...sc,
       end,
       poseThumb: scenePoseThumbApiUrl(pageUrl, sc.start),
+      analysis: {
+        sam: sceneAnalysisThumbApiUrl(pageUrl, sc.start, "sam"),
+        alpha: sceneAnalysisThumbApiUrl(pageUrl, sc.start, "alpha"),
+        watermark: sceneAnalysisThumbApiUrl(pageUrl, sc.start, "watermark"),
+        vectorscope: sceneAnalysisThumbApiUrl(pageUrl, sc.start, "vectorscope"),
+      },
       ...extras,
     };
   });
@@ -641,6 +748,39 @@ export async function handlePoseThumbApi(req, res) {
   }
 
   const svg = buildPoseEstimateSvg(pageUrl, t);
+  const buf = Buffer.from(svg, "utf8");
+  res.writeHead(200, {
+    "Content-Type": "image/svg+xml; charset=utf-8",
+    "Content-Length": buf.length,
+    "Cache-Control": "private, max-age=3600",
+  });
+  res.end(buf);
+  return true;
+}
+
+/** @param {import("node:http").IncomingMessage} req @param {import("node:http").ServerResponse} res */
+export async function handleSceneAnalysisThumbApi(req, res) {
+  let u;
+  try {
+    u = new URL(req.url || "/", "http://127.0.0.1");
+  } catch {
+    return false;
+  }
+  if (u.pathname !== "/api/ingest/scene-analysis-thumb" || req.method !== "GET") return false;
+
+  const pageUrl = (u.searchParams.get("url") || "").trim();
+  const t = Math.max(0, Number(u.searchParams.get("t")) || 0);
+  const kind = (u.searchParams.get("kind") || "sam").trim().toLowerCase();
+  if (!pageUrl.startsWith("http://") && !pageUrl.startsWith("https://")) {
+    json(res, 400, { ok: false, error: "need http(s) url" });
+    return true;
+  }
+  if (!(kind in SCENE_ANALYSIS_KINDS)) {
+    json(res, 400, { ok: false, error: "kind must be sam, alpha, watermark, or vectorscope" });
+    return true;
+  }
+
+  const svg = buildSceneAnalysisSvg(pageUrl, t, kind);
   const buf = Buffer.from(svg, "utf8");
   res.writeHead(200, {
     "Content-Type": "image/svg+xml; charset=utf-8",

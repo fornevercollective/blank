@@ -192,7 +192,7 @@ const server = http.createServer((req, res) => {
         }
         const allow = "GET, HEAD, POST, OPTIONS";
         const body = Buffer.from(
-          `${req.method} ${urlPath} — ingest: POST /api/ingest/resolve, GET /api/ingest/play/:id, scene-thumb, scene-audio, pose-thumb, POST /api/ingest/intel\n`,
+          `${req.method} ${urlPath} — ingest: POST /api/ingest/resolve, GET /api/ingest/play/:id, scene-thumb, scene-audio, pose-thumb, scene-analysis-thumb, POST /api/ingest/intel\n`,
           "utf8",
         );
         res.writeHead(405, {
