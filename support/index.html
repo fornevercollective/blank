@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Collaborative workspace</title>
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="favicon.ico">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body
+  data-default-mustream-desktop="/Users/qbit/dev/mustream-desktop"
+  data-default-mueee-root="/Users/qbit/dev/mueee-kbatch"
+>
+  <aside
+    id="drawer"
+    class="drawer"
+    aria-labelledby="drawer-title"
+  >
+    <div class="drawer-head">
+      <h2 id="drawer-title">Thread (prompts)</h2>
+      <button type="button" id="close-drawer" class="drawer-close" aria-label="Close menu">×</button>
+    </div>
+    <div id="drawer-prompts" class="drawer-body"></div>
+  </aside>
+
+  <div class="app">
+    <header class="app-header">
+      <div class="header-rail" aria-label="Session controls">
+        <button
+          type="button"
+          id="open-drawer"
+          class="header-rail-menu"
+          aria-label="Open menu"
+          aria-controls="drawer"
+          aria-expanded="false"
+        >
+          <span class="sr-only">Open menu</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+        <div class="header-rail-readouts">
+          <div class="header-rail-clock-row">
+            <time id="rail-time" class="header-rail-time" datetime="">
+              <span class="header-rail-time-h">00</span>
+              <span class="header-rail-time-m">:00</span>
+              <span class="header-rail-time-s">:00</span>
+            </time>
+            <div class="header-rail-geo" aria-label="Coordinates">
+              <div id="rail-lat" class="header-rail-coord header-rail-coord--lat" title="Latitude">
+                <span class="header-rail-coord-h">—</span>
+                <span class="header-rail-coord-m">—</span>
+                <span class="header-rail-coord-s">—</span>
+              </div>
+              <div id="rail-lon" class="header-rail-coord header-rail-coord--lon" title="Longitude">
+                <span class="header-rail-coord-h">—</span>
+                <span class="header-rail-coord-m">—</span>
+                <span class="header-rail-coord-s">—</span>
+              </div>
+            </div>
+          </div>
+          <div id="rail-thumb" class="header-rail-thumb" aria-hidden="true">
+            <img id="rail-thumb-img" class="header-rail-thumb-img" alt="" width="42" height="24" decoding="async" hidden />
+            <span class="header-rail-thumb-ph" aria-hidden="true"></span>
+          </div>
+          <div id="rail-upcoming" class="header-rail-upcoming" aria-label="Up next in queue" hidden></div>
+          <div class="header-rail-playback" aria-label="Playback">
+            <span id="rail-frames" class="header-rail-frames" title="Frame count (video / snapshots)">0</span>
+            <span id="rail-play-time" class="header-rail-play-time" hidden title="Position while scrubbing">0:00</span>
+          </div>
+        </div>
+        <div class="header-rail-foot">
+          <button
+            type="button"
+            id="rail-refresh"
+            class="header-rail-refresh"
+            aria-label="Refresh thread and video presets"
+          >
+            <span class="header-rail-sync-dot" aria-hidden="true"></span>
+            <span class="header-rail-refresh-glyph" aria-hidden="true">↻</span>
+          </button>
+          <span id="rail-sync" class="header-rail-sync-label" role="status" aria-live="polite">offline</span>
+        </div>
+      </div>
+      <div class="header-main">
+        <div class="header-settings-row" id="header-quality-bar" role="group" aria-label="Ingest quality">
+          <details class="header-quality-chip" data-quality="video">
+            <summary class="header-quality-name">video</summary>
+            <div class="header-quality-panel">
+              <ul id="quality-video" class="header-quality-list" role="listbox" aria-label="Video quality"></ul>
+            </div>
+          </details>
+          <details class="header-quality-chip" data-quality="audio">
+            <summary class="header-quality-name">audio</summary>
+            <div class="header-quality-panel">
+              <ul id="quality-audio" class="header-quality-list" role="listbox" aria-label="Audio quality"></ul>
+            </div>
+          </details>
+          <details class="header-quality-chip" data-quality="snap">
+            <summary class="header-quality-name">snap</summary>
+            <div class="header-quality-panel">
+              <ul id="quality-snap" class="header-quality-list" role="listbox" aria-label="Snapshot quality"></ul>
+            </div>
+          </details>
+          <details class="header-quality-chip" data-quality="code">
+            <summary class="header-quality-name">code</summary>
+            <div class="header-quality-panel">
+              <ul id="quality-code" class="header-quality-list" role="listbox" aria-label="Captions and code tracks"></ul>
+            </div>
+          </details>
+          <details class="header-quality-chip" data-quality="download">
+            <summary class="header-quality-name">download</summary>
+            <div class="header-quality-panel">
+              <ul id="quality-download" class="header-quality-list" role="listbox" aria-label="Download quality"></ul>
+            </div>
+          </details>
+        </div>
+        <div class="header-title-row">
+          <img
+            class="app-logo"
+            src="favicon.ico"
+            alt=""
+            width="36"
+            height="36"
+            decoding="async"
+          />
+          <div class="header-heading">
+            <div class="ffplay-broadcast-ticker" role="status" aria-live="polite">
+              <span class="ffplay-stream-title">COLLABORATIVE AI</span>
+              <span class="ffplay-stream-stats">
+                <span class="ffplay-epoch" id="ffplay-epoch">0</span>
+                <span class="ffplay-mbps" id="ffplay-mbps">0.0 Mbps</span>
+              </span>
+            </div>
+            <div class="header-program" role="status" aria-live="polite">
+              <span class="header-chapter" id="header-chapter">00 — Live</span>
+              <p class="header-title header-program-caption" id="header-live-caption">
+                Prompts live here; shipped work is below
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="header-prompts-row">
+          <button
+            type="button"
+            id="header-prompts-scroll-left"
+            class="header-prompt-scroll header-prompt-scroll--left"
+            aria-label="Scroll prompts left"
+            disabled
+          >
+            <span aria-hidden="true">‹</span>
+          </button>
+          <div class="header-prompts-viewport" id="header-prompts-viewport">
+            <div class="header-prompts-meta" id="header-prompts-meta" aria-label="Preview snapshot and subject">
+              <div class="header-prompts-snap" id="header-prompts-snap" title="Frame snapshot">
+                <img
+                  id="header-prompts-snap-img"
+                  class="header-prompts-snap-img"
+                  alt=""
+                  width="64"
+                  height="36"
+                  decoding="async"
+                  hidden
+                />
+                <span class="header-prompts-snap-ph" aria-hidden="true"></span>
+              </div>
+              <div class="header-prompts-subject">
+                <time class="header-prompts-time" id="header-prompts-time" datetime="">—</time>
+                <p class="header-prompts-title" id="header-prompts-subject">Queue a video to preview</p>
+              </div>
+            </div>
+            <div class="header-prompts-scroll" id="header-prompts-scroll">
+              <nav class="header-prompts-track" id="header-prompts" aria-label="Message prompts"></nav>
+            </div>
+          </div>
+          <button
+            type="button"
+            id="header-prompts-scroll-right"
+            class="header-prompt-scroll header-prompt-scroll--right"
+            aria-label="Scroll prompts right"
+          >
+            <span aria-hidden="true">›</span>
+          </button>
+        </div>
+        <form class="header-prompt-form" id="header-prompt-form" role="search">
+          <label class="sr-only" for="header-prompt-input">Search prompts, paste video URL, or add a message</label>
+          <input
+            type="search"
+            id="header-prompt-input"
+            class="header-prompt-input"
+            name="prompt"
+            placeholder="Search prompts or paste TikTok / live URL…"
+            autocomplete="off"
+            spellcheck="false"
+            enterkeyhint="search"
+          />
+          <button type="submit" class="header-prompt-send">Add</button>
+          <button type="button" class="header-prompt-btn" id="ingest-paste">Paste</button>
+          <button type="button" class="header-prompt-btn" id="ingest-clear">Clear</button>
+          <button type="button" class="header-prompt-btn" id="ingest-resolve">resolve</button>
+          <button type="button" class="header-prompt-btn" id="ingest-download">download</button>
+          <details class="ingest-paths header-prompt-paths">
+            <summary>Path defaults</summary>
+            <div class="ingest-paths-inner">
+              <label>
+                MuStream desktop
+                <input type="text" id="path-mustream" autocomplete="off" spellcheck="false">
+              </label>
+              <label>
+                mueee-kbatch
+                <input type="text" id="path-mueee" autocomplete="off" spellcheck="false">
+              </label>
+            </div>
+          </details>
+          <div class="ingest-presets header-prompt-presets" id="ingest-presets-wrap" hidden>
+            <span class="ingest-presets-label" title="videos.json">Presets</span>
+            <div id="ingest-preset-strip" class="ingest-preset-strip"></div>
+          </div>
+        </form>
+      </div>
+      <div class="header-end">
+        <div class="ffplay-wrap" id="ffplay-wrap">
+          <div class="ffplay-panel">
+            <div class="ffplay-thumb" aria-hidden="true">
+              <div class="ffplay-broadcast">
+                <div id="ffplay-hint" class="ffplay-hint-bar" hidden></div>
+                <div class="ffplay-broadcast-screen">
+                  <span class="ffplay-thumb-inner" id="ffplay-placeholder"></span>
+                  <div id="ffplay-embed" class="ffplay-embed-host" hidden></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="ffplay-toolbar" role="toolbar" aria-label="Playback controls">
+            <button type="button" class="ffplay-tool-btn" id="ffplay-camera">camera</button>
+            <button type="button" class="ffplay-tool-btn" id="ffplay-feed">feed</button>
+            <button
+              type="button"
+              class="ffplay-tool-btn"
+              id="ffplay-controls"
+              aria-expanded="false"
+              aria-haspopup="menu"
+              aria-controls="ffplay-popout"
+            >
+              controls
+            </button>
+          </div>
+          <div
+            id="ffplay-popout"
+            class="ffplay-popout"
+            hidden
+            role="menu"
+            aria-label="ffplay terminal commands"
+          >
+            <p class="ffplay-popout-hint" id="ffplay-popout-hint">Run in Terminal. Click a line to copy.</p>
+            <ul class="ffplay-menu" id="ffplay-menu" role="none"></ul>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="app-main" id="main-scroll">
+      <details class="ingest-panel" id="ingest-panel" open>
+        <summary class="ingest-panel-summary">
+          <span class="ingest-panel-chevron" aria-hidden="true"></span>
+          <span class="ingest-panel-title">Video queue</span>
+          <span class="ingest-panel-count" id="ingest-panel-count" aria-live="polite"></span>
+        </summary>
+        <div class="ingest-panel-inner">
+          <div id="ingest-queue" class="ingest-queue" aria-live="polite"></div>
+        </div>
+      </details>
+      <div class="feed" id="feed">
+        <p class="feed-intro">Thread deliverables below; use the header bar to queue video — preview is top right.</p>
+        <!-- Phrase search mount point (populated by phrase-search.js after intro) -->
+      </div>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.7/dist/hls.min.js" crossorigin="anonymous"></script>
+  <script src="app.js" type="module"></script>
+</body>
+</html>

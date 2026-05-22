@@ -1,0 +1,104 @@
+# blank (server + page)
+
+Static **index.html** and **server.mjs** live here. The web root for the server is this directory.
+
+**Run from project root:**
+
+```bash
+cd /Users/qbit/dev/blank
+npm start --prefix support
+```
+
+Or from this folder:
+
+```bash
+cd support
+npm start
+```
+
+Open **http://127.0.0.1:5173/** (or the URL printed).
+
+**Custom port:** `PORT=8080 npm start` (from `support/` or with `--prefix support` from the project root).
+
+No npm dependencies—**server.mjs** is plain Node.
+
+---
+
+## Terminal output & networking (busy localhost)
+
+The dev server prints a **startup banner** (listen URL, doc root, Node version, pid, **caps**, **timeouts**) and a **line per request** (time, method, path, status, duration, approx bytes, client address). **`SIGUSR1`** dumps aggregate stats (same terminal): request count, bytes served, in-flight requests, busy-rejects, TCP opens.
+
+To reduce contention when lots of other local servers are running, you can **tune** (environment variables; defaults are conservative for a static dev server):
+
+| Variable | Default | Purpose |
+|----------|---------|--------|
+| `BLANK_HOST` | `127.0.0.1` | Bind only on loopback (avoids LAN-facing listeners). |
+| `BLANK_MAX_CONNECTIONS` | `128` | Cap simultaneous TCP connections on this process (Node `server.maxConnections`). |
+| `BLANK_MAX_CONCURRENT` | `24` | Max in-flight HTTP handlers; extra requests get **503** + `Retry-After` instead of piling work on the event loop. |
+| `BLANK_KEEP_ALIVE_MS` | `5000` | Shorter HTTP keep-alive so idle sockets free faster vs Node’s long defaults. |
+| `BLANK_HEADERS_TIMEOUT_MS` | `15000` | Abandoned / slow header sends. |
+| `BLANK_REQUEST_TIMEOUT_MS` | `30000` | Whole-request timeout (where supported by your Node version). |
+| `BLANK_QUIET=1` | off | Shorter banner (request lines still print). |
+| `BLANK_LOG_CONNECTIONS=1` | off | Log every TCP connect/disconnect (verbose). |
+
+Example lighter profile when many stacks are open:
+
+```bash
+cd /Users/qbit/dev/blank
+BLANK_MAX_CONNECTIONS=48 BLANK_MAX_CONCURRENT=6 BLANK_KEEP_ALIVE_MS=3000 PORT=5173 node support/server.mjs
+```
+
+Or `./start.sh` with the same variables exported before the command.
+
+---
+
+## Thread data (refresh = latest file + saved menu)
+
+- **`thread.json`** — edit this file to change the built-in rows (`id` values `core-*`). Each **refresh** fetches it again with **`cache: no-store`**, so updates show up without a rebuild.
+- **Browser `localStorage`** (`blank.collab.live.v1`) stores **`live: true`** rows you add at runtime and the **selected chip index**, so the top menu / drawer stay in sync after reload.
+- **Built-ins** always come from `thread.json` on load (same `id` = file wins). **Live-only** rows (ids not in the file) are kept from storage.
+- From the devtools console you can add a durable row, then refresh:
+
+```js
+blankAddLiveMessage({
+  prompt: "Ship the API draft",
+  title: "API draft",
+  bodyHtml: "<p>Done.</p>",
+});
+```
+
+Clear saved menu state (live rows + selection): Application → Local Storage → remove `blank.collab.live.v1`.
+
+## Video ingest
+
+Same idea as **`mueee-kbatch/video-ingest-hub`**: paste or queue http(s) URLs, presets from **`videos.json`**, previews in the header when embeddable (YouTube, Vimeo, HLS, direct file).
+
+- **`video-ingest.js`** — classify URLs, embeds, `commandsFor()` (yt-dlp, mustream, ffprobe, ffplay, open-in-mustream, launch-mustream.sh).
+- **`ytdlp-api.mjs`** + **`POST /api/ingest/resolve`** — on paste/queue for TikTok/watch pages: **yt-dlp** resolves HLS, header preview plays via **`/api/ingest/play/:id`**, MKV archive starts in **`~/Downloads`**.
+- **`blank.videoIngest.queue.v1`** — queued rows (max 24).
+- **`blank.videoIngest.paths.v1`** — MuStream desktop + mueee-kbatch paths for command substitution.
+- Paste uses **MuStream-style URL pick** (embedded links, quotes, trailing punctuation stripped). **TikTok** `/@user/live` → title **`@user · live`**, tracking query params removed.
+- Single **header bar** (Add / Paste / Clear) for prompts and video URLs — **`mustream:https://…`** and messy paste supported.
+- **camera** — copy macOS camera `ffplay` command.
+- **feed** — queue first HLS preset from `videos.json` (or paste from clipboard).
+- **controls** — pop-out with Terminal commands for the active queued URL.
+
+## ffplay (header preview)
+
+The right-hand preview shows the **active queue** item. **TikTok / watch pages** auto-resolve with **yt-dlp** (needs `yt-dlp` on PATH; restart `./start.sh` after updates). Use **controls** for fallback Terminal commands.
+
+Rebuild **Launch Blank.app** (in the parent folder) after editing the copy of the AppleScript here:
+
+```bash
+cd /Users/qbit/dev/blank
+osacompile -o "Launch Blank.app" "support/Launch Blank.applescript"
+./support/macos/refresh-launcher-icon.sh
+```
+
+The second line rebuilds **`blank.icns`** from **`support/favicon.ico`** and copies it to **`Launch Blank.app/Contents/Resources/applet.icns`**. It also renames **`Assets.car`** to **`Assets.car.stock`** once (Script Editor’s catalog can hide a custom **`applet.icns`**); if anything looks wrong, rename **`Assets.car.stock`** back to **`Assets.car`**.
+
+If you change the favicon, run the script again (or only the script if the `.app` bundle already exists).
+
+**`Launch.command`** still uses Terminal’s default icon (macOS doesn’t bundle icons in `.command` files the same way). Use **Launch Blank.app** for the branded launcher.
+
+The project’s main readme is **../README.md** (launchers live next to it).

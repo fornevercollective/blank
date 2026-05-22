@@ -1,0 +1,37 @@
+{
+  "updatedAt": "2026-05-20T12:00:00.000Z",
+  "items": [
+    {
+      "id": "core-0",
+      "live": false,
+      "prompt": "Map the information architecture: header with message-driven prompts, left drawer, and a feed of deliverables.",
+      "title": "IA + component outline",
+      "workLabel": "Finished work",
+      "bodyHtml": "\n      <p><strong>Layout:</strong> sticky header (menu tab + prompt strip), full-height scroll region for cards.</p>\n      <p><strong>Drawer:</strong> lists the same prompts as full text; choosing one scrolls the matching deliverable into view.</p>\n      <p><strong>Feed:</strong> cards render in order; each card shows a numbered timestamp and a collapsible body for the completed artifact.</p>\n    "
+    },
+    {
+      "id": "core-1",
+      "live": false,
+      "prompt": "Use plain HTML/CSS/JS only: collapsible sections with accessible controls, sequential reveal, reduced-motion fallback.",
+      "title": "Implementation constraints",
+      "workLabel": "Deliverable",
+      "bodyHtml": "\n      <p>Each slab is a <code>&lt;details&gt;</code> row; the summary bar toggles the finished work underneath.</p>\n      <ul>\n        <li>Sequential load uses timeouts; disabled when <code>prefers-reduced-motion: reduce</code>.</li>\n        <li>Drawer uses a push layout (main surface slides); Escape closes.</li>\n      </ul>\n    "
+    },
+    {
+      "id": "core-2",
+      "live": false,
+      "prompt": "Visually separate 'conversation intent' (prompts in the menu) from 'shipped output' (cards). Timestamps must read as #n · time.",
+      "title": "UX split: prompts vs shipped work",
+      "workLabel": "Outcome",
+      "bodyHtml": "\n      <p>Prompts stay compact in the header strip so intent stays visible while you review work product below.</p>\n      <p>Each finished block is a card with a top-right stamp <strong>#01 · …</strong> for scanability.</p>\n    "
+    },
+    {
+      "id": "core-3",
+      "live": false,
+      "prompt": "Wire sequential loading so later cards appear after earlier ones, simulating async handoffs.",
+      "title": "Staggered feed",
+      "workLabel": "Behavior",
+      "bodyHtml": "\n      <p>Cards start hidden, then gain <code>.card--visible</code> on a staggered timer so the feed reads like progressive completion.</p>\n    "
+    }
+  ]
+}

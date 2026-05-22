@@ -1,0 +1,17 @@
+{
+  "items": [
+    {
+      "id": "sample-hls-bigbuck",
+      "title": "Sample HLS (Apple test)",
+      "url": "https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_fmp4/master.m3u8",
+      "notes": "<p>Good <strong>feed</strong> smoke test — ffplay / ffmpeg on the manifest URL.</p>",
+      "ingestHints": "<code>ffplay -autoexit</code> on the URL, or <code>mustream</code> for watch pages."
+    },
+    {
+      "id": "sample-direct-mp4",
+      "title": "Direct MP4 (test vector)",
+      "url": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+      "notes": "<p>Direct file — inline <code>&lt;video&gt;</code> when CORS allows.</p>"
+    }
+  ]
+}
