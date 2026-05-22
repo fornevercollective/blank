@@ -1,3 +1,4 @@
+<img width="971" height="769" alt="Screenshot 2026-05-22 at 9 06 50 am" src="https://github.com/user-attachments/assets/417f5244-4102-4c82-969e-06b0428b42c0" />
 # blank
 
 Double-click **`Launch Blank.app`** or **`Launch.command`** in this folder to open Terminal, start the server, and open your browser.
