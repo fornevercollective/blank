@@ -79,9 +79,9 @@ Same idea as **`mueee-kbatch/video-ingest-hub`**: paste or queue http(s) URLs, p
 - **`blank.videoIngest.paths.v1`** — MuStream desktop + mueee-kbatch paths for command substitution.
 - Paste uses **MuStream-style URL pick** (embedded links, quotes, trailing punctuation stripped). **TikTok** `/@user/live` → title **`@user · live`**, tracking query params removed.
 - Single **header bar** (Add / Paste / Clear) for prompts and video URLs — **`mustream:https://…`** and messy paste supported.
-- **camera** — copy macOS camera `ffplay` command.
-- **feed** — queue first HLS preset from `videos.json` (or paste from clipboard).
-- **controls** — pop-out with Terminal commands for the active queued URL.
+- **camera** — menu of local `ffplay` avfoundation commands (no embed ads).
+- **feed** — menu of ad-free sample `ffplay` streams from `videos.json` + active queue; **double-click** queues the default HLS preset.
+- **controls** — full menu: **Play without embed ads** (mustream, yt-dlp→ffplay pipe, direct ffplay) then archive/probe rows.
 
 ## ffplay (header preview)
 
