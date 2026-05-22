@@ -272,7 +272,184 @@ export function buildLayoutCrossRef(heatmap) {
   return { byChar, hot };
 }
 
-const BASE_LAYOUT_ID = "qwerty";
+export const BASE_LAYOUT_ID = "qwerty";
+
+/** @typedef {{ from: string, to: string, dx: number, dy: number, dist: number }} TypingTransition */
+
+/** @typedef {{ heatmap: Record<string, number>, transitions: TypingTransition[], metrics: Record<string, string | number>, lastKey: string | null }} PhraseTypingAnalysis */
+
+/** @param {string} layoutId */
+function keyPosForLayout(layoutId) {
+  const rows = KEYBOARD_LAYOUTS[layoutId]?.rows || KEYBOARD_LAYOUTS[BASE_LAYOUT_ID].rows;
+  /** @type {Record<string, { x: number, y: number }>} */
+  const map = {};
+  rows.forEach((row, r) => {
+    row.forEach((key, c) => {
+      for (const ch of key) {
+        map[ch] = { x: c, y: r };
+        map[ch.toLowerCase()] = { x: c, y: r };
+      }
+    });
+  });
+  map[" "] = { x: 5, y: 1 };
+  return map;
+}
+
+/**
+ * kbatch-style typing path + metrics for phrase search query on a layout.
+ * @param {string} text
+ * @param {string} layoutId
+ * @param {Record<string, number>} phraseHeatmap
+ */
+export function analyzePhraseTyping(text, layoutId, phraseHeatmap = {}) {
+  const keyPos = keyPosForLayout(layoutId);
+  /** @type {Record<string, number>} */
+  const heatmap = { ...phraseHeatmap };
+  /** @type {TypingTransition[]} */
+  const transitions = [];
+  /** @type {Record<string, number>} */
+  const wordFreq = {};
+  let totalDist = 0;
+  let totalKeys = 0;
+  /** @type {string | null} */
+  let lastKey = null;
+  let lastPos = null;
+
+  const src = String(text || "");
+  for (const raw of src) {
+    const ch = raw.toLowerCase();
+    if (ch === " ") {
+      heatmap[" "] = (heatmap[" "] || 0) + 1;
+      lastKey = " ";
+      lastPos = keyPos[" "];
+      totalKeys += 1;
+      continue;
+    }
+    const pos = keyPos[ch];
+    if (!pos) continue;
+    heatmap[ch] = (heatmap[ch] || 0) + 1;
+    totalKeys += 1;
+    if (lastPos && lastKey && lastKey !== " ") {
+      const dx = pos.x - lastPos.x;
+      const dy = pos.y - lastPos.y;
+      const dist = Math.hypot(dx, dy);
+      totalDist += dist;
+      transitions.push({ from: lastKey, to: ch, dx, dy, dist });
+    }
+    lastKey = ch;
+    lastPos = pos;
+  }
+
+  for (const w of src.toLowerCase().match(/[\p{L}\p{N}]{2,}/gu) || []) {
+    wordFreq[w] = (wordFreq[w] || 0) + 1;
+  }
+  const words = Object.keys(wordFreq).length;
+  const hapax = Object.values(wordFreq).filter((c) => c === 1).length;
+  const avgDist = transitions.length ? totalDist / transitions.length : 0;
+  const efficiency = Math.max(0, Math.min(100, Math.round(100 - avgDist * 30)));
+  const strain = Math.min(100, Math.round(avgDist * 25));
+  const rowChanges = transitions.filter((t) => Math.abs(t.dy) > 0.3).length;
+  const complexity = transitions.length
+    ? Math.min(100, Math.round((rowChanges / transitions.length) * 150))
+    : 0;
+  const wpm =
+    src.length > 2 ? Math.max(1, Math.round((words / Math.max(0.5, src.length / 5)) * 60)) : 0;
+  const tone =
+    complexity >= 55 ? "complex" : efficiency >= 62 ? "flow" : words ? "neutral" : "—";
+
+  return {
+    heatmap,
+    transitions,
+    lastKey,
+    metrics: {
+      wpm,
+      efficiency,
+      complexity,
+      strain,
+      keys: totalKeys,
+      distance: avgDist.toFixed(1),
+      words,
+      hapax,
+      layout: KEYBOARD_LAYOUTS[layoutId]?.name || layoutId,
+      tone,
+      paths: transitions.length,
+      stack: words ? "phrase" : "idle",
+      stream: src.length ? "live" : "idle",
+    },
+  };
+}
+
+/**
+ * @param {CanvasRenderingContext2D} ctx
+ * @param {PhraseTypingAnalysis} analysis
+ * @param {string} layoutId
+ * @param {number} W
+ * @param {number} H
+ */
+function renderContrailsPanel(ctx, analysis, layoutId, W, H) {
+  ctx.fillStyle = KB_THEME.canvasBg;
+  ctx.fillRect(0, 0, W, H);
+
+  const keyPos = keyPosForLayout(layoutId);
+  const trans = analysis.transitions;
+  const lastKey = analysis.lastKey;
+
+  const kx = (key) => {
+    const p = keyPos[key];
+    return p ? 14 + (p.x / 10) * (W - 28) : W / 2;
+  };
+  const ky = (key) => {
+    const p = keyPos[key];
+    return p ? 10 + (p.y / 3.2) * (H - 28) : H / 2;
+  };
+
+  if (trans.length < 2) {
+    ctx.fillStyle = KB_THEME.footnote;
+    ctx.font = "10px ui-monospace, monospace";
+    ctx.textAlign = "center";
+    ctx.fillText("Type to see contrails…", W / 2, H / 2);
+    ctx.textAlign = "start";
+    return;
+  }
+
+  const len = trans.length;
+  for (let i = Math.max(0, len - 120); i < len; i++) {
+    const t = trans[i];
+    const age = (len - i) / 120;
+    const alpha = 0.08 + (1 - age) * 0.55;
+    ctx.strokeStyle = `rgba(194, 65, 12, ${alpha})`;
+    ctx.lineWidth = 1 + (1 - age) * 1.5;
+    ctx.beginPath();
+    ctx.moveTo(kx(t.from), ky(t.from));
+    ctx.lineTo(kx(t.to), ky(t.to));
+    ctx.stroke();
+    if (i > len - 16) {
+      ctx.fillStyle = `rgba(194, 65, 12, ${alpha * 0.35})`;
+      ctx.beginPath();
+      ctx.arc(kx(t.to), ky(t.to), 3 + (1 - age) * 4, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+
+  if (lastKey && keyPos[lastKey]) {
+    const cx = kx(lastKey);
+    const cy = ky(lastKey);
+    ctx.fillStyle = "#ea580c";
+    ctx.beginPath();
+    ctx.arc(cx, cy, 4, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = "rgba(234, 88, 12, 0.2)";
+    ctx.beginPath();
+    ctx.arc(cx, cy, 12, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  for (const key of Object.keys(keyPos)) {
+    if (key === " " || key.length > 2) continue;
+    ctx.fillStyle = KB_THEME.keyStroke;
+    ctx.fillRect(kx(key) - 1, ky(key) - 1, 2, 2);
+  }
+}
 
 /** @param {number} r @param {number} c */
 function glyphsAtKeyPosition(r, c) {
@@ -293,18 +470,17 @@ function keyHeat(key, heatmap) {
 }
 
 /**
- * @param {number} W @param {number} H
- * @returns {{ keyW: number, keyH: number, padL: number, rows: string[][] }}
+ * @param {number} W @param {number} H @param {string} layoutId
  */
-function qwertyGridMetrics(W, H) {
-  const base = KEYBOARD_LAYOUTS[BASE_LAYOUT_ID];
-  const rows = base.rows;
-  const maxCols = Math.max(...rows.map((row) => row.length));
-  const rowCount = rows.length;
+function layoutGridMetrics(W, H, layoutId) {
+  const grid = KEYBOARD_LAYOUTS[BASE_LAYOUT_ID].rows;
+  const displayRows = KEYBOARD_LAYOUTS[layoutId]?.rows || grid;
+  const maxCols = Math.max(...grid.map((row) => row.length));
+  const rowCount = grid.length;
   const keyW = W / (maxCols + 1.1);
   const keyH = (H - 18) / rowCount;
   const padL = (W - maxCols * keyW - 0.38 * keyW * (rowCount - 1)) / 2;
-  return { keyW, keyH, padL, rows, maxCols, rowCount };
+  return { keyW, keyH, padL, displayRows, grid, maxCols, rowCount };
 }
 
 /**
@@ -447,12 +623,15 @@ function renderKeyDetailExpanded(canvas, r, c, baseKey, heatmap) {
 }
 
 /**
- * QWERTY keyboard grid; each key shows a spiral of same-position glyphs on all layouts.
+ * Keyboard grid; each key shows a spiral of same-position glyphs on all layouts.
  * @param {HTMLCanvasElement} canvas
  * @param {Record<string, number>} heatmap
  * @param {KeyRect[]} [keyRectsOut]
+ * @param {{ layoutId?: string }} [opts]
  */
-export function renderGeometricOverlay(canvas, heatmap, keyRectsOut) {
+export function renderGeometricOverlay(canvas, heatmap, keyRectsOut, opts = {}) {
+  const layoutId = opts.layoutId || BASE_LAYOUT_ID;
+  const layoutName = KEYBOARD_LAYOUTS[layoutId]?.name || layoutId;
   const host = canvas.parentElement;
   const W = host?.clientWidth || 400;
   const H = Math.max(220, host?.clientHeight || 220);
@@ -468,14 +647,16 @@ export function renderGeometricOverlay(canvas, heatmap, keyRectsOut) {
   ctx.fillStyle = KB_THEME.canvasBg;
   ctx.fillRect(0, 0, W, H);
 
-  const { keyW, keyH, padL, rows } = qwertyGridMetrics(W, H);
+  const { keyW, keyH, padL, displayRows, grid } = layoutGridMetrics(W, H, layoutId);
   const maxCount = Math.max(1, ...Object.values(heatmap));
   /** @type {KeyRect[]} */
   const rects = [];
 
-  rows.forEach((row, ri) => {
+  grid.forEach((gridRow, ri) => {
     const stagger = ri * 0.38 * keyW;
-    row.forEach((baseKey, ci) => {
+    gridRow.forEach((_slot, ci) => {
+      const baseKey = displayRows[ri]?.[ci];
+      if (!baseKey) return;
       const x = padL + stagger + ci * keyW;
       const y = 8 + ri * keyH;
       const glyphs = glyphsAtKeyPosition(ri, ci);
@@ -536,7 +717,7 @@ export function renderGeometricOverlay(canvas, heatmap, keyRectsOut) {
   ctx.font = "9px ui-monospace, monospace";
   ctx.textAlign = "center";
   ctx.fillText(
-    `${LAYOUT_RING_ORDER.length} layouts · click a key for large spiral`,
+    `${layoutName} · ${LAYOUT_RING_ORDER.length} layouts/key · click to enlarge`,
     W / 2,
     H - 5,
   );
@@ -555,13 +736,44 @@ export function mountPhraseKeyboardViz(host, hooks) {
 
   const wrap = document.createElement("div");
   wrap.className = "feed-phrase-kb";
+  const layoutOptions = LAYOUT_RING_ORDER.map(
+    (id) =>
+      `<option value="${escapeHtml(id)}"${id === BASE_LAYOUT_ID ? " selected" : ""}>${escapeHtml(KEYBOARD_LAYOUTS[id].name)}</option>`,
+  ).join("");
+
   wrap.innerHTML = `
     <div class="feed-phrase-kb-head">
       <span class="feed-phrase-kb-title">Geometric pattern</span>
+      <label class="feed-phrase-kb-layout-label">
+        <span class="sr-only">Keyboard layout</span>
+        <select id="feed-phrase-layout-select" class="feed-phrase-layout-select" aria-label="Keyboard layout mapping">${layoutOptions}</select>
+      </label>
       <span class="feed-phrase-kb-meta" id="feed-phrase-kb-meta">QWERTY · spiral per key</span>
     </div>
-    <div class="feed-phrase-kb-canvas-wrap feed-phrase-kb-canvas-wrap--main">
-      <canvas id="feed-phrase-geometric" class="feed-phrase-kb-canvas" aria-label="QWERTY keyboard with per-key multi-layout letter spirals. Click a key to enlarge."></canvas>
+    <div class="feed-phrase-kb-stage">
+      <aside class="feed-phrase-kb-rail" aria-label="Contrails and kbatch metrics">
+        <div class="feed-phrase-kb-rail-title">Contrails</div>
+        <div class="feed-phrase-kb-contrail-wrap">
+          <canvas id="feed-phrase-contrails" class="feed-phrase-kb-canvas feed-phrase-kb-canvas--contrail" aria-label="Typing path contrails for active layout"></canvas>
+        </div>
+        <dl class="feed-phrase-kb-stats">
+          <div><dt>WPM</dt><dd id="kb-s-wpm">0</dd></div>
+          <div><dt>Efficiency</dt><dd id="kb-s-eff">0%</dd></div>
+          <div><dt>Complexity</dt><dd id="kb-s-cpx">0%</dd></div>
+          <div><dt>Strain</dt><dd id="kb-s-strain">0%</dd></div>
+          <div><dt>Keys</dt><dd id="kb-s-keys">0</dd></div>
+          <div><dt>Distance</dt><dd id="kb-s-dist">0.0</dd></div>
+          <div><dt>Words</dt><dd id="kb-s-words">0</dd></div>
+          <div><dt>Hapax</dt><dd id="kb-s-hapax">0</dd></div>
+          <div><dt>Paths</dt><dd id="kb-s-paths">0</dd></div>
+          <div><dt>Tone</dt><dd id="kb-s-tone">—</dd></div>
+          <div><dt>Stack</dt><dd id="kb-s-stack">idle</dd></div>
+          <div><dt>Stream</dt><dd id="kb-s-stream">idle</dd></div>
+        </dl>
+      </aside>
+      <div class="feed-phrase-kb-canvas-wrap feed-phrase-kb-canvas-wrap--main">
+        <canvas id="feed-phrase-geometric" class="feed-phrase-kb-canvas" aria-label="Keyboard with per-key multi-layout letter spirals. Click a key to enlarge."></canvas>
+      </div>
     </div>
     <div id="feed-phrase-key-detail" class="feed-phrase-key-detail" hidden>
       <div class="feed-phrase-key-detail-head">
@@ -580,6 +792,8 @@ export function mountPhraseKeyboardViz(host, hooks) {
   host.appendChild(wrap);
 
   const canvas = wrap.querySelector("#feed-phrase-geometric");
+  const contrailCanvas = wrap.querySelector("#feed-phrase-contrails");
+  const layoutSelect = wrap.querySelector("#feed-phrase-layout-select");
   const meta = wrap.querySelector("#feed-phrase-kb-meta");
   const crossEl = wrap.querySelector("#feed-phrase-crossref");
   const crossBody = wrap.querySelector("#feed-phrase-crossref-body");
@@ -592,7 +806,61 @@ export function mountPhraseKeyboardViz(host, hooks) {
   /** @type {KeyRect[]} */
   const keyRects = [];
   let lastHeatmap = {};
+  /** @type {PhraseTypingAnalysis | null} */
+  let lastAnalysis = null;
+  let activeLayoutId = BASE_LAYOUT_ID;
   let selectedKey = null;
+
+  const statEls = {
+    wpm: wrap.querySelector("#kb-s-wpm"),
+    eff: wrap.querySelector("#kb-s-eff"),
+    cpx: wrap.querySelector("#kb-s-cpx"),
+    strain: wrap.querySelector("#kb-s-strain"),
+    keys: wrap.querySelector("#kb-s-keys"),
+    dist: wrap.querySelector("#kb-s-dist"),
+    words: wrap.querySelector("#kb-s-words"),
+    hapax: wrap.querySelector("#kb-s-hapax"),
+    paths: wrap.querySelector("#kb-s-paths"),
+    tone: wrap.querySelector("#kb-s-tone"),
+    stack: wrap.querySelector("#kb-s-stack"),
+    stream: wrap.querySelector("#kb-s-stream"),
+  };
+
+  function updateStats(metrics) {
+    if (statEls.wpm) statEls.wpm.textContent = String(metrics.wpm ?? 0);
+    if (statEls.eff) statEls.eff.textContent = `${metrics.efficiency ?? 0}%`;
+    if (statEls.cpx) statEls.cpx.textContent = `${metrics.complexity ?? 0}%`;
+    if (statEls.strain) statEls.strain.textContent = `${metrics.strain ?? 0}%`;
+    if (statEls.keys) statEls.keys.textContent = String(metrics.keys ?? 0);
+    if (statEls.dist) statEls.dist.textContent = String(metrics.distance ?? "0.0");
+    if (statEls.words) statEls.words.textContent = String(metrics.words ?? 0);
+    if (statEls.hapax) statEls.hapax.textContent = String(metrics.hapax ?? 0);
+    if (statEls.paths) statEls.paths.textContent = String(metrics.paths ?? 0);
+    if (statEls.tone) statEls.tone.textContent = String(metrics.tone ?? "—");
+    if (statEls.stack) statEls.stack.textContent = String(metrics.stack ?? "idle");
+    if (statEls.stream) statEls.stream.textContent = String(metrics.stream ?? "idle");
+  }
+
+  function paintContrails() {
+    if (!(contrailCanvas instanceof HTMLCanvasElement)) return;
+    const host = contrailCanvas.parentElement;
+    const W = host?.clientWidth || 120;
+    const H = host?.clientHeight || 140;
+    const dpr = Math.min(2, devicePixelRatio || 1);
+    contrailCanvas.width = Math.floor(W * dpr);
+    contrailCanvas.height = Math.floor(H * dpr);
+    contrailCanvas.style.width = `${W}px`;
+    contrailCanvas.style.height = `${H}px`;
+    const ctx = contrailCanvas.getContext("2d");
+    if (!ctx) return;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    if (lastAnalysis) {
+      renderContrailsPanel(ctx, lastAnalysis, activeLayoutId, W, H);
+    } else {
+      ctx.fillStyle = KB_THEME.canvasBg;
+      ctx.fillRect(0, 0, W, H);
+    }
+  }
 
   const showKeyDetail = (hit) => {
     if (!(detailPanel instanceof HTMLElement) || !(detailCanvas instanceof HTMLCanvasElement)) {
@@ -601,7 +869,8 @@ export function mountPhraseKeyboardViz(host, hooks) {
     selectedKey = hit;
     detailPanel.hidden = false;
     if (detailTitle) {
-      detailTitle.textContent = `QWERTY · ${hit.baseKey.toUpperCase()} — ${KEYBOARD_LAYOUTS[BASE_LAYOUT_ID].rows[hit.r]?.[hit.c] ?? hit.baseKey} position`;
+      const layout = KEYBOARD_LAYOUTS[activeLayoutId];
+      detailTitle.textContent = `${layout.name} · ${hit.baseKey.toUpperCase()} — ${layout.rows[hit.r]?.[hit.c] ?? hit.baseKey} position`;
     }
     renderKeyDetailExpanded(detailCanvas, hit.r, hit.c, hit.baseKey, lastHeatmap);
   };
@@ -628,9 +897,14 @@ export function mountPhraseKeyboardViz(host, hooks) {
   const paint = () => {
     const q = hooks.getQuery().trim();
     const hits = hooks.getIndexHits();
-    const hm = buildPhraseLetterHeatmap(q, hits);
-    lastHeatmap = hm;
-    renderGeometricOverlay(canvas, hm, keyRects);
+    const phraseHm = buildPhraseLetterHeatmap(q, hits);
+    lastAnalysis = analyzePhraseTyping(q || " ", activeLayoutId, phraseHm);
+    lastHeatmap = lastAnalysis.heatmap;
+    updateStats(lastAnalysis.metrics);
+    renderGeometricOverlay(canvas, lastHeatmap, keyRects, {
+      layoutId: activeLayoutId,
+    });
+    paintContrails();
     if (selectedKey) {
       const still = keyRects.find(
         (k) => k.r === selectedKey.r && k.c === selectedKey.c,
@@ -639,12 +913,13 @@ export function mountPhraseKeyboardViz(host, hooks) {
       else hideKeyDetail();
     }
 
-    const { byChar, hot } = buildLayoutCrossRef(hm);
+    const { byChar, hot } = buildLayoutCrossRef(lastHeatmap);
+    const layoutName = KEYBOARD_LAYOUTS[activeLayoutId]?.name || activeLayoutId;
     if (meta) {
-      const active = hot.filter(([ch]) => hm[ch] > 0).length;
+      const active = hot.filter(([ch]) => lastHeatmap[ch] > 0).length;
       meta.textContent = q
-        ? `QWERTY · ${active} heated glyphs · ${LAYOUT_RING_ORDER.length} layouts/key`
-        : `QWERTY base · ${LAYOUT_RING_ORDER.length} layouts per key`;
+        ? `${layoutName} · ${active} heated · ${lastAnalysis.metrics.paths} paths`
+        : `${layoutName} · ${LAYOUT_RING_ORDER.length} layouts per key`;
     }
 
     if (!(crossEl instanceof HTMLDetailsElement) || !(crossBody instanceof HTMLElement)) return;
@@ -666,11 +941,18 @@ export function mountPhraseKeyboardViz(host, hooks) {
       .join("")}</ul>`;
   };
 
+  if (layoutSelect instanceof HTMLSelectElement) {
+    layoutSelect.addEventListener("change", () => {
+      activeLayoutId = layoutSelect.value || BASE_LAYOUT_ID;
+      paint();
+    });
+  }
+
   const ro =
     typeof ResizeObserver !== "undefined"
       ? new ResizeObserver(() => paint())
       : null;
-  ro?.observe(wrap.querySelector(".feed-phrase-kb-canvas-wrap--main") || wrap);
+  ro?.observe(wrap.querySelector(".feed-phrase-kb-stage") || wrap);
   ro?.observe(wrap.querySelector(".feed-phrase-key-detail-canvas-wrap") || wrap);
 
   return { repaint: paint };
