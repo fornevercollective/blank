@@ -434,7 +434,11 @@ function attachSceneEstimates(pageUrl, scenes, captions, data) {
 }
 
 async function resolveStreamForThumb(pageUrl) {
-  const out = await runYtDlp(["-f", "b", "-g", "--no-warnings", "--no-playlist", pageUrl], 120_000);
+  const out = await runYtDlpForPage(
+    pageUrl,
+    ["-f", "b", "-g", "--no-warnings", "--no-playlist"],
+    120_000,
+  );
   const lines = out
     .split(/\r?\n/)
     .map((l) => l.trim())
@@ -547,7 +551,10 @@ function heroThumbFromIntelCache(pageUrl) {
 
 function runYtDlp(args, timeoutMs = 90_000) {
   return new Promise((resolve, reject) => {
-    const child = spawn("yt-dlp", args, { stdio: ["ignore", "pipe", "pipe"] });
+    const child = spawn("yt-dlp", args, {
+      stdio: ["ignore", "pipe", "pipe"],
+      env: { ...process.env },
+    });
     let out = "";
     let err = "";
     const timer = setTimeout(() => {
@@ -573,6 +580,36 @@ function runYtDlp(args, timeoutMs = 90_000) {
       resolve(out.trim());
     });
   });
+}
+
+/** @param {string} pageUrl @param {string[]} args without URL @param {number} [timeoutMs] */
+async function runYtDlpForPage(pageUrl, args, timeoutMs = 90_000) {
+  const isYoutube = /youtube\.com|youtu\.be/i.test(pageUrl);
+  if (!isYoutube) return runYtDlp([...args, pageUrl], timeoutMs);
+
+  const clients = (process.env.YTDLP_PLAYER_CLIENT || "android,tv_embedded,ios,mweb")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+  /** @type {Error | null} */
+  let lastErr = null;
+  for (const client of clients) {
+    try {
+      return await runYtDlp(
+        [...args, "--extractor-args", `youtube:player_client=${client}`, pageUrl],
+        timeoutMs,
+      );
+    } catch (e) {
+      lastErr = e instanceof Error ? e : new Error(String(e));
+      const msg = lastErr.message;
+      if (!/bot|sign in|confirm you/i.test(msg)) throw lastErr;
+    }
+  }
+  const cookies = process.env.YTDLP_COOKIES || process.env.YTDLP_COOKIES_FILE;
+  if (cookies) {
+    return runYtDlp([...args, "--cookies", cookies, pageUrl], timeoutMs);
+  }
+  throw lastErr || new Error("yt-dlp failed for YouTube URL");
 }
 
 function fetchText(url) {
@@ -755,7 +792,7 @@ export async function fetchVideoIntel(pageUrl, captionPref = "en-auto") {
   const cached = intelCache.get(cacheKey);
   if (cached && Date.now() - cached.created < INTEL_TTL_MS) return cached.data;
 
-  const raw = await runYtDlp(["-J", "--no-warnings", "--no-playlist", pageUrl]);
+  const raw = await runYtDlpForPage(pageUrl, ["-J", "--no-warnings", "--no-playlist"]);
   const data = JSON.parse(raw);
   const tiktok = /tiktok\.com/i.test(pageUrl);
   const posterThumb = pickThumbUrl(data);

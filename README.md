@@ -56,10 +56,12 @@ Static UI is deployed from **`support/`** on every push to **`main`** via [`.git
 1. In [github.com/fornevercollective/blank/settings/pages](https://github.com/fornevercollective/blank/settings/pages), set **Build and deployment → Source** to **GitHub Actions**.
 2. After the workflow succeeds, the site is at **https://fornevercollective.github.io/blank/**
 
-**Note:** Pages serves the front end plus a **pre-cached** YouTube demo (`SKia5QUiGkE` — scenes, captions, thumbnails). Other ingest APIs (`/api/ingest/*`, live yt-dlp preview, gsplat PLY export) need the local server (`./start.sh` or `node support/server.mjs`). Rebuild cache:
+**Note:** Pages serves the front end plus a **committed** pre-cache under `support/pages-cache/SKia5QUiGkE/` (scenes, captions, thumbnails). CI does **not** call YouTube (runners get bot-blocked); refresh the bundle locally and commit:
 
 ```bash
 node support/scripts/build-pages-cache.mjs "https://www.youtube.com/watch?v=SKia5QUiGkE"
+# optional: --force to rebuild an existing cache
+# if blocked: YTDLP_COOKIES=/path/to/cookies.txt node support/scripts/build-pages-cache.mjs --force
 ```
 
-See **support/README.md** → *Scene intel → gsplat export*.
+Other ingest APIs (`/api/ingest/*`, live yt-dlp preview, gsplat PLY export) need the local server (`./start.sh` or `node support/server.mjs`). See **support/README.md** → *Scene intel → gsplat export*.

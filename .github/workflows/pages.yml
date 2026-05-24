@@ -1,6 +1,9 @@
 # Publish static UI from support/ to GitHub Pages.
 # Enable once: repo Settings → Pages → Build and deployment → Source: GitHub Actions.
 # Project site URL: https://fornevercollective.github.io/blank/
+#
+# Pages intel is committed under support/pages-cache/ (YouTube blocks yt-dlp on CI runners).
+# Refresh locally: node support/scripts/build-pages-cache.mjs [--force]
 
 name: Deploy GitHub Pages
 
@@ -31,15 +34,27 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
-      - name: Install cache tools
+      - name: Verify Pages intel cache
         run: |
-          sudo apt-get update
-          sudo apt-get install -y ffmpeg python3-pip
-          python3 -m pip install --user yt-dlp
-          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
-
-      - name: Build Pages intel cache
-        run: node support/scripts/build-pages-cache.mjs "https://www.youtube.com/watch?v=SKia5QUiGkE"
+          INTEL="support/pages-cache/SKia5QUiGkE/intel.json"
+          MANIFEST="support/pages-cache/SKia5QUiGkE/manifest.json"
+          if [ ! -f "$INTEL" ] || [ ! -f "$MANIFEST" ]; then
+            echo "::error::Missing pages-cache bundle. On a machine with yt-dlp + ffmpeg, run:"
+            echo "  node support/scripts/build-pages-cache.mjs"
+            echo "Then commit support/pages-cache/ and push."
+            exit 1
+          fi
+          node --input-type=module -e "
+            import fs from 'node:fs';
+            const m = JSON.parse(fs.readFileSync('${MANIFEST}','utf8'));
+            const scenes = fs.readdirSync('support/pages-cache/SKia5QUiGkE/scenes').filter((f) => f.endsWith('.jpg'));
+            if (!scenes.length) {
+              console.error('::error::No scene JPEGs in pages-cache');
+              process.exit(1);
+            }
+            console.log('Pages cache OK:', m.title);
+            console.log('  scenes:', scenes.length, '| captions:', m.captionLines);
+          "
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

@@ -15,7 +15,9 @@ const SUPPORT = path.resolve(__dirname, "..");
 const DEFAULT_URL = "https://www.youtube.com/watch?v=SKia5QUiGkE";
 const MAX_SCENES = 28;
 
-const pageUrl = (process.argv[2] || process.env.PAGES_CACHE_URL || DEFAULT_URL).trim();
+const argv = process.argv.slice(2).filter((a) => a !== "--force");
+const force = process.argv.includes("--force");
+const pageUrl = (argv[0] || process.env.PAGES_CACHE_URL || DEFAULT_URL).trim();
 
 function youtubeId(url) {
   const m = url.match(/(?:[?&]v=|youtu\.be\/|\/shorts\/)([A-Za-z0-9_-]{11})/);
@@ -34,6 +36,20 @@ async function main() {
   }
 
   const outRoot = path.join(SUPPORT, "pages-cache", id);
+  const intelPath = path.join(outRoot, "intel.json");
+  if (!force && fs.existsSync(intelPath)) {
+    const manifestPath = path.join(outRoot, "manifest.json");
+    let hint = "";
+    try {
+      const m = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
+      hint = ` (${m.sceneCount} scenes, ${m.captionLines} captions)`;
+    } catch {
+      /* ignore */
+    }
+    console.log(`Pages cache already present at ${intelPath}${hint} — use --force to rebuild`);
+    return;
+  }
+
   const scenesDir = path.join(outRoot, "scenes");
   const posesDir = path.join(outRoot, "poses");
   const analysisDir = path.join(outRoot, "analysis");
@@ -99,7 +115,6 @@ async function main() {
     scenes,
   };
 
-  const intelPath = path.join(outRoot, "intel.json");
   fs.writeFileSync(intelPath, JSON.stringify(bundle, null, 2), "utf8");
 
   const manifest = {
