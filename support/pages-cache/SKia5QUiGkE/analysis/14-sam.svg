@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 104 88" width="104" height="88">
+  <rect width="104" height="88" fill="#1a1a1a"/>
+  <g opacity="0.35"><ellipse cx="57.8" cy="22.5" rx="9.6" ry="12.2" fill="hsla(11,72%,52%,0.72)" stroke="hsla(11,80%,28%,0.9)" stroke-width="1.2"/>
+  <ellipse cx="56.6" cy="14.7" rx="19.2" ry="13.4" fill="hsla(286,72%,52%,0.72)" stroke="hsla(286,80%,28%,0.9)" stroke-width="1.2"/>
+  <ellipse cx="77.6" cy="44.1" rx="12.2" ry="19.2" fill="hsla(171,72%,52%,0.72)" stroke="hsla(171,80%,28%,0.9)" stroke-width="1.2"/>
+  <ellipse cx="67.1" cy="42.1" rx="21.5" ry="10.3" fill="hsla(247,72%,52%,0.72)" stroke="hsla(247,80%,28%,0.9)" stroke-width="1.2"/>
+  <ellipse cx="59.1" cy="52.5" rx="8.8" ry="12.9" fill="hsla(58,72%,52%,0.72)" stroke="hsla(58,80%,28%,0.9)" stroke-width="1.2"/>
+  <ellipse cx="17.4" cy="12.8" rx="23.1" ry="6.2" fill="hsla(115,72%,52%,0.72)" stroke="hsla(115,80%,28%,0.9)" stroke-width="1.2"/>
+  <ellipse cx="79.6" cy="39.4" rx="23.1" ry="10.1" fill="hsla(89,72%,52%,0.72)" stroke="hsla(89,80%,28%,0.9)" stroke-width="1.2"/></g>
+  <rect x="1" y="1" width="102" height="86" fill="none" stroke="#404040" stroke-width="0.5"/>
+  <text x="52" y="84" text-anchor="middle" fill="#a3a3a3" font-size="6" font-family="ui-monospace,monospace">SAM mask</text>
+</svg>

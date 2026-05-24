@@ -15,6 +15,7 @@ import {
 import { filterScenesForGsplat } from "./scene-gsplat-filters.js";
 import { mountSceneDisruptor } from "./scene-camera-telemetry.js";
 import { trackClientTokens } from "./header-runtime-stats.js";
+import { fetchPagesIntel, isStuckDemoPlaylistUrl } from "./pages-static.js";
 
 /** True on GitHub Pages / static hosts with no Node ingest API. */
 export function isStaticPreviewHost() {
@@ -28,7 +29,10 @@ export function staticIntelNoticeHtml() {
   const hostHint = pages
     ? "This GitHub Pages build is UI-only."
     : "Run <code>./start.sh</code> or <code>node support/server.mjs</code> from the repo.";
-  return `${hostHint} Video intel (scenes, captions, thumbnails) needs that server. The <strong>finished work</strong> for each card stays in the collapsible body below.`;
+  const cacheHint = pages
+    ? " Pre-cached demo intel loads for the bundled SpaceX YouTube replay when it is queued."
+    : "";
+  return `${hostHint}${cacheHint} Other URLs need the local server for live intel. The <strong>finished work</strong> for each card stays in the collapsible body below.`;
 }
 
 /** @param {HTMLElement} slot */
@@ -1335,6 +1339,9 @@ function bindSceneCards(root, pageUrl, intel, sceneIndex = 0) {
 
 /** @param {string} pageUrl */
 export async function requestVideoIntel(pageUrl) {
+  const cached = await fetchPagesIntel(pageUrl);
+  if (cached) return cached;
+
   if (getIngestApiOk() === false) {
     throw new Error("Intel API unavailable (static preview)");
   }

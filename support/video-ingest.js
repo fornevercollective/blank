@@ -1088,6 +1088,7 @@ export async function fetchPresets() {
           url: u,
           notes: typeof o.notes === "string" ? o.notes : "",
           ingestHints: typeof o.ingestHints === "string" ? o.ingestHints : "",
+          pagesDefault: Boolean(o.pagesDefault),
         };
       })
       .filter(Boolean);

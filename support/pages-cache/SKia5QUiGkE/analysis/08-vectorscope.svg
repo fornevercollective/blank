@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 104 88" width="104" height="88">
+  <rect width="104" height="88" fill="#0f0f0f"/>
+  <rect x="58" y="23.13528367391212" width="1.1" height="16.86471632608788" fill="#ef4444" opacity="0.9"/>
+  <rect x="59.2" y="29.340944865099374" width="1.1" height="10.659055134900626" fill="#ef4444" opacity="0.9"/>
+  <rect x="60.4" y="27.532800810302795" width="1.1" height="12.467199189697205" fill="#ef4444" opacity="0.9"/>
+  <rect x="61.6" y="26.550691282970526" width="1.1" height="13.449308717029474" fill="#ef4444" opacity="0.9"/>
+  <rect x="62.8" y="20.690089157011847" width="1.1" height="19.309910842988153" fill="#ef4444" opacity="0.9"/>
+  <rect x="64" y="21.938649076488485" width="1.1" height="18.061350923511515" fill="#ef4444" opacity="0.9"/>
+  <rect x="65.2" y="21.13813204717313" width="1.1" height="18.86186795282687" fill="#ef4444" opacity="0.9"/>
+  <rect x="66.4" y="20.530221150380143" width="1.1" height="19.469778849619857" fill="#ef4444" opacity="0.9"/>
+  <rect x="67.6" y="17.644972400191467" width="1.1" height="22.355027599808533" fill="#ef4444" opacity="0.9"/>
+  <rect x="68.8" y="28.970182777608322" width="1.1" height="11.029817222391678" fill="#ef4444" opacity="0.9"/>
+  <rect x="72" y="24.769263454892034" width="1.1" height="15.230736545107964" fill="#22c55e" opacity="0.9"/>
+  <rect x="73.2" y="29.535247206114057" width="1.1" height="10.464752793885943" fill="#22c55e" opacity="0.9"/>
+  <rect x="74.4" y="28.63690297320413" width="1.1" height="11.36309702679587" fill="#22c55e" opacity="0.9"/>
+  <rect x="75.6" y="32.20296673295157" width="1.1" height="7.797033267048429" fill="#22c55e" opacity="0.9"/>
+  <rect x="76.8" y="34.48127830738231" width="1.1" height="5.518721692617685" fill="#22c55e" opacity="0.9"/>
+  <rect x="78" y="21.0538246717895" width="1.1" height="18.9461753282105" fill="#22c55e" opacity="0.9"/>
+  <rect x="79.2" y="28.796243380940577" width="1.1" height="11.203756619059423" fill="#22c55e" opacity="0.9"/>
+  <rect x="80.4" y="18.29509248451681" width="1.1" height="21.70490751548319" fill="#22c55e" opacity="0.9"/>
+  <rect x="81.6" y="30.10329246756232" width="1.1" height="9.896707532437683" fill="#22c55e" opacity="0.9"/>
+  <rect x="82.8" y="34.17549499174941" width="1.1" height="5.8245050082505925" fill="#22c55e" opacity="0.9"/>
+  <rect x="86" y="17.080489312550167" width="1.1" height="22.919510687449833" fill="#3b82f6" opacity="0.9"/>
+  <rect x="87.2" y="32.758945411247886" width="1.1" height="7.241054588752113" fill="#3b82f6" opacity="0.9"/>
+  <rect x="88.4" y="34.89055401060976" width="1.1" height="5.109445989390241" fill="#3b82f6" opacity="0.9"/>
+  <rect x="89.6" y="30.693580720269487" width="1.1" height="9.30641927973051" fill="#3b82f6" opacity="0.9"/>
+  <rect x="90.8" y="23.729103627551602" width="1.1" height="16.270896372448398" fill="#3b82f6" opacity="0.9"/>
+  <rect x="92" y="17.499046488082744" width="1.1" height="22.500953511917256" fill="#3b82f6" opacity="0.9"/>
+  <rect x="93.2" y="31.641386563806186" width="1.1" height="8.358613436193814" fill="#3b82f6" opacity="0.9"/>
+  <rect x="94.4" y="30.250449224899164" width="1.1" height="9.749550775100838" fill="#3b82f6" opacity="0.9"/>
+  <rect x="95.6" y="20.276944069256295" width="1.1" height="19.723055930743705" fill="#3b82f6" opacity="0.9"/>
+  <rect x="96.8" y="31.611612884237342" width="1.1" height="8.388387115762658" fill="#3b82f6" opacity="0.9"/>
+  <circle cx="26" cy="36" r="20" fill="#141414" stroke="#525252" stroke-width="1"/>
+  <circle cx="26" cy="36" r="12" fill="none" stroke="#404040" stroke-width="0.6"/>
+  <ellipse cx="26" cy="36" rx="9" ry="5" fill="none" stroke="#eab308" stroke-width="1.2" opacity="0.9"/>
+  <line x1="26" y1="16" x2="26" y2="56" stroke="#404040" stroke-width="0.5"/>
+  <line x1="6" y1="36" x2="46" y2="36" stroke="#404040" stroke-width="0.5"/>
+  <text x="52" y="84" text-anchor="middle" fill="#a3a3a3" font-size="5.5" font-family="ui-monospace,monospace">RGB parade · vectorscope</text>
+</svg>

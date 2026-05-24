@@ -31,6 +31,16 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
+      - name: Install cache tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg python3-pip
+          python3 -m pip install --user yt-dlp
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Build Pages intel cache
+        run: node support/scripts/build-pages-cache.mjs "https://www.youtube.com/watch?v=SKia5QUiGkE"
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

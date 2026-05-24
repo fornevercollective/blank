@@ -1261,3 +1261,5 @@ function json(res, code, obj) {
   });
   res.end(buf);
 }
+
+export { captureSceneThumb };

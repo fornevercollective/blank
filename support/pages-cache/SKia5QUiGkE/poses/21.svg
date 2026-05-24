@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 104 88" width="104" height="88">
+  <rect width="104" height="88" fill="#141414"/>
+  <g stroke="#7eb8da" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.95">
+    <line x1="51.1" y1="11.0" x2="51.2" y2="20.0"/>
+    <line x1="51.1" y1="11.0" x2="47.0" y2="10.0"/>
+    <line x1="51.1" y1="11.0" x2="55.0" y2="10.0"/>
+    <line x1="47.0" y1="10.0" x2="43.8" y2="12.0"/>
+    <line x1="55.0" y1="10.0" x2="57.8" y2="12.0"/>
+    <line x1="51.2" y1="20.0" x2="36.5" y2="26.0"/>
+    <line x1="51.2" y1="20.0" x2="65.1" y2="26.0"/>
+    <line x1="36.5" y1="26.0" x2="28.0" y2="38.0"/>
+    <line x1="28.0" y1="38.0" x2="31.7" y2="50.0"/>
+    <line x1="65.1" y1="26.0" x2="71.4" y2="36.0"/>
+    <line x1="71.4" y1="36.0" x2="67.6" y2="48.0"/>
+    <line x1="51.2" y1="20.0" x2="51.4" y2="52.0"/>
+    <line x1="51.4" y1="52.0" x2="40.8" y2="54.0"/>
+    <line x1="51.4" y1="52.0" x2="60.8" y2="54.0"/>
+    <line x1="40.8" y1="54.0" x2="37.1" y2="68.0"/>
+    <line x1="37.1" y1="68.0" x2="34.8" y2="82.0"/>
+    <line x1="60.8" y1="54.0" x2="63.3" y2="67.0"/>
+    <line x1="63.3" y1="67.0" x2="65.5" y2="81.0"/>
+    <line x1="36.5" y1="26.0" x2="65.1" y2="26.0"/>
+    <line x1="40.8" y1="54.0" x2="60.8" y2="54.0"/>
+  </g>
+  <g><circle cx="51.1" cy="11.0" r="2.4" fill="#9ed4f0" stroke="#141414" stroke-width="0.6"/>
+    <circle cx="47.0" cy="10.0" r="2.4" fill="#9ed4f0" stroke="#141414" stroke-width="0.6"/>
+    <circle cx="55.0" cy="10.0" r="2.4" fill="#9ed4f0" stroke="#141414" stroke-width="0.6"/>
+    <circle cx="43.8" cy="12.0" r="2.4" fill="#9ed4f0" stroke="#141414" stroke-width="0.6"/>
+    <circle cx="57.8" cy="12.0" r="2.4" fill="#9ed4f0" stroke="#141414" stroke-width="0.6"/>
+    <circle cx="51.2" cy="20.0" r="2.4" fill="#9ed4f0" stroke="#141414" stroke-width="0.6"/>
+    <circle cx="36.5" cy="26.0" r="2.4" fill="#9ed4f0" stroke="#141414" stroke-width="0.6"/>
+    <circle cx="65.1" cy="26.0" r="2.4" fill="#9ed4f0" stroke="#141414" stroke-width="0.6"/>
+    <circle cx="28.0" cy="38.0" r="2.4" fill="#9ed4f0" stroke="#141414" stroke-width="0.6"/>
+    <circle cx="71.4" cy="36.0" r="2.4" fill="#9ed4f0" stroke="#141414" stroke-width="0.6"/>
+    <circle cx="31.7" cy="50.0" r="2.4" fill="#9ed4f0" stroke="#141414" stroke-width="0.6"/>
+    <circle cx="67.6" cy="48.0" r="2.4" fill="#9ed4f0" stroke="#141414" stroke-width="0.6"/>
+    <circle cx="51.4" cy="52.0" r="2.4" fill="#9ed4f0" stroke="#141414" stroke-width="0.6"/>
+    <circle cx="40.8" cy="54.0" r="2.4" fill="#9ed4f0" stroke="#141414" stroke-width="0.6"/>
+    <circle cx="60.8" cy="54.0" r="2.4" fill="#9ed4f0" stroke="#141414" stroke-width="0.6"/>
+    <circle cx="37.1" cy="68.0" r="2.4" fill="#9ed4f0" stroke="#141414" stroke-width="0.6"/>
+    <circle cx="63.3" cy="67.0" r="2.4" fill="#9ed4f0" stroke="#141414" stroke-width="0.6"/>
+    <circle cx="34.8" cy="82.0" r="2.4" fill="#9ed4f0" stroke="#141414" stroke-width="0.6"/>
+    <circle cx="65.5" cy="81.0" r="2.4" fill="#9ed4f0" stroke="#141414" stroke-width="0.6"/></g>
+  <text x="52" y="86" text-anchor="middle" fill="#6b7280" font-size="6.5" font-family="ui-monospace,monospace">pose est.</text>
+</svg>

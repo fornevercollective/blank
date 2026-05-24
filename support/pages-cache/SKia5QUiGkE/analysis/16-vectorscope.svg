@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 104 88" width="104" height="88">
+  <rect width="104" height="88" fill="#0f0f0f"/>
+  <rect x="58" y="17.966597652520658" width="1.1" height="22.033402347479342" fill="#ef4444" opacity="0.9"/>
+  <rect x="59.2" y="22.243191376850753" width="1.1" height="17.756808623149247" fill="#ef4444" opacity="0.9"/>
+  <rect x="60.4" y="19.41052452181711" width="1.1" height="20.58947547818289" fill="#ef4444" opacity="0.9"/>
+  <rect x="61.6" y="34.614747458746365" width="1.1" height="5.385252541253635" fill="#ef4444" opacity="0.9"/>
+  <rect x="62.8" y="23.792947191696836" width="1.1" height="16.207052808303164" fill="#ef4444" opacity="0.9"/>
+  <rect x="64" y="26.707630587440832" width="1.1" height="13.29236941255917" fill="#ef4444" opacity="0.9"/>
+  <rect x="65.2" y="30.08580176860229" width="1.1" height="9.914198231397709" fill="#ef4444" opacity="0.9"/>
+  <rect x="66.4" y="20.469815330689265" width="1.1" height="19.530184669310735" fill="#ef4444" opacity="0.9"/>
+  <rect x="67.6" y="30.647974850295107" width="1.1" height="9.352025149704893" fill="#ef4444" opacity="0.9"/>
+  <rect x="68.8" y="31.61840219321158" width="1.1" height="8.38159780678842" fill="#ef4444" opacity="0.9"/>
+  <rect x="72" y="32.19099414353049" width="1.1" height="7.809005856469508" fill="#22c55e" opacity="0.9"/>
+  <rect x="73.2" y="25.80687682279546" width="1.1" height="14.19312317720454" fill="#22c55e" opacity="0.9"/>
+  <rect x="74.4" y="22.926054518419797" width="1.1" height="17.073945481580203" fill="#22c55e" opacity="0.9"/>
+  <rect x="75.6" y="22.18098009055969" width="1.1" height="17.81901990944031" fill="#22c55e" opacity="0.9"/>
+  <rect x="76.8" y="27.16923500112473" width="1.1" height="12.83076499887527" fill="#22c55e" opacity="0.9"/>
+  <rect x="78" y="22.172310064121223" width="1.1" height="17.827689935878777" fill="#22c55e" opacity="0.9"/>
+  <rect x="79.2" y="35.693480874340395" width="1.1" height="4.306519125659605" fill="#22c55e" opacity="0.9"/>
+  <rect x="80.4" y="22.53112077771945" width="1.1" height="17.46887922228055" fill="#22c55e" opacity="0.9"/>
+  <rect x="81.6" y="25.096393903972672" width="1.1" height="14.903606096027328" fill="#22c55e" opacity="0.9"/>
+  <rect x="82.8" y="26.345876372965492" width="1.1" height="13.65412362703451" fill="#22c55e" opacity="0.9"/>
+  <rect x="86" y="21.152092400275194" width="1.1" height="18.847907599724806" fill="#3b82f6" opacity="0.9"/>
+  <rect x="87.2" y="17.886962946012375" width="1.1" height="22.113037053987625" fill="#3b82f6" opacity="0.9"/>
+  <rect x="88.4" y="28.283371540783758" width="1.1" height="11.716628459216242" fill="#3b82f6" opacity="0.9"/>
+  <rect x="89.6" y="30.29555422493619" width="1.1" height="9.704445775063812" fill="#3b82f6" opacity="0.9"/>
+  <rect x="90.8" y="18.677113218856306" width="1.1" height="21.322886781143694" fill="#3b82f6" opacity="0.9"/>
+  <rect x="92" y="33.16597085752663" width="1.1" height="6.834029142473366" fill="#3b82f6" opacity="0.9"/>
+  <rect x="93.2" y="18.921363395387623" width="1.1" height="21.078636604612377" fill="#3b82f6" opacity="0.9"/>
+  <rect x="94.4" y="33.69096699489536" width="1.1" height="6.309033005104641" fill="#3b82f6" opacity="0.9"/>
+  <rect x="95.6" y="28.11671361050492" width="1.1" height="11.88328638949508" fill="#3b82f6" opacity="0.9"/>
+  <rect x="96.8" y="24.004221429118004" width="1.1" height="15.995778570881994" fill="#3b82f6" opacity="0.9"/>
+  <circle cx="26" cy="36" r="20" fill="#141414" stroke="#525252" stroke-width="1"/>
+  <circle cx="26" cy="36" r="12" fill="none" stroke="#404040" stroke-width="0.6"/>
+  <ellipse cx="26" cy="36" rx="9" ry="5" fill="none" stroke="#eab308" stroke-width="1.2" opacity="0.9"/>
+  <line x1="26" y1="16" x2="26" y2="56" stroke="#404040" stroke-width="0.5"/>
+  <line x1="6" y1="36" x2="46" y2="36" stroke="#404040" stroke-width="0.5"/>
+  <text x="52" y="84" text-anchor="middle" fill="#a3a3a3" font-size="5.5" font-family="ui-monospace,monospace">RGB parade · vectorscope</text>
+</svg>

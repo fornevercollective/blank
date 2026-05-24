@@ -58,8 +58,14 @@ import {
   preloadSceneMedia,
   seekPreview,
   formatIntelClock,
+  isStaticPreviewHost,
 } from "./feed-intel.js";
 import { initHeaderRuntimeStats } from "./header-runtime-stats.js";
+import {
+  fetchPagesIntel,
+  isStuckDemoPlaylistUrl,
+  PAGES_DEMO_URL,
+} from "./pages-static.js";
 import {
   initPhraseSearch,
   updatePhraseSearchIntel,
@@ -900,6 +906,24 @@ async function syncFeedIntelNow() {
   const apiOk = await refreshIngestApiCheck();
   if (!apiOk) {
     lastIntelSyncUrl = pageUrl;
+    try {
+      const cached = await fetchPagesIntel(pageUrl);
+      if (cached) {
+        applyIntelToFeedCards(cached);
+        queueIntelByUrl.set(normalizeUrl(pageUrl), cached);
+        syncHeaderPromptsMetaFromIntel(cached);
+        updatePhraseSearchIntel(cached, pageUrl);
+        if (cached?.title) patchQueueByUrl(pageUrl, { title: cached.title });
+        globalThis.blankIngest?.redraw?.(readQueue());
+        if (slots.iaSlot) await renderIaIntel(slots.iaSlot, cached, pageUrl);
+        if (slots.implSlot) renderImplIntel(slots.implSlot, cached);
+        if (slots.uxSlot) renderUxIntel(slots.uxSlot, cached);
+        if (slots.staggerSlot) renderStaggerIntel(slots.staggerSlot, cached, pageUrl);
+        return;
+      }
+    } catch {
+      /* fall through */
+    }
     fillIntelSlotsUnavailable(slots);
     return;
   }
@@ -2032,8 +2056,9 @@ function initVideoIngest() {
       redraw(readQueue());
     },
     getDefaultFeedUrl: () => {
-      const hls = presets.find((p) => classifyUrl(normalizeUrl(p.url)) === "hls");
-      const pick = hls || presets[0];
+      const pagesPick = presets.find((p) => p.pagesDefault) || presets.find((p) => p.id === "spacex-demo");
+      const youtube = presets.find((p) => classifyUrl(normalizeUrl(p.url)) === "youtube");
+      const pick = pagesPick || youtube || presets[0];
       if (!pick) return null;
       const parts = [];
       if (pick.notes) parts.push(`<div>${pick.notes}</div>`);
@@ -2065,8 +2090,25 @@ function initVideoIngest() {
 
   initFfplayPreviewViews();
 
-  void mountPresets().then(() => {
-    const q = readQueue();
+  void mountPresets().then(async () => {
+    let q = readQueue();
+    if (isStaticPreviewHost()) {
+      const needsDemo =
+        !q.length || q.some((item) => isStuckDemoPlaylistUrl(item.url));
+      if (needsDemo) {
+        const cached = await fetchPagesIntel(PAGES_DEMO_URL);
+        q = [
+          {
+            id: "pages-demo",
+            url: PAGES_DEMO_URL,
+            title: cached?.title || "SpaceX · YouTube replay",
+            addedAt: Date.now(),
+          },
+        ];
+        writeQueue(q);
+        writeActiveId("pages-demo");
+      }
+    }
     writeQueue(q);
     redraw(q);
     void refreshIngestApiCheck().then(() => redraw(readQueue()));
