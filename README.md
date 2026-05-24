@@ -8,6 +8,13 @@ built for live develop and iteration workflows while terminal AI cli is running
 ______
 <img width="971" height="769" alt="Screenshot 2026-05-22 at 9 06 50 am" src="https://github.com/user-attachments/assets/417f5244-4102-4c82-969e-06b0428b42c0" />
 <img width="1178" height="852" alt="Screenshot 2026-05-22 at 9 49 11 am" src="https://github.com/user-attachments/assets/06a3f7f2-2f23-4c5d-8c1d-1fb72e9ec4a8" />
+------
+<img width="1185" height="857" alt="Screenshot 2026-05-24 at 10 46 38 am" src="https://github.com/user-attachments/assets/d520c8ef-8c77-4b15-8f4f-f7e61b17f1fa" />
+updating the waveforms, scrubbing, IK Pose estimates, camera axis detection
+------
+<img width="1185" height="857" alt="Screenshot 2026-05-24 at 10 30 53 am" src="https://github.com/user-attachments/assets/ed451e83-f893-4cb8-af41-880073d844cb" />
+<img width="1185" height="857" alt="Screenshot 2026-05-24 at 10 33 01 am" src="https://github.com/user-attachments/assets/f573655b-bded-407f-bfa4-e5cbd7fa0857" />
+
 
 
 Double-click **`Launch Blank.app`** or **`Launch.command`** in this folder to open Terminal, start the server, and open your browser.
