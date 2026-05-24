@@ -10,6 +10,7 @@
  *   BLANK_KEEP_ALIVE_MS       — HTTP keep-alive timeout (default 5000; lower frees sockets)
  *   BLANK_HEADERS_TIMEOUT_MS  — headers timeout (default 15000)
  *   BLANK_REQUEST_TIMEOUT_MS  — whole request timeout (default 30000)
+ *   BLANK_INGEST_TIMEOUT_MS   — ingest/ffmpeg routes (default 600000)
  *   BLANK_QUIET=1             — fewer startup lines (request lines still log)
  *   BLANK_LOG_CONNECTIONS=1   — log each TCP open/close (noisy)
  */
@@ -19,6 +20,10 @@ import path from "node:path";
 import process from "node:process";
 import { fileURLToPath } from "node:url";
 import { handleIngestApi } from "./ytdlp-api.mjs";
+import {
+  addRuntimeTokensForIngest,
+  getRuntimeSnapshot,
+} from "./runtime-stats.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = __dirname;
@@ -27,7 +32,8 @@ const HOST = process.env.BLANK_HOST || process.env.HOST || "127.0.0.1";
 
 const MAX_CONNECTIONS = intEnv("BLANK_MAX_CONNECTIONS", 128);
 const MAX_CONCURRENT = intEnv("BLANK_MAX_CONCURRENT", 24);
-const KEEP_ALIVE_MS = intEnv("BLANK_KEEP_ALIVE_MS", 5000);
+const KEEP_ALIVE_MS = intEnv("BLANK_KEEP_ALIVE_MS", 12_000);
+const INGEST_REQUEST_TIMEOUT_MS = intEnv("BLANK_INGEST_TIMEOUT_MS", 600_000);
 const HEADERS_TIMEOUT_MS = intEnv("BLANK_HEADERS_TIMEOUT_MS", 15000);
 const REQUEST_TIMEOUT_MS = intEnv("BLANK_REQUEST_TIMEOUT_MS", 30000);
 const QUIET = process.env.BLANK_QUIET === "1";
@@ -37,6 +43,7 @@ const MIME = {
   ".html": "text/html; charset=utf-8",
   ".css": "text/css; charset=utf-8",
   ".js": "text/javascript; charset=utf-8",
+  ".mjs": "text/javascript; charset=utf-8",
   ".json": "application/json; charset=utf-8",
   ".png": "image/png",
   ".svg": "image/svg+xml",
@@ -46,11 +53,22 @@ const MIME = {
 const stats = {
   requests: 0,
   busyRejects: 0,
+  clientResets: 0,
   bytesOut: 0,
   inFlight: 0,
   tcpOpen: 0,
   started: Date.now(),
 };
+
+/** Browser aborts / stale keep-alive — noisy but harmless. */
+function isBenignClientError(err) {
+  const code = err && typeof err === "object" && "code" in err ? String(err.code) : "";
+  const msg = err instanceof Error ? err.message : String(err);
+  if (code === "ECONNRESET" || code === "EPIPE" || code === "ECANCELED") return true;
+  if (/ECONNRESET|EPIPE|aborted|socket hang up/i.test(msg)) return true;
+  if (/Parse Error|Invalid method|HPE_/i.test(msg)) return true;
+  return false;
+}
 
 function intEnv(name, fallback) {
   const v = process.env[name];
@@ -106,7 +124,7 @@ function printStats() {
   const uptime = ((Date.now() - stats.started) / 1000).toFixed(1);
   process.stdout.write(
     `\n${bold}[stats]${rst} uptime ${uptime}s  requests ${stats.requests}  bytes-out ~${fmtBytes(stats.bytesOut)}  busy-rejects ${stats.busyRejects}\n` +
-      `         in-flight ${stats.inFlight}  tcp-open ${stats.tcpOpen}  caps concurrent≤${MAX_CONCURRENT} connections≤${MAX_CONNECTIONS}\n\n`,
+      `         in-flight ${stats.inFlight}  tcp-open ${stats.tcpOpen}  client-resets ${stats.clientResets}  caps concurrent≤${MAX_CONCURRENT} connections≤${MAX_CONNECTIONS}\n\n`,
   );
 }
 
@@ -172,7 +190,24 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  if (urlPath === "/api/runtime" && (method === "GET" || method === "HEAD")) {
+    const body = Buffer.from(JSON.stringify(getRuntimeSnapshot(stats)), "utf8");
+    res.writeHead(200, {
+      "Content-Type": "application/json; charset=utf-8",
+      "Content-Length": body.length,
+      "Cache-Control": "no-store",
+      "Access-Control-Allow-Origin": "*",
+      Connection: "close",
+    });
+    if (method === "HEAD") res.end();
+    else res.end(body);
+    finalize(200, body.length);
+    return;
+  }
+
   if (urlPath.startsWith("/api/ingest/")) {
+    req.setTimeout(INGEST_REQUEST_TIMEOUT_MS);
+    res.setTimeout?.(INGEST_REQUEST_TIMEOUT_MS);
     if (req.method === "OPTIONS") {
       res.writeHead(204, {
         "Access-Control-Allow-Origin": "*",
@@ -187,12 +222,13 @@ const server = http.createServer((req, res) => {
     handleIngestApi(req, res, urlPath)
       .then((handled) => {
         if (handled) {
+          addRuntimeTokensForIngest(urlPath, method);
           if (!finalized) finalize(res.statusCode || 200, 0);
           return;
         }
         const allow = "GET, HEAD, POST, OPTIONS";
         const body = Buffer.from(
-          `${req.method} ${urlPath} — ingest: POST /api/ingest/resolve, GET /api/ingest/play/:id, scene-thumb, scene-audio, pose-thumb, scene-analysis-thumb, POST /api/ingest/intel\n`,
+          `${req.method} ${urlPath} — ingest: POST /api/ingest/resolve, GET /api/ingest/play/:id, scene-thumb, scene-audio, pose-thumb, scene-analysis-thumb, POST /api/ingest/intel, POST /api/ingest/gsplat/build, GET gsplat/pointcloud.ply transforms.json\n`,
           "utf8",
         );
         res.writeHead(405, {
@@ -264,7 +300,7 @@ const server = http.createServer((req, res) => {
     const size = st.size;
     res.setHeader("Content-Type", MIME[ext] || "application/octet-stream");
     res.setHeader("Content-Length", size);
-    if (ext === ".html" || ext === ".js" || ext === ".css" || ext === ".json") {
+    if (ext === ".html" || ext === ".js" || ext === ".mjs" || ext === ".css" || ext === ".json") {
       res.setHeader("Cache-Control", "no-store");
     }
     if (method === "HEAD") {
@@ -337,9 +373,20 @@ server.on("connection", (socket) => {
 });
 
 server.on("clientError", (err, socket) => {
-  process.stdout.write(`${dim}${ts()}${rst} ${red}http clientError${rst} ${dim}${err.message}${rst}\n`);
+  if (isBenignClientError(err)) {
+    stats.clientResets++;
+    if (LOG_CONNECTIONS) {
+      process.stdout.write(
+        `${dim}${ts()}${rst} ${dim}http client reset${rst} ${dim}${err.message}${rst}\n`,
+      );
+    }
+  } else {
+    process.stdout.write(
+      `${dim}${ts()}${rst} ${red}http clientError${rst} ${err.message}${err.code ? ` (${err.code})` : ""}\n`,
+    );
+  }
   try {
-    socket.destroy();
+    if (!socket.destroyed) socket.destroy();
   } catch {
     /* noop */
   }

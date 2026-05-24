@@ -17,6 +17,9 @@ import {
   refreshIngestApiCheck,
   getIngestApiOk,
   renderIngestChecklist,
+  renderResolvedLinksPanel,
+  formatResolvedLinksBlock,
+  copyText,
   renderIngestActions,
   buildIngestChecklist,
   commandsFor,
@@ -33,9 +36,9 @@ import {
   readPaths,
   persistPaths,
   fetchPresets,
-  copyText,
   escapeHtml,
   mountPreview,
+  initFfplayPreviewViews,
   setPreviewHint,
   onRailPlayback,
   onPreviewStreamRecovery,
@@ -48,7 +51,15 @@ import {
   refreshFeedIntel,
   deriveShowFromIntel,
   fillIntelSlotsUnavailable,
+  sceneThumbStripHtml,
+  headerSceneChipsHtml,
+  sceneIndexAtTime,
+  enrichScenes,
+  preloadSceneMedia,
+  seekPreview,
+  formatIntelClock,
 } from "./feed-intel.js";
+import { initHeaderRuntimeStats } from "./header-runtime-stats.js";
 import {
   initPhraseSearch,
   updatePhraseSearchIntel,
@@ -357,6 +368,16 @@ let headerPromptScrollBound = false;
 let intelPullTimer = 0;
 let intelSyncTimer = 0;
 let lastIntelSyncUrl = "";
+
+/** @type {Map<string, object>} */
+const queueIntelByUrl = new Map();
+
+/** When true, header meta uses scene thumbs (no canvas snapshot flicker). */
+let headerSceneChipMode = false;
+
+let lastHeaderSnapDataUrl = "";
+let headerSnapDebounce = 0;
+let lastHeaderMetaSceneIdx = -1;
 /** Cooldown after preview failure so we do not resolve→play→fail in a loop. */
 let previewRecoveryUntil = 0;
 
@@ -440,20 +461,24 @@ function updateHeaderPromptsMeta(patch = {}) {
   if (!(snapImg instanceof HTMLImageElement) || !timeEl || !subjectEl) return;
 
   if ("thumbDataUrl" in patch && patch.thumbDataUrl) {
-    snapImg.onerror = () => {
-      snapImg.hidden = true;
-      snapImg.removeAttribute("src");
-    };
-    snapImg.src = patch.thumbDataUrl;
-    snapImg.hidden = false;
-  } else if ("thumbSrc" in patch) {
-    if (patch.thumbSrc) {
+    if (snapImg.src !== patch.thumbDataUrl) {
       snapImg.onerror = () => {
         snapImg.hidden = true;
         snapImg.removeAttribute("src");
       };
-      snapImg.src = patch.thumbSrc;
+      snapImg.src = patch.thumbDataUrl;
       snapImg.hidden = false;
+    }
+  } else if ("thumbSrc" in patch) {
+    if (patch.thumbSrc) {
+      if (snapImg.getAttribute("src") !== patch.thumbSrc) {
+        snapImg.onerror = () => {
+          snapImg.hidden = true;
+          snapImg.removeAttribute("src");
+        };
+        snapImg.src = patch.thumbSrc;
+        snapImg.hidden = false;
+      }
     } else {
       snapImg.hidden = true;
       snapImg.removeAttribute("src");
@@ -475,6 +500,8 @@ function updateHeaderPromptsMeta(patch = {}) {
 /** @param {import('./video-ingest.js').QueueItem | null | undefined} item */
 function syncHeaderPromptsMetaFromQueue(item) {
   if (!item?.url) {
+    headerSceneChipMode = false;
+    rebuildHeaderSceneChips(null);
     updateHeaderPromptsMeta({
       subject: "",
       detail: "",
@@ -485,6 +512,11 @@ function syncHeaderPromptsMetaFromQueue(item) {
     return;
   }
   const norm = normalizeUrl(item.url);
+  const cached = queueIntelByUrl.get(norm);
+  if (cached?.scenes?.length) {
+    rebuildHeaderSceneChips(cached);
+    return;
+  }
   const kind = classifyUrl(norm);
   const title = String(item.title || displayTitleForUrl(norm, kind)).trim();
   const parts = title.split(/\s*\|\s*/);
@@ -499,9 +531,87 @@ function syncHeaderPromptsMetaFromQueue(item) {
   });
 }
 
+/** @param {number} idx */
+function highlightHeaderSceneChip(idx) {
+  const wrap = document.getElementById("header-scene-chips");
+  if (!wrap) return;
+  wrap.querySelectorAll(".header-scene-chip").forEach((chip) => {
+    const i = Number(chip.getAttribute("data-scene-idx"));
+    chip.classList.toggle("is-active", i === idx);
+  });
+}
+
+/** @param {object} intel @param {string} pageUrl @param {number} t */
+function syncHeaderMetaAtSceneTime(intel, pageUrl, t) {
+  const scenes = enrichScenes(Array.isArray(intel.scenes) ? intel.scenes : [], intel, pageUrl);
+  if (!scenes.length) return;
+  const idx = Math.max(0, sceneIndexAtTime(scenes, t));
+  const sc = scenes[idx] || scenes[0];
+  const { show, headline } = deriveShowFromIntel(intel);
+  const dur = intel.durationLabel ? ` · ${intel.durationLabel}` : "";
+  const timeLabel = `${formatIntelClock(t)}${dur}`;
+  highlightHeaderSceneChip(idx);
+  if (idx === lastHeaderMetaSceneIdx) {
+    updateHeaderPromptsMeta({ timeLabel, scrubbing: false });
+    return;
+  }
+  lastHeaderMetaSceneIdx = idx;
+  const norm = normalizeUrl(pageUrl);
+  let thumbSrc = sc.thumb ? String(sc.thumb) : intel.thumb ? String(intel.thumb) : null;
+  if (!thumbSrc) thumbSrc = previewThumbUrl(norm, classifyUrl(norm));
+  updateHeaderPromptsMeta({
+    subject: show,
+    detail: String(sc.title || headline || "").slice(0, 72),
+    thumbSrc,
+    timeLabel,
+    scrubbing: false,
+  });
+}
+
+/** @param {object | null | undefined} intel */
+function rebuildHeaderSceneChips(intel) {
+  const wrap = document.getElementById("header-scene-chips");
+  const track = document.getElementById("header-prompts");
+  if (!(wrap instanceof HTMLElement) || !track) return;
+
+  const pageUrl = String(intel?.webpageUrl || getWatchUrlForIntel() || "").trim();
+  const scenes = Array.isArray(intel?.scenes) ? intel.scenes : [];
+
+  if (!pageUrl || !scenes.length) {
+    headerSceneChipMode = false;
+    lastHeaderMetaSceneIdx = -1;
+    wrap.hidden = true;
+    wrap.replaceChildren();
+    track.querySelectorAll(".header-prompt-chip").forEach((c) => {
+      c.hidden = false;
+    });
+    return;
+  }
+
+  headerSceneChipMode = true;
+  lastHeaderMetaSceneIdx = -1;
+  wrap.innerHTML = headerSceneChipsHtml(scenes, pageUrl, intel);
+  wrap.hidden = false;
+  track.querySelectorAll(".header-prompt-chip").forEach((c) => {
+    c.hidden = true;
+  });
+  preloadSceneMedia(wrap);
+  wrap.querySelectorAll(".header-scene-chip[data-seek]").forEach((chip) => {
+    chip.addEventListener("click", () => {
+      const sec = Number(chip.getAttribute("data-seek"));
+      if (Number.isFinite(sec)) seekPreview(sec);
+    });
+  });
+  syncHeaderMetaAtSceneTime(intel, pageUrl, 0);
+  requestAnimationFrame(updateHeaderPromptScrollButtons);
+}
+
 /** @param {object | null | undefined} intel */
 function syncHeaderPromptsMetaFromIntel(intel) {
   if (!intel) return;
+  rebuildHeaderSceneChips(intel);
+  if (headerSceneChipMode) return;
+
   const { show, headline } = deriveShowFromIntel(intel);
   const pageUrl = String(intel.webpageUrl || "").trim();
   let thumbSrc = intel.thumb ? String(intel.thumb) : null;
@@ -523,20 +633,65 @@ function syncHeaderPromptsMetaFromIntel(intel) {
 function initHeaderPromptsMeta() {
   onRailPlayback((ev) => {
     if (ev.type === "scrub") {
-      updateHeaderPromptsMeta({
-        timeLabel: ev.active ? ev.label : "0:00",
-        scrubbing: ev.active,
-      });
+      if (headerSceneChipMode) {
+        const pageUrl = getWatchUrlForIntel();
+        const intel = pageUrl ? queueIntelByUrl.get(normalizeUrl(pageUrl)) : null;
+        if (intel && ev.label) {
+          const m = ev.label.match(/^(\d+:\d+(?::\d+)?)/);
+          if (m) {
+            const parts = m[1].split(":").map(Number);
+            let sec = 0;
+            if (parts.length === 3) sec = parts[0] * 3600 + parts[1] * 60 + parts[2];
+            else if (parts.length === 2) sec = parts[0] * 60 + parts[1];
+            syncHeaderMetaAtSceneTime(intel, pageUrl, sec);
+          }
+        }
+        updateHeaderPromptsMeta({ scrubbing: ev.active });
+      } else {
+        updateHeaderPromptsMeta({
+          timeLabel: ev.active ? ev.label : "0:00",
+          scrubbing: ev.active,
+        });
+      }
       return;
     }
     if (ev.type === "snapshot") {
-      updateHeaderPromptsMeta({ thumbDataUrl: ev.dataUrl });
+      if (headerSceneChipMode) return;
+      if (ev.dataUrl === lastHeaderSnapDataUrl) return;
+      window.clearTimeout(headerSnapDebounce);
+      headerSnapDebounce = window.setTimeout(() => {
+        lastHeaderSnapDataUrl = ev.dataUrl;
+        updateHeaderPromptsMeta({ thumbDataUrl: ev.dataUrl });
+      }, 900);
+      return;
+    }
+    if (ev.type === "frame" && headerSceneChipMode && ev.timeLabel) {
+      const pageUrl = getWatchUrlForIntel();
+      const intel = pageUrl ? queueIntelByUrl.get(normalizeUrl(pageUrl)) : null;
+      if (!intel) return;
+      const m = String(ev.timeLabel).match(/^(\d+:\d+(?::\d+)?)/);
+      if (!m) return;
+      const parts = m[1].split(":").map(Number);
+      let sec = 0;
+      if (parts.length === 3) sec = parts[0] * 3600 + parts[1] * 60 + parts[2];
+      else if (parts.length === 2) sec = parts[0] * 60 + parts[1];
+      syncHeaderMetaAtSceneTime(intel, pageUrl, sec);
       return;
     }
     if (ev.type === "reset") {
+      headerSceneChipMode = false;
       const active = resolveActiveItem(readQueue());
       syncHeaderPromptsMetaFromQueue(active);
     }
+  });
+
+  document.addEventListener("blank:preview-time", (ev) => {
+    if (!headerSceneChipMode) return;
+    const t = ev.detail?.t;
+    if (!Number.isFinite(t)) return;
+    const pageUrl = getWatchUrlForIntel();
+    const intel = pageUrl ? queueIntelByUrl.get(normalizeUrl(pageUrl)) : null;
+    if (intel) syncHeaderMetaAtSceneTime(intel, pageUrl, t);
   });
 }
 
@@ -752,9 +907,11 @@ async function syncFeedIntelNow() {
   lastIntelSyncUrl = pageUrl;
   void refreshFeedIntel(pageUrl, slots, {
     onIntel(intel) {
+      queueIntelByUrl.set(normalizeUrl(pageUrl), intel);
       syncHeaderPromptsMetaFromIntel(intel);
       updatePhraseSearchIntel(intel, pageUrl);
       if (intel?.title) patchQueueByUrl(pageUrl, { title: intel.title });
+      globalThis.blankIngest?.redraw?.(readQueue());
     },
   }).catch(() => {
     lastIntelSyncUrl = "";
@@ -1469,6 +1626,7 @@ function initVideoIngest() {
       const next = patchQueueItem(itemId, {
         playId: data.playId,
         streamKind: data.streamKind,
+        streamUrl: typeof data.streamUrl === "string" ? data.streamUrl : undefined,
         title: data.title || item.title,
         resolveError: undefined,
       });
@@ -1478,6 +1636,7 @@ function initVideoIngest() {
       const msg = e instanceof Error ? e.message : String(e);
       const next = patchQueueItem(itemId, {
         playId: undefined,
+        streamUrl: undefined,
         resolveError: msg,
       });
       redraw(next);
@@ -1519,6 +1678,7 @@ function initVideoIngest() {
       "Preview stream failed (TikTok often blocks browser HLS). Click resolve to retry once, or controls → MuStream.";
     patchQueueItem(active.id, {
       playId: undefined,
+      streamUrl: undefined,
       resolveError: msg,
     });
     clearRailThumb();
@@ -1618,8 +1778,12 @@ function initVideoIngest() {
       };
 
       const { actions } = buildIngestChecklist(item, getPaths(), getIngestApiOk());
-      const top = document.createElement("div");
-      top.className = "ingest-row-top";
+      const fold = document.createElement("details");
+      fold.className = "ingest-row-fold";
+      if (active?.id === item.id) fold.setAttribute("open", "");
+
+      const summary = document.createElement("summary");
+      summary.className = "ingest-row-top";
       const meta = document.createElement("div");
       meta.className = "ingest-row-meta";
       meta.innerHTML = `<span class="ingest-kind">${escapeHtml(kindLabel(kind))}</span><h3 class="ingest-row-title">${escapeHtml(item.title || item.url)}</h3>`;
@@ -1628,7 +1792,8 @@ function initVideoIngest() {
       playBtn.type = "button";
       playBtn.className = "ingest-row-play";
       playBtn.textContent = active?.id === item.id ? "Previewing" : "Preview";
-      playBtn.addEventListener("click", () => {
+      playBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
         writeActiveId(item.id);
         redraw(readQueue());
       });
@@ -1637,12 +1802,64 @@ function initVideoIngest() {
       rm.className = "ingest-row-remove";
       rm.setAttribute("aria-label", "Remove");
       rm.textContent = "×";
-      rm.addEventListener("click", () => {
+      rm.addEventListener("click", (e) => {
+        e.stopPropagation();
         const next = readQueue().filter((x) => x.id !== item.id);
         writeQueue(next);
         redraw(next);
       });
-      top.append(meta, actionsEl, playBtn, rm);
+      for (const btn of actionsEl.querySelectorAll("button")) {
+        btn.addEventListener("click", (e) => e.stopPropagation());
+      }
+      summary.append(meta, actionsEl, playBtn, rm);
+      fold.appendChild(summary);
+
+      const expandable = document.createElement("div");
+      expandable.className = "ingest-row-expand";
+
+      const intel = queueIntelByUrl.get(norm);
+      const sceneStrip = document.createElement("details");
+      sceneStrip.className = "ingest-scene-strip-wrap ingest-scene-strip-fold";
+      if (intel?.scenes?.length) {
+        sceneStrip.setAttribute("open", "");
+        const count = intel.scenes.length;
+        const summary = document.createElement("summary");
+        summary.className = "ingest-scene-strip-label";
+        summary.innerHTML = `Scene cuts <span class="ingest-scene-strip-count">(${count})</span>`;
+        sceneStrip.appendChild(summary);
+        const inner = document.createElement("div");
+        inner.className = "ingest-scene-strip-inner";
+        inner.innerHTML = `${sceneThumbStripHtml(intel.scenes, norm, intel, { className: "card-stagger-list ingest-scene-strip" })}
+          <p class="card-intel-muted ingest-scene-strip-hint">Scene handoffs load sequentially in <strong>IA +</strong>; list mirrors reveal order.</p>`;
+        sceneStrip.appendChild(inner);
+        preloadSceneMedia(sceneStrip);
+        sceneStrip.querySelectorAll(".card-stagger-item[data-seek]").forEach((el) => {
+          el.addEventListener("click", (e) => {
+            e.stopPropagation();
+            const sec = Number(el.getAttribute("data-seek"));
+            if (Number.isFinite(sec)) seekPreview(sec);
+          });
+          el.addEventListener("keydown", (e) => {
+            if (e.key !== "Enter" && e.key !== " ") return;
+            e.preventDefault();
+            e.stopPropagation();
+            const sec = Number(el.getAttribute("data-seek"));
+            if (Number.isFinite(sec)) seekPreview(sec);
+          });
+        });
+      } else if (active?.id === item.id) {
+        const poster = previewThumbUrl(norm, kind);
+        const summary = document.createElement("summary");
+        summary.className = "ingest-scene-strip-label";
+        summary.textContent = "Scene cuts";
+        sceneStrip.appendChild(summary);
+        const inner = document.createElement("div");
+        inner.className = "ingest-scene-strip-inner";
+        inner.innerHTML = poster
+          ? `<figure class="ingest-queue-poster"><img src="${escapeHtml(poster)}" alt="" width="120" height="68" loading="lazy" decoding="async" /><figcaption class="card-intel-muted">Scene thumbnails after intel pull…</figcaption></figure>`
+          : `<p class="card-intel-muted ingest-scene-strip-hint">Scene thumbnails appear after intel pull (local server).</p>`;
+        sceneStrip.appendChild(inner);
+      }
 
       const cmds = document.createElement("details");
       cmds.className = "ingest-row-cmds";
@@ -1662,14 +1879,26 @@ function initVideoIngest() {
       cmds.appendChild(ul);
 
       const checklist = renderIngestChecklist(item, getPaths(), ingestHandlers, getIngestApiOk());
+      const mainCol = document.createElement("div");
+      mainCol.className = "ingest-row-main";
+      mainCol.append(checklist, renderResolvedLinksPanel(item));
 
-      row.append(top, checklist, cmds);
+      if (sceneStrip.childElementCount > 0) {
+        const body = document.createElement("div");
+        body.className = "ingest-row-body";
+        body.append(sceneStrip, mainCol);
+        expandable.append(body, cmds);
+      } else {
+        expandable.append(mainCol, cmds);
+      }
       if (item.notesHtml?.trim()) {
         const notes = document.createElement("div");
         notes.className = "ingest-row-notes";
         notes.innerHTML = item.notesHtml.trim();
-        row.appendChild(notes);
+        expandable.appendChild(notes);
       }
+      fold.appendChild(expandable);
+      row.appendChild(fold);
       queueRoot.appendChild(row);
     });
     syncFeedIntelFromQueue();
@@ -1705,9 +1934,29 @@ function initVideoIngest() {
   document.getElementById("ingest-clear")?.addEventListener("click", () => {
     writeQueue([]);
     writeActiveId(null);
+    queueIntelByUrl.clear();
     clearRailThumb();
     redraw([]);
     setRailSync(false);
+  });
+
+  document.getElementById("ingest-copy-links")?.addEventListener("click", async () => {
+    const active = resolveActiveItem(readQueue());
+    if (!active) {
+      window.alert("Queue a URL or select a row first.");
+      return;
+    }
+    const block = formatResolvedLinksBlock(active);
+    const btn = document.getElementById("ingest-copy-links");
+    await copyText(btn instanceof HTMLElement ? btn : null, block);
+    if (!active.playId && !active.streamUrl) {
+      setPreviewHint(
+        hintHost,
+        "Copied page URL only — click resolve for proxied play + CDN stream links.",
+      );
+    } else {
+      setPreviewHint(hintHost, "Copied resolved links to clipboard.");
+    }
   });
 
   document.getElementById("ingest-resolve")?.addEventListener("click", () => {
@@ -1719,7 +1968,7 @@ function initVideoIngest() {
     const item = ensureQueued(target);
     if (!item) return;
     previewRecoveryUntil = 0;
-    patchQueueItem(item.id, { playId: undefined, resolveError: undefined });
+    patchQueueItem(item.id, { playId: undefined, streamUrl: undefined, resolveError: undefined });
     redraw(readQueue());
     void autoResolveItem(item.id, { force: true, download: false });
   });
@@ -1774,6 +2023,7 @@ function initVideoIngest() {
 
   const api = {
     queueUrl,
+    redraw,
     getActive: () => resolveActiveItem(readQueue()),
     getPaths,
     getPresets: () => presets,
@@ -1813,6 +2063,8 @@ function initVideoIngest() {
     mainInput.focus();
   });
 
+  initFfplayPreviewViews();
+
   void mountPresets().then(() => {
     const q = readQueue();
     writeQueue(q);
@@ -1822,22 +2074,52 @@ function initVideoIngest() {
   return api;
 }
 
+function showBootFailure(err) {
+  const feed = document.getElementById("feed");
+  const msg = err instanceof Error ? err.message : String(err);
+  console.error("[blank] boot failed:", err);
+  if (feed) {
+    const banner = document.createElement("p");
+    banner.className = "feed-boot-error";
+    banner.setAttribute("role", "alert");
+    banner.textContent = `UI failed to finish loading: ${msg}. Hard-refresh (Cmd+Shift+R). If this persists, check the browser console.`;
+    feed.prepend(banner);
+  }
+  document.querySelectorAll(".card").forEach((c) => c.classList.add("card--visible"));
+}
+
 async function main() {
   initQualitySettings();
+  initHeaderRuntimeStats();
   initHeaderPromptScroll();
   initHeaderPromptsMeta();
-  await refreshIngestApiCheck();
-  const ingest = initVideoIngest();
-  initHeaderRail(ingest);
+
   const { merged, activeIndex } = await loadThread();
   buildUi(merged, activeIndex);
+
+  void refreshIngestApiCheck().then(() => {
+    syncFeedIntelFromQueue();
+    const ingest = globalThis.blankIngest;
+    if (ingest && typeof ingest.reload === "function") void ingest.reload();
+  });
+
+  const ingest = initVideoIngest();
+  initHeaderRail(ingest);
   const feedEl = document.getElementById("feed");
   if (feedEl) {
-    initPhraseSearch(feedEl, {
-      getQueue: readQueue,
-      getThread: () => currentThread,
-      getPageUrl: getWatchUrlForIntel,
-    });
+    try {
+      initPhraseSearch(feedEl, {
+        getQueue: readQueue,
+        getThread: () => currentThread,
+        getPageUrl: getWatchUrlForIntel,
+      });
+    } catch (e) {
+      console.error("[blank] phrase search init:", e);
+      const note = document.createElement("p");
+      note.className = "feed-boot-error";
+      note.textContent = `Phrase search failed to load (${e instanceof Error ? e.message : String(e)}). Feed cards below should still work.`;
+      feedEl.appendChild(note);
+    }
   }
   if (ingest) initHeaderPromptInput(ingest);
   initLiveProgram();
@@ -1854,4 +2136,4 @@ async function main() {
   };
 }
 
-main();
+main().catch(showBootFailure);

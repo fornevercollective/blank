@@ -4,7 +4,17 @@
 
 import { escapeHtml, getIngestApiOk, refreshIngestApiCheck } from "./video-ingest.js";
 import { qualityPayloadForApi } from "./ingest-settings.js";
-import { sceneAnalysisThumbApiUrl } from "./scene-analysis-api.js";
+import { sceneAnalysisThumbApiUrl, scenePoseThumbApiUrl } from "./scene-analysis-api.js";
+import {
+  gsplatPlyApiUrl,
+  gsplatTransformsApiUrl,
+  gsplatCamerasApiUrl,
+  GSPLAT_SCENE_FILTER_TYPES,
+  sceneGsplatTagLabels,
+} from "./scene-gsplat-api.js";
+import { filterScenesForGsplat } from "./scene-gsplat-filters.js";
+import { mountSceneDisruptor } from "./scene-camera-telemetry.js";
+import { trackClientTokens } from "./header-runtime-stats.js";
 
 /** True on GitHub Pages / static hosts with no Node ingest API. */
 export function isStaticPreviewHost() {
@@ -47,6 +57,12 @@ export function formatIntelClock(sec) {
   return `${m}:${String(r).padStart(2, "0")}`;
 }
 
+/** @param {number} t */
+function emitPreviewTime(t) {
+  if (!Number.isFinite(t)) return;
+  document.dispatchEvent(new CustomEvent("blank:preview-time", { detail: { t } }));
+}
+
 /** @param {number} seconds */
 export function seekPreview(seconds) {
   const host = document.getElementById("ffplay-embed");
@@ -55,6 +71,7 @@ export function seekPreview(seconds) {
   if (video instanceof HTMLVideoElement) {
     video.currentTime = seconds;
     void video.play().catch(() => {});
+    emitPreviewTime(seconds);
     return;
   }
   const frame = host.querySelector("iframe");
@@ -64,6 +81,7 @@ export function seekPreview(seconds) {
       u.searchParams.set("start", String(Math.floor(seconds)));
       u.searchParams.set("autoplay", "1");
       frame.src = u.toString();
+      emitPreviewTime(seconds);
     } catch {
       /* noop */
     }
@@ -297,7 +315,9 @@ function seededJoints(pageUrl, tSec, ikHint) {
     return seed / 0xffffffff;
   };
   const seated = /seated|desk|anchor/i.test(ikHint);
-  const twoShot = /two-shot|dialogue|conversation/i.test(ikHint);
+  const twoShot = /two-shot|dialogue|conversation|two hosts|co-host|personnel behind/i.test(
+    ikHint,
+  );
   const standing = /standing|gestur|walk|podium|stage/i.test(ikHint);
   const cx = 52 + (rnd() - 0.5) * (twoShot ? 14 : 8);
   const lean = (rnd() - 0.5) * (standing ? 0.28 : 0.16);
@@ -305,6 +325,17 @@ function seededJoints(pageUrl, tSec, ikHint) {
   const stance = seated ? 0.75 : 0.9 + rnd() * 0.2;
   const drop = seated ? 6 : 0;
 
+  return jointsFromParams(cx, lean, reach, stance, drop);
+}
+
+/**
+ * @param {number} cx
+ * @param {number} lean
+ * @param {number} reach
+ * @param {number} stance
+ * @param {number} drop
+ */
+function jointsFromParams(cx, lean, reach, stance, drop) {
   return normJointsToSvg({
     nose: { x: (cx + lean * 4) / 104, y: (11 + drop) / 88 },
     lEye: { x: (cx - 4 + lean * 3) / 104, y: (10 + drop) / 88 },
@@ -326,6 +357,222 @@ function seededJoints(pageUrl, tSec, ikHint) {
     lAnkle: { x: (cx - 14 * stance) / 104, y: (82 + drop) / 88 },
     rAnkle: { x: (cx + 13 * stance) / 104, y: (81 + drop) / 88 },
   });
+}
+
+/**
+ * Phase-shifted joints for motion / walk-cycle prediction along a segment.
+ * @param {string} pageUrl
+ * @param {number} tSec
+ * @param {string} ikHint
+ * @param {number} phase01 0…1 across segment
+ */
+function seededJointsMotion(pageUrl, tSec, ikHint, phase01) {
+  if (/no figure|screen content|graphics/i.test(ikHint)) {
+    return seededJoints(pageUrl, tSec, ikHint);
+  }
+  let seed = hashSeed(`${pageUrl}\0${Math.floor(tSec)}\0${Math.floor(phase01 * 1000)}`);
+  const rnd = () => {
+    seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0;
+    return seed / 0xffffffff;
+  };
+  const seated = /seated|desk|anchor/i.test(ikHint);
+  const twoShot = /two-shot|dialogue|conversation|two hosts|co-host|personnel behind/i.test(
+    ikHint,
+  );
+  const standing = /standing|gestur|walk|podium|stage|pad \/ vehicle/i.test(ikHint);
+  const cx = 52 + (rnd() - 0.5) * (twoShot ? 14 : 8);
+  const lean = (rnd() - 0.5) * (standing ? 0.28 : 0.16) + Math.sin(phase01 * Math.PI * 2) * 0.06;
+  const reach = (standing ? 1.05 : seated ? 0.75 : 0.9) + rnd() * 0.25;
+  const stance = seated ? 0.75 : 0.9 + rnd() * 0.2;
+  const drop = seated ? 6 : 0;
+  const j = jointsFromParams(cx, lean, reach, stance, drop);
+
+  if (standing && !seated) {
+    const cycles = /walk|track|pad|podium|gestur/i.test(ikHint) ? 1.35 : 0.85;
+    const swing = Math.sin(phase01 * Math.PI * 2 * cycles) * 7;
+    const swingOpp = Math.sin(phase01 * Math.PI * 2 * cycles + Math.PI) * 7;
+    j.lAnkle = { x: j.lAnkle.x, y: j.lAnkle.y + swing };
+    j.rAnkle = { x: j.rAnkle.x, y: j.rAnkle.y + swingOpp };
+    j.lKnee = { x: j.lKnee.x, y: j.lKnee.y + swing * 0.42 };
+    j.rKnee = { x: j.rKnee.x, y: j.rKnee.y + swingOpp * 0.42 };
+    j.midHip = { x: j.midHip.x, y: j.midHip.y + (swing + swingOpp) * 0.08 };
+  } else if (seated) {
+    const bob = Math.sin(phase01 * Math.PI * 2) * 1.8;
+    j.midHip = { x: j.midHip.x, y: j.midHip.y + bob };
+    j.neck = { x: j.neck.x, y: j.neck.y + bob * 0.35 };
+  }
+  return j;
+}
+
+/**
+ * @param {Array<{ joints: Record<string, { x: number, y: number }> }>} samples
+ * @param {string} ikHint
+ */
+function predictMotionProfile(samples, ikHint) {
+  if (/no figure|screen content|graphics/i.test(ikHint)) {
+    return { kind: "gfx", label: "No figure · screen / GFX", strideIdx: [] };
+  }
+  if (samples.length < 2) {
+    return { kind: "static", label: "Static · single frame", strideIdx: [] };
+  }
+  const ankleMid = samples.map((s) => (s.joints.lAnkle.y + s.joints.rAnkle.y) / 2);
+  const wristSpread = samples.map((s) => Math.hypot(s.joints.lWrist.x - s.joints.rWrist.x, 0));
+  let displacement = 0;
+  for (let i = 1; i < samples.length; i++) {
+    const a = samples[i].joints;
+    const b = samples[i - 1].joints;
+    displacement +=
+      Math.hypot(a.lAnkle.x - b.lAnkle.x, a.lAnkle.y - b.lAnkle.y) +
+      Math.hypot(a.rAnkle.x - b.rAnkle.x, a.rAnkle.y - b.rAnkle.y);
+  }
+  displacement /= Math.max(1, samples.length - 1);
+  let crossings = 0;
+  for (let i = 1; i < samples.length; i++) {
+    const d0 = samples[i - 1].joints.lAnkle.y - samples[i - 1].joints.rAnkle.y;
+    const d1 = samples[i].joints.lAnkle.y - samples[i].joints.rAnkle.y;
+    if (d0 * d1 < 0) crossings++;
+  }
+  const wristVar = Math.max(...wristSpread) - Math.min(...wristSpread);
+  const strideIdx = [];
+  for (let i = 1; i < ankleMid.length - 1; i++) {
+    if (ankleMid[i] > ankleMid[i - 1] && ankleMid[i] > ankleMid[i + 1]) strideIdx.push(i);
+    if (ankleMid[i] < ankleMid[i - 1] && ankleMid[i] < ankleMid[i + 1]) strideIdx.push(i);
+  }
+  if (crossings >= 2 && displacement > 4.5) {
+    return { kind: "walk", label: "Walk cycle · alternating stride", strideIdx };
+  }
+  if (/seated|desk|presenter/i.test(ikHint) && displacement < 5) {
+    return { kind: "seated", label: "Seated · subtle weight shift", strideIdx: [] };
+  }
+  if (wristVar > 6 || displacement > 3) {
+    return { kind: "gesture", label: "Gesture · upper-body motion", strideIdx };
+  }
+  return { kind: "static", label: "Locked-off · low displacement", strideIdx };
+}
+
+/** @param {number} durSec */
+function motionStripFrameCount(durSec) {
+  const dur = Math.max(8, Math.min(45, durSec));
+  return Math.min(14, Math.max(6, Math.round(dur / 2.5)));
+}
+
+/**
+ * @param {HTMLElement} wrap
+ * @param {string} pageUrl
+ * @param {number} startSec
+ * @param {number} durSec
+ * @param {string} ikHint
+ * @param {HTMLCanvasElement | null} waveCanvas
+ */
+function mountSceneMotionStrip(wrap, pageUrl, startSec, durSec, ikHint, waveCanvas) {
+  if (wrap.dataset.motionMounted === "1") return;
+  wrap.dataset.motionMounted = "1";
+
+  const dur = Math.max(8, Math.min(45, durSec));
+  const n = motionStripFrameCount(dur);
+  const cellsHost = wrap.querySelector("[data-motion-cells]");
+  const predictEl = wrap.querySelector("[data-motion-predict]");
+  const playheadEl = wrap.querySelector("[data-motion-playhead]");
+  if (!(cellsHost instanceof HTMLElement)) return;
+
+  const samples = [];
+  for (let i = 0; i < n; i++) {
+    const phase = n > 1 ? i / (n - 1) : 0;
+    const t = startSec + phase * dur;
+    samples.push({ phase, t, joints: seededJointsMotion(pageUrl, t, ikHint, phase) });
+  }
+  const profile = predictMotionProfile(samples, ikHint);
+  if (predictEl) {
+    predictEl.textContent = profile.label;
+    predictEl.dataset.motionKind = profile.kind;
+  }
+  wrap.dataset.motionKind = profile.kind;
+
+  const strideSet = new Set(profile.strideIdx);
+
+  /** @param {number} frac */
+  const setPlayhead = (frac) => {
+    const f = Math.max(0, Math.min(1, frac));
+    wrap.style.setProperty("--motion-playhead", `${(f * 100).toFixed(2)}%`);
+    cellsHost.querySelectorAll(".card-scene-motion-cell").forEach((cell) => {
+      const cf = Number(cell.getAttribute("data-frac"));
+      cell.classList.toggle("is-active", Math.abs(cf - f) < 0.5 / n);
+    });
+  };
+
+  cellsHost.replaceChildren();
+  for (let i = 0; i < n; i++) {
+    const phase = n > 1 ? i / (n - 1) : 0;
+    const t = startSec + phase * dur;
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "card-scene-motion-cell";
+    if (strideSet.has(i)) btn.classList.add("is-stride");
+    btn.dataset.frac = String(phase);
+    btn.dataset.t = String(t);
+    btn.title = `${formatIntelClock(t)} · SAM + IK`;
+    btn.innerHTML = `<span class="card-scene-motion-pair" aria-hidden="true">
+      <img class="card-scene-motion-sam" alt="" width="40" height="24" decoding="async" crossorigin="anonymous" />
+      <img class="card-scene-motion-pose" alt="" width="40" height="24" decoding="async" crossorigin="anonymous" />
+    </span>`;
+    btn.addEventListener("click", (ev) => {
+      ev.stopPropagation();
+      const frac = Number(btn.dataset.frac);
+      setPlayhead(frac);
+      seekPreview(t);
+    });
+    cellsHost.appendChild(btn);
+  }
+
+  const loadThumbs = () => {
+    cellsHost.querySelectorAll(".card-scene-motion-cell").forEach((cell) => {
+      const t = Number(cell.getAttribute("data-t"));
+      if (!Number.isFinite(t)) return;
+      const sam = cell.querySelector(".card-scene-motion-sam");
+      const pose = cell.querySelector(".card-scene-motion-pose");
+      if (sam instanceof HTMLImageElement && !sam.src) {
+        sam.src = sceneAnalysisThumbApiUrl(pageUrl, t, "sam");
+      }
+      if (pose instanceof HTMLImageElement && !pose.src) {
+        pose.src = scenePoseThumbApiUrl(pageUrl, t);
+      }
+    });
+  };
+
+  const details = wrap.closest("details");
+  const onVisible = () => {
+    if (details && !details.open) return;
+    loadThumbs();
+  };
+  details?.addEventListener("toggle", onVisible);
+  if (!details || details.open) loadThumbs();
+
+  wrap.addEventListener("click", (ev) => {
+    const target = ev.target;
+    if (!(target instanceof HTMLElement)) return;
+    if (target.closest(".card-scene-motion-cell")) return;
+    const rect = cellsHost.getBoundingClientRect();
+    const frac = Math.max(0, Math.min(1, (ev.clientX - rect.left) / rect.width));
+    setPlayhead(frac);
+    seekPreview(startSec + frac * dur);
+  });
+
+  document.addEventListener("blank:preview-time", (ev) => {
+    const t = ev?.detail?.t;
+    if (!Number.isFinite(t)) return;
+    if (t < startSec - 0.05 || t > startSec + dur + 0.05) return;
+    setPlayhead((t - startSec) / dur);
+  });
+
+  if (waveCanvas instanceof HTMLCanvasElement) {
+    waveCanvas.addEventListener("click", () => {
+      const ph = wrap.style.getPropertyValue("--motion-playhead");
+      if (ph) setPlayhead(parseFloat(ph) / 100);
+    });
+  }
+
+  setPlayhead(0);
+  if (playheadEl) playheadEl.hidden = false;
 }
 
 /** @param {Record<string, { x: number, y: number }>} joints @param {boolean} noFigure */
@@ -387,7 +634,7 @@ function mountPoseFromFrame(seg, pageUrl, startSec) {
 }
 
 /** @param {object[]} scenes @param {object} intel @param {string} [pageUrl] */
-function enrichScenes(scenes, intel, pageUrl = "") {
+export function enrichScenes(scenes, intel, pageUrl = "") {
   const duration = Number(intel.duration) || null;
   const capLines = Array.isArray(intel.captions?.lines) ? intel.captions.lines : [];
   const normalized = scenes.map((sc, i) => {
@@ -404,7 +651,7 @@ function enrichScenes(scenes, intel, pageUrl = "") {
     return { ...sc, start, end };
   });
 
-  return normalized.map((sc) => {
+  return normalized.map((sc, i) => {
     const lines = capLines.filter((row) => {
       const t =
         typeof row.startSec === "number" && Number.isFinite(row.startSec)
@@ -423,8 +670,29 @@ function enrichScenes(scenes, intel, pageUrl = "") {
               vectorscope: sceneAnalysisThumbApiUrl(pageUrl, sc.start, "vectorscope"),
             }
           : undefined;
-    return analysis ? { ...sc, lines, analysis } : { ...sc, lines };
+    let row = analysis ? { ...sc, lines, analysis } : { ...sc, lines };
+    row = applyGsplatScenePose(row, i, intel);
+    return row;
   });
+}
+
+/** @param {object} sc @param {number} i @param {object} intel */
+function applyGsplatScenePose(sc, i, intel) {
+  const cams = intel?.gsplat?.cameras;
+  if (!Array.isArray(cams) || !cams.length) return sc;
+  const cam =
+    cams.find((c) => Math.abs((Number(c.t) || 0) - sc.start) < 3) ||
+    cams[Math.min(i, cams.length - 1)];
+  if (!cam?.position) return sc;
+  const [x, y, z] = cam.position;
+  const summary = intel.gsplat?.geoSummary || "gsplat-ready";
+  return {
+    ...sc,
+    geoOverlay: `ENU (${x.toFixed(1)}, ${y.toFixed(1)}, ${z.toFixed(1)}) m · ${cam.id || "cam"} · ${summary}`,
+    cameraPoseSource: cam.source || "sparse-reconstruction",
+    cameraPoseId: cam.id,
+    sceneCamera: cam,
+  };
 }
 
 /** Light-track waveform on card surface. */
@@ -644,12 +912,24 @@ async function mountSceneWaveform(canvas, pageUrl, startSec, durSec) {
     drawSceneWave(canvas, env, { playhead, placeholder });
   };
 
+  const motionWrap = canvas.previousElementSibling;
+
   const scrubAt = (clientX) => {
     const rect = canvas.getBoundingClientRect();
     const frac = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
     playhead = frac;
     paint();
     seekPreview(startSec + frac * dur);
+    if (motionWrap instanceof HTMLElement && motionWrap.classList.contains("card-scene-motion")) {
+      motionWrap.style.setProperty("--motion-playhead", `${(frac * 100).toFixed(2)}%`);
+      motionWrap
+        .querySelectorAll(".card-scene-motion-cell")
+        .forEach((cell) => {
+          const cf = Number(cell.getAttribute("data-frac"));
+          const n = motionWrap.querySelectorAll(".card-scene-motion-cell").length;
+          cell.classList.toggle("is-active", Math.abs(cf - frac) < 0.5 / Math.max(1, n));
+        });
+    }
     return frac;
   };
 
@@ -667,37 +947,50 @@ async function mountSceneWaveform(canvas, pageUrl, startSec, durSec) {
   }
 
   const details = canvas.closest("details");
-  details?.addEventListener("toggle", () => {
-    if (details.open) scheduleSceneWavePaints(canvas, paint);
-  });
+  const onVisible = () => {
+    scheduleSceneWavePaints(canvas, paint);
+    if (details && !details.open) return;
+    void loadAudio();
+  };
+  details?.addEventListener("toggle", onVisible);
+
+  let audioLoaded = false;
+  const loadAudio = async () => {
+    if (audioLoaded) return;
+    if (details && !details.open) return;
+    audioLoaded = true;
+
+    try {
+      const res = await fetch(`/api/ingest/scene-audio?${q}`);
+      if (!res.ok) throw new Error(`scene-audio ${res.status}`);
+      const buf = await res.arrayBuffer();
+      if (buf.byteLength < 128) throw new Error("scene-audio empty");
+      const Ctx = globalThis.AudioContext || globalThis.webkitAudioContext;
+      if (!Ctx) throw new Error("AudioContext unavailable");
+      const ctx = new Ctx();
+      if (ctx.state === "suspended") await ctx.resume();
+      const audio = await ctx.decodeAudioData(buf.slice(0));
+      await ctx.close();
+      const { w } = waveCanvasMetrics(canvas);
+      const ch = audio.getChannelData(0);
+      if (!ch?.length) throw new Error("no audio samples");
+      envelope = envelopeFromChannel(ch, Math.max(32, Math.floor(w / 3)));
+      placeholder = false;
+      canvas.classList.remove("card-scene-wave--placeholder");
+      paint();
+      scheduleSceneWavePaints(canvas, paint);
+    } catch {
+      audioLoaded = false;
+      placeholder = true;
+      envelope = null;
+      canvas.classList.add("card-scene-wave--placeholder");
+      scheduleSceneWavePaints(canvas, paint);
+    }
+  };
 
   scheduleSceneWavePaints(canvas, paint);
-
-  try {
-    const res = await fetch(`/api/ingest/scene-audio?${q}`);
-    if (!res.ok) throw new Error(`scene-audio ${res.status}`);
-    const buf = await res.arrayBuffer();
-    if (buf.byteLength < 128) throw new Error("scene-audio empty");
-    const Ctx = globalThis.AudioContext || globalThis.webkitAudioContext;
-    if (!Ctx) throw new Error("AudioContext unavailable");
-    const ctx = new Ctx();
-    if (ctx.state === "suspended") await ctx.resume();
-    const audio = await ctx.decodeAudioData(buf.slice(0));
-    await ctx.close();
-    const { w } = waveCanvasMetrics(canvas);
-    const ch = audio.getChannelData(0);
-    if (!ch?.length) throw new Error("no audio samples");
-    envelope = envelopeFromChannel(ch, Math.max(32, Math.floor(w / 3)));
-    placeholder = false;
-    canvas.classList.remove("card-scene-wave--placeholder");
-    paint();
-    scheduleSceneWavePaints(canvas, paint);
-  } catch {
-    placeholder = true;
-    envelope = null;
-    canvas.classList.add("card-scene-wave--placeholder");
-    scheduleSceneWavePaints(canvas, paint);
-  }
+  if (!details || details.open) void loadAudio();
+  else onVisible();
 }
 
 /** @param {string} pageUrl @param {object} intel */
@@ -708,9 +1001,99 @@ function videoPosterFallback(pageUrl, intel) {
   return null;
 }
 
+/**
+ * Stagger-style scene thumb list (queue panel, stagger card, etc.).
+ * @param {object[]} scenes
+ * @param {string} pageUrl
+ * @param {object} intel
+ * @param {{ max?: number, className?: string }} [opts]
+ */
+/**
+ * @param {object[]} scenes
+ * @param {number} t
+ */
+export function sceneIndexAtTime(scenes, t) {
+  const list = Array.isArray(scenes) ? scenes : [];
+  if (!list.length) return -1;
+  for (let i = 0; i < list.length; i++) {
+    const start = Number(list[i].start) || 0;
+    const next = list[i + 1] ? Number(list[i + 1].start) : null;
+    const end =
+      Number(list[i].end) > start
+        ? Number(list[i].end)
+        : next != null && next > start
+          ? next
+          : start + 90;
+    if (t >= start && t < end) return i;
+  }
+  if (t >= (Number(list[list.length - 1].start) || 0)) return list.length - 1;
+  return 0;
+}
+
+/**
+ * Horizontal scene chips for header prompt strip.
+ * @param {object[]} scenes
+ * @param {string} pageUrl
+ * @param {object} intel
+ * @param {{ max?: number }} [opts]
+ */
+export function headerSceneChipsHtml(scenes, pageUrl, intel, opts = {}) {
+  const max = opts.max ?? 25;
+  const enriched = enrichScenes(Array.isArray(scenes) ? scenes : [], intel, pageUrl).slice(0, max);
+  const poster = videoPosterFallback(pageUrl, intel);
+  if (!enriched.length) return "";
+  return enriched
+    .map((sc, i) => {
+      const src = sc.thumb || poster || "";
+      const cors =
+        src && (src.startsWith("/api/") || src.includes("/api/ingest/"))
+          ? ' crossorigin="anonymous"'
+          : "";
+      const thumb = src
+        ? `<img class="header-scene-chip-thumb" src="${escapeHtml(src)}"${poster ? ` data-fallback="${escapeHtml(poster)}"` : ""}${cors} alt="" width="56" height="32" loading="${i < 8 ? "eager" : "lazy"}" decoding="async" />`
+        : `<span class="header-scene-chip-ph" aria-hidden="true"></span>`;
+      const title = String(sc.title || `Scene ${formatIntelClock(sc.start)}`).slice(0, 48);
+      return `<button type="button" class="header-scene-chip" data-seek="${sc.start}" data-scene-idx="${i}" title="${escapeHtml(title)}">
+        ${thumb}
+        <span class="header-scene-chip-meta"><span class="header-scene-chip-idx">#${String(i + 1).padStart(2, "0")}</span> <time>${escapeHtml(formatIntelClock(sc.start))}</time></span>
+      </button>`;
+    })
+    .join("");
+}
+
+export function sceneThumbStripHtml(scenes, pageUrl, intel, opts = {}) {
+  const max = opts.max ?? 25;
+  const listClass = opts.className || "card-stagger-list";
+  const enriched = enrichScenes(Array.isArray(scenes) ? scenes : [], intel, pageUrl);
+  const poster = videoPosterFallback(pageUrl, intel);
+  const slice = enriched.slice(0, max);
+  if (!slice.length) {
+    return `<p class="card-intel-muted">No scene cuts yet.</p>`;
+  }
+  const rows = slice
+    .map((sc, i) => {
+      const src = sc.thumb || poster || "";
+      const cors =
+        src && (src.startsWith("/api/") || src.includes("/api/ingest/"))
+          ? ' crossorigin="anonymous"'
+          : "";
+      const thumb = src
+        ? `<img class="card-stagger-thumb" src="${escapeHtml(src)}"${poster ? ` data-fallback="${escapeHtml(poster)}"` : ""}${cors} alt="" width="64" height="36" loading="${i < 6 ? "eager" : "lazy"}" decoding="async" />`
+        : `<span class="card-stagger-thumb-ph" aria-hidden="true"></span>`;
+      return `<li class="card-stagger-item" data-seek="${sc.start}" tabindex="0" role="button" title="Seek preview to ${escapeHtml(formatIntelClock(sc.start))}">
+          ${thumb}
+          <span class="card-stagger-meta"><span class="card-stagger-idx">#${String(i + 1).padStart(2, "0")}</span> <time>${escapeHtml(formatIntelClock(sc.start))}</time> — ${escapeHtml(String(sc.title || "Scene"))}</span>
+        </li>`;
+    })
+    .join("");
+  return `<ol class="${escapeHtml(listClass)}" role="list">${rows}</ol>`;
+}
+
 /** @param {HTMLElement} root */
-function preloadSceneMedia(root) {
-  root.querySelectorAll(".card-scene-frame-img, .card-scene-analysis-img").forEach((el) => {
+export function preloadSceneMedia(root) {
+  root.querySelectorAll(
+    ".card-scene-frame-img, .card-scene-analysis-img, .card-scene-pose-img",
+  ).forEach((el) => {
     if (!(el instanceof HTMLImageElement)) return;
     const mark = () => el.classList.add("is-loaded");
     el.addEventListener("load", mark, { once: true });
@@ -749,7 +1132,7 @@ function sceneAnalysisStripHtml(sc) {
             ? "Watermark"
             : "RGB Parade · Vectorscope";
     return `<figure class="card-scene-media card-scene-media--analysis card-scene-media--${id}" aria-label="${escapeHtml(label)}">
-        <img class="card-scene-analysis-img" src="${escapeHtml(String(src))}" alt="" width="92" height="52" loading="lazy" decoding="async" />
+        <img class="card-scene-analysis-img" src="${escapeHtml(String(src))}" alt="" width="92" height="52" loading="lazy" decoding="async" crossorigin="anonymous" />
         <figcaption class="card-scene-media-cap" title="${escapeHtml(label)}"><span>${escapeHtml(cap)}</span></figcaption>
       </figure>`;
   }).join("");
@@ -780,10 +1163,16 @@ function sceneCardHtml(sc, i, capLabel, capAuto, posterFallback) {
     ? `<img class="card-scene-frame-img" src="${frameSrc}"${fb ? ` data-fallback="${fb}"` : ""}${frameCors} alt="" width="92" height="52" loading="${i < 4 ? "eager" : "lazy"}" decoding="async" />`
     : `<span class="card-thumb card-scene-frame-thumb" aria-hidden="true"></span>`;
   const ikHint = String(sc.ikPoseEstimate || "");
+  const cine = sc.cinematography && typeof sc.cinematography === "object" ? sc.cinematography : null;
   const estimatesHtml = `<dl class="card-scene-estimates">
     <div><dt>Camera est.</dt><dd>${escapeHtml(sc.cameraEstimate || "—")}</dd></div>
     <div><dt>Scene est.</dt><dd>${escapeHtml(sc.sceneEstimate || "—")}</dd></div>
     <div><dt>IK pose est.</dt><dd>${escapeHtml(sc.ikPoseEstimate || "—")}</dd></div>
+    ${cine ? `<div><dt>Lens (ASC est.)</dt><dd>${escapeHtml(cine.lensMm)} · ${escapeHtml(cine.lensType || "")}</dd></div>
+    <div><dt>Support</dt><dd>${escapeHtml(cine.support || "—")}</dd></div>
+    <div><dt>Framing</dt><dd>${escapeHtml(cine.framing || "—")}</dd></div>` : ""}
+    ${sc.geoOverlay ? `<div><dt>Geo / gsplat</dt><dd>${escapeHtml(sc.geoOverlay)}</dd></div>` : ""}
+    ${sc.cameraPoseId ? `<div><dt>Camera pose</dt><dd>${escapeHtml(sc.cameraPoseId)}${sc.cameraPoseSource ? ` · ${escapeHtml(sc.cameraPoseSource)}` : ""}</dd></div>` : ""}
     ${sc.lensHint ? `<div><dt>Frame</dt><dd>${escapeHtml(sc.lensHint)}</dd></div>` : ""}
   </dl>`;
   const captionLines = (sc.lines || []).slice(0, 48);
@@ -806,12 +1195,18 @@ function sceneCardHtml(sc, i, capLabel, capAuto, posterFallback) {
         })
         .join("")}</div>`
     : `<p class="card-scene-caption-empty">No captions in this segment.</p>`;
-  const poseSvg = `<svg class="card-pose-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 104 88" width="104" height="88" role="img" aria-label="IK pose estimate from scene frame">
+  const poseSrc = sc.poseThumb ? escapeHtml(String(sc.poseThumb)) : "";
+  const poseMedia = poseSrc
+    ? `<img class="card-scene-pose-img" src="${poseSrc}" alt="" width="104" height="88" loading="lazy" decoding="async" crossorigin="anonymous" />
+        <svg class="card-pose-svg card-pose-svg--overlay" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 104 88" width="104" height="88" aria-hidden="true">
+        <g class="card-pose-skeleton" stroke="#7eb8da" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.95"></g>
+      </svg>`
+    : `<svg class="card-pose-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 104 88" width="104" height="88" role="img" aria-label="IK pose estimate from scene frame">
         <rect width="104" height="88" fill="#141414"/>
         <g class="card-pose-skeleton" stroke="#7eb8da" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.95"></g>
       </svg>`;
 
-  return `<details class="card card-scene-card card--visible" role="listitem" data-start="${start}" data-end="${end}" data-ik-estimate="${escapeHtml(ikHint)}"${i === 0 ? " open" : ""}>
+  return `<details class="card card-scene-card card--visible" role="listitem" data-start="${start}" data-end="${end}" data-scene-index="${i}" data-ik-estimate="${escapeHtml(ikHint)}"${i === 0 ? " open" : ""}>
     <summary class="card-summary card-scene-summary">
       <span class="sr-only">Toggle scene: ${escapeHtml(label)}</span>
       <figure class="card-scene-media card-scene-media--frame">
@@ -824,25 +1219,56 @@ function sceneCardHtml(sc, i, capLabel, capAuto, posterFallback) {
       </div>
       ${sceneAnalysisStripHtml(sc)}
       <figure class="card-scene-media card-scene-media--pose" aria-label="IK pose placement estimate">
-        ${poseSvg}
+        ${poseMedia}
         <figcaption class="card-scene-media-cap"><span>IK pose</span></figcaption>
       </figure>
       <span class="card-cta">${Math.round(dur)}s</span>
     </summary>
     <div class="card-panel card-scene-panel">
-      ${estimatesHtml}
-      <p class="card-scene-range">${escapeHtml(formatIntelClock(start))} → ${escapeHtml(formatIntelClock(end))}</p>
-      <button type="button" class="card-scene-play" data-seek="${start}">Preview segment</button>
-      <canvas class="card-scene-wave" width="280" height="36"></canvas>
-      <p class="card-scene-wave-hint">Waveform · click to scrub${capLabel ? ` · ${escapeHtml(capLabel)}${capAuto}` : ""}</p>
-      ${captionsBlock}
+      <div class="card-scene-panel-main">
+        ${estimatesHtml}
+        <p class="card-scene-range">${escapeHtml(formatIntelClock(start))} → ${escapeHtml(formatIntelClock(end))}</p>
+        <button type="button" class="card-scene-play" data-seek="${start}">Preview segment</button>
+        <div class="card-scene-motion" data-scene-motion>
+          <div class="card-scene-motion-head">
+            <span class="card-scene-motion-label">SAM / IK · motion</span>
+            <span class="card-scene-motion-predict" data-motion-predict>—</span>
+          </div>
+          <div class="card-scene-motion-body">
+            <div class="card-scene-motion-strip" data-motion-cells role="group" aria-label="SAM and IK pose across segment"></div>
+            <span class="card-scene-motion-playhead" data-motion-playhead aria-hidden="true"></span>
+          </div>
+        </div>
+        <canvas class="card-scene-wave" width="280" height="36"></canvas>
+        <p class="card-scene-wave-hint">SAM/IK strip + waveform · click to scrub${capLabel ? ` · ${escapeHtml(capLabel)}${capAuto}` : ""}</p>
+        ${captionsBlock}
+      </div>
+      <aside class="card-scene-disruptor" data-scene-disruptor aria-label="Live camera and subject telemetry">
+        <p class="card-scene-disruptor-label">Camera setup · off-axis</p>
+        <div class="card-scene-projection" data-projection-svg aria-hidden="true"></div>
+        <dl class="card-scene-telem">
+          <div><dt>Setup</dt><dd data-telem-setup>—</dd></div>
+          <div><dt>Viewing</dt><dd data-telem-cam-angle>—</dd></div>
+          <div><dt>Subject</dt><dd data-telem-subj-bearing>—</dd></div>
+          <div><dt>Plane proj.</dt><dd data-telem-off-axis>—</dd></div>
+          <div><dt>FOV</dt><dd data-telem-fov>—</dd></div>
+          <div><dt>Movement</dt><dd data-telem-move>—</dd></div>
+          <div><dt>Sync</dt><dd data-telem-seg>—</dd></div>
+        </dl>
+      </aside>
     </div>
   </details>`;
 }
 
-/** @param {HTMLElement} root @param {string} pageUrl */
-function bindSceneCards(root, pageUrl) {
-  root.querySelectorAll(".card-scene-card").forEach((seg) => {
+/** @param {HTMLElement} root @param {string} pageUrl @param {object} [intel] @param {number} [sceneIndex] */
+function bindSceneCards(root, pageUrl, intel, sceneIndex = 0) {
+  /** querySelectorAll skips the root node — include it when it is the scene card. */
+  const segments =
+    root.matches(".card-scene-card")
+      ? [root]
+      : [...root.querySelectorAll(".card-scene-card")];
+
+  segments.forEach((seg) => {
     if (!(seg instanceof HTMLElement)) return;
     const start = Number(seg.dataset.start);
     const end = Number(seg.dataset.end);
@@ -871,12 +1297,39 @@ function bindSceneCards(root, pageUrl) {
     });
 
     const canvas = seg.querySelector("canvas.card-scene-wave");
-    if (canvas instanceof HTMLCanvasElement && pageUrl) {
-      void mountSceneWaveform(canvas, pageUrl, start, dur);
-    } else if (canvas instanceof HTMLCanvasElement) {
+    const motionWrap = seg.querySelector("[data-scene-motion]");
+    const ikHint = seg.dataset.ikEstimate || "";
+    if (motionWrap instanceof HTMLElement && pageUrl) {
+      mountSceneMotionStrip(
+        motionWrap,
+        pageUrl,
+        start,
+        dur,
+        ikHint,
+        canvas instanceof HTMLCanvasElement ? canvas : null,
+      );
+    }
+    if (canvas instanceof HTMLCanvasElement) {
       drawPlaceholderWave(canvas);
+      if (pageUrl) void mountSceneWaveform(canvas, pageUrl, start, dur);
     }
     mountPoseFromFrame(seg, pageUrl, start);
+
+    const idx = Number(seg.dataset.sceneIndex);
+    const i = Number.isFinite(idx) ? idx : sceneIndex;
+    const sc =
+      Array.isArray(intel?.scenes) && intel.scenes[i]
+        ? intel.scenes[i]
+        : {
+            start,
+            end,
+            title: seg.querySelector(".card-title")?.textContent || "",
+            ikPoseEstimate: seg.dataset.ikEstimate || "",
+          };
+    if (seg.dataset.disruptorMounted !== "1") {
+      seg.dataset.disruptorMounted = "1";
+      mountSceneDisruptor(seg, sc, pageUrl, intel, i);
+    }
   });
 }
 
@@ -899,6 +1352,7 @@ export async function requestVideoIntel(pageUrl) {
     }
     throw new Error(data.error || `intel failed (${res.status})`);
   }
+  trackClientTokens(2400);
   return data;
 }
 
@@ -964,6 +1418,7 @@ export async function renderIaIntel(slot, intel, pageUrl = "") {
     ${programHtml}
     <h4 class="card-intel-sub">Scene / camera cuts <span class="card-scene-count" data-scene-count></span></h4>
     <div class="card-scene-stack" data-scene-stack role="list"></div>
+    ${gsplatPanelHtml(intel, pageUrl, scenes)}
   `;
 
   const stack = slot.querySelector("[data-scene-stack]");
@@ -989,13 +1444,345 @@ export async function renderIaIntel(slot, intel, pageUrl = "") {
 
     stack.appendChild(card);
     requestAnimationFrame(() => card.classList.add("card--visible"));
-    bindSceneCards(card, pageUrl);
+    bindSceneCards(card, pageUrl, intel, i);
     preloadSceneMedia(card);
 
     if (i < scenes.length - 1) {
       await new Promise((r) => window.setTimeout(r, SCENE_REVEAL_MS));
     }
   }
+
+  bindGsplatPanel(slot, pageUrl, intel, scenes);
+}
+
+/** @param {string} raw */
+function parseIntelClockInput(raw) {
+  const s = String(raw || "").trim();
+  if (!s) return NaN;
+  if (/^\d+(\.\d+)?$/.test(s)) return Number(s);
+  const parts = s.split(":").map((p) => Number(p.trim()));
+  if (parts.some((n) => !Number.isFinite(n))) return NaN;
+  if (parts.length === 3) return parts[0] * 3600 + parts[1] * 60 + parts[2];
+  if (parts.length === 2) return parts[0] * 60 + parts[1];
+  return NaN;
+}
+
+/** @param {object[]} scenes */
+function gsplatSceneListHtml(scenes) {
+  return scenes
+    .map((sc, i) => {
+      const tags = sceneGsplatTagLabels(sc);
+      const tagHtml = tags
+        .map((t) => `<span class="card-gsplat-tag">${escapeHtml(t)}</span>`)
+        .join("");
+      const title = escapeHtml(String(sc.title || `Scene ${formatIntelClock(sc.start)}`).slice(0, 80));
+      const dur = Math.max(0, Math.round((sc.end || sc.start) - sc.start));
+      return `<li class="card-gsplat-scene-row">
+        <label class="card-gsplat-scene-label">
+          <input type="checkbox" data-gsplat-scene="${i}" checked />
+          <span class="card-gsplat-scene-time">#${i + 1} ${escapeHtml(formatIntelClock(sc.start))}</span>
+          <span class="card-gsplat-scene-title">${title}</span>
+          <span class="card-gsplat-scene-dur">${dur}s</span>
+          ${tagHtml ? `<span class="card-gsplat-scene-tags">${tagHtml}</span>` : ""}
+        </label>
+      </li>`;
+    })
+    .join("");
+}
+
+/** @param {object} intel @param {string} pageUrl @param {object[]} scenes */
+function gsplatPanelHtml(intel, pageUrl, scenes) {
+  if (!pageUrl) return "";
+  const g = intel?.gsplat;
+  const status = g
+    ? `<p class="card-gsplat-status">${escapeHtml(g.geoSummary || "")}${g.segmentLabel ? ` <span class="card-gsplat-segment-badge">${escapeHtml(g.segmentLabel)}</span>` : ""}</p>
+       <p class="card-gsplat-dl">
+         <a href="${escapeHtml(g.plyUrl || gsplatPlyApiUrl(pageUrl))}" download>pointcloud.ply</a>
+         · <a href="${escapeHtml(g.transformsUrl || gsplatTransformsApiUrl(pageUrl))}" download>transforms.json</a>
+         · <a href="${escapeHtml(g.camerasUrl || gsplatCamerasApiUrl(pageUrl))}" download>cameras.json</a>
+       </p>`
+    : `<p class="card-intel-muted card-gsplat-intro">Sparse init PLY + transforms for <strong>training</strong> (splatfacto/gsplat). Pick scenes or a type filter below, then build. After train, open the <strong>trained</strong> <code>point_cloud.ply</code> in <a href="https://supersplat.at/editor" target="_blank" rel="noopener">SuperSplat</a> — not this sparse <code>pointcloud.ply</code>. CLI: <code>node support/scripts/gsplat-export-kit.mjs &lt;url&gt; --filter=wh-lawn</code></p>`;
+  const filterChips = GSPLAT_SCENE_FILTER_TYPES.map(
+    (f) =>
+      `<button type="button" class="card-gsplat-filter${f.id === "all" ? " is-active" : ""}" data-gsplat-filter="${escapeHtml(f.id)}" title="${escapeHtml(f.title)}">${escapeHtml(f.label)}</button>`,
+  ).join("");
+  const sceneList =
+    scenes.length > 0
+      ? gsplatSceneListHtml(scenes)
+      : `<li class="card-intel-muted">No scenes to pick — load intel first.</li>`;
+  const cmd = g?.gsplatCommand ? escapeHtml(g.gsplatCommand) : "";
+  return `
+    <section class="card-gsplat-panel" data-gsplat-panel>
+      <h4 class="card-intel-sub">Point cloud → gsplat</h4>
+      ${status}
+      <div class="card-gsplat-segment">
+        <p class="card-gsplat-segment-label">Isolate segment</p>
+        <div class="card-gsplat-filters" role="group" aria-label="Scene type match">${filterChips}</div>
+        <div class="card-gsplat-range">
+          <label>From <input type="text" data-gsplat-t0 placeholder="0:00" autocomplete="off" /></label>
+          <label>To <input type="text" data-gsplat-t1 placeholder="end" autocomplete="off" /></label>
+          <label>Max dur <input type="number" data-gsplat-max-dur min="1" step="1" placeholder="90" title="Max seconds per scene" /></label>
+          <label>Cap <input type="number" data-gsplat-max-n min="1" max="24" value="14" title="Max scenes in bundle" /></label>
+        </div>
+        <input type="search" class="card-gsplat-caption" data-gsplat-caption placeholder="Title / caption match…" />
+        <div class="card-gsplat-pick-actions">
+          <button type="button" data-gsplat-pick-all>All</button>
+          <button type="button" data-gsplat-pick-none>None</button>
+          <button type="button" data-gsplat-pick-match>Match filter</button>
+        </div>
+        <ul class="card-gsplat-scene-list" data-gsplat-scene-list>${sceneList}</ul>
+        <p class="card-gsplat-pick-count" data-gsplat-count>${scenes.length} selected</p>
+      </div>
+      <button type="button" class="card-gsplat-build"${g ? ' data-built="1"' : ""}>${g ? "Rebuild export bundle" : "Build export bundle"}</button>
+      <pre class="card-gsplat-cmd" aria-label="gsplat train commands"${cmd ? "" : " hidden"}>${cmd}</pre>
+    </section>`;
+}
+
+/** @param {HTMLElement} panel */
+function getGsplatActiveFilterIds(panel) {
+  return [...panel.querySelectorAll(".card-gsplat-filter.is-active")]
+    .map((b) => b.getAttribute("data-gsplat-filter"))
+    .filter((id) => id && id !== "all");
+}
+
+/** @param {HTMLElement} panel @param {object[]} scenes */
+function readGsplatFilterOpts(panel, scenes) {
+  const filterTypes = getGsplatActiveFilterIds(panel);
+  const captionEl = panel.querySelector("[data-gsplat-caption]");
+  const captionQuery = captionEl instanceof HTMLInputElement ? captionEl.value : "";
+  const t0 = parseIntelClockInput(panel.querySelector("[data-gsplat-t0]")?.value);
+  const t1 = parseIntelClockInput(panel.querySelector("[data-gsplat-t1]")?.value);
+  const maxDurEl = panel.querySelector("[data-gsplat-max-dur]");
+  const maxDur =
+    maxDurEl instanceof HTMLInputElement && maxDurEl.value !== ""
+      ? Number(maxDurEl.value)
+      : NaN;
+  return {
+    filterTypes,
+    captionQuery,
+    timeStart: Number.isFinite(t0) ? t0 : undefined,
+    timeEnd: Number.isFinite(t1) ? t1 : undefined,
+    maxDurationSec: Number.isFinite(maxDur) && maxDur > 0 ? maxDur : undefined,
+    sceneCount: scenes.length,
+  };
+}
+
+/** @param {HTMLElement} panel */
+function updateGsplatPickCount(panel) {
+  const countEl = panel.querySelector("[data-gsplat-count]");
+  const n = panel.querySelectorAll("[data-gsplat-scene]:checked").length;
+  if (countEl) countEl.textContent = `${n} selected`;
+}
+
+/** @param {HTMLElement} panel @param {object[]} scenes @param {string} pageUrl */
+function readGsplatBuildBody(panel, scenes, pageUrl) {
+  const opts = readGsplatFilterOpts(panel, scenes);
+  let indices = [...panel.querySelectorAll("[data-gsplat-scene]:checked")].map((inp) =>
+    Number(inp.getAttribute("data-gsplat-scene")),
+  );
+  const hasExtraFilter =
+    opts.filterTypes.length > 0 ||
+    Boolean(opts.captionQuery?.trim()) ||
+    Number.isFinite(opts.timeStart) ||
+    Number.isFinite(opts.timeEnd) ||
+    Number.isFinite(opts.maxDurationSec);
+
+  if (!indices.length && hasExtraFilter) {
+    const matched = filterScenesForGsplat(
+      scenes.map((sc, index) => ({ ...sc, index })),
+      opts,
+    );
+    indices = matched.map((row) => row.index);
+  }
+  if (!indices.length) {
+    throw new Error("select scenes, set a type/time filter, or click Match filter");
+  }
+
+  const maxNEl = panel.querySelector("[data-gsplat-max-n]");
+  const maxScenes =
+    maxNEl instanceof HTMLInputElement && maxNEl.value !== ""
+      ? Math.min(24, Math.max(1, Number(maxNEl.value) || 14))
+      : 14;
+  return {
+    url: pageUrl,
+    useFrames: true,
+    sceneIndices: indices,
+    filterTypes: opts.filterTypes.length ? opts.filterTypes : undefined,
+    captionQuery: opts.captionQuery || undefined,
+    timeStart: opts.timeStart,
+    timeEnd: opts.timeEnd,
+    maxDurationSec: opts.maxDurationSec,
+    maxScenes,
+  };
+}
+
+/** @param {HTMLElement} slot @param {string} pageUrl @param {object} intel @param {object[]} scenes */
+function bindGsplatPanel(slot, pageUrl, intel, scenes) {
+  const panel = slot.querySelector("[data-gsplat-panel]");
+  const btn = panel?.querySelector(".card-gsplat-build");
+  if (!(panel instanceof HTMLElement) || !(btn instanceof HTMLButtonElement) || !pageUrl) return;
+
+  updateGsplatPickCount(panel);
+
+  panel.querySelector("[data-gsplat-pick-all]")?.addEventListener("click", () => {
+    panel.querySelectorAll("[data-gsplat-scene]").forEach((inp) => {
+      if (inp instanceof HTMLInputElement) inp.checked = true;
+    });
+    updateGsplatPickCount(panel);
+  });
+  panel.querySelector("[data-gsplat-pick-none]")?.addEventListener("click", () => {
+    panel.querySelectorAll("[data-gsplat-scene]").forEach((inp) => {
+      if (inp instanceof HTMLInputElement) inp.checked = false;
+    });
+    updateGsplatPickCount(panel);
+  });
+  panel.querySelector("[data-gsplat-pick-match]")?.addEventListener("click", () => {
+    const opts = readGsplatFilterOpts(panel, scenes);
+    const matched = filterScenesForGsplat(
+      scenes.map((sc, index) => ({ ...sc, index })),
+      opts,
+    );
+    const pick = new Set(matched.map((row) => row.index));
+    panel.querySelectorAll("[data-gsplat-scene]").forEach((inp) => {
+      if (inp instanceof HTMLInputElement) {
+        const i = Number(inp.getAttribute("data-gsplat-scene"));
+        inp.checked = pick.has(i);
+      }
+    });
+    updateGsplatPickCount(panel);
+  });
+
+  panel.querySelectorAll(".card-gsplat-filter").forEach((chip) => {
+    chip.addEventListener("click", () => {
+      if (!(chip instanceof HTMLButtonElement)) return;
+      const id = chip.getAttribute("data-gsplat-filter");
+      if (id === "all") {
+        panel.querySelectorAll(".card-gsplat-filter").forEach((b) => b.classList.remove("is-active"));
+        chip.classList.add("is-active");
+        return;
+      }
+      panel.querySelector('[data-gsplat-filter="all"]')?.classList.remove("is-active");
+      chip.classList.toggle("is-active");
+      if (!getGsplatActiveFilterIds(panel).length) {
+        panel.querySelector('[data-gsplat-filter="all"]')?.classList.add("is-active");
+      }
+    });
+  });
+
+  panel.addEventListener("change", (ev) => {
+    if (ev.target instanceof HTMLInputElement && ev.target.matches("[data-gsplat-scene]")) {
+      updateGsplatPickCount(panel);
+    }
+  });
+
+  btn.addEventListener("click", async () => {
+    const cmdEl = panel?.querySelector(".card-gsplat-cmd");
+    const statusEl = panel?.querySelector(".card-gsplat-status");
+    const dlEl = panel?.querySelector(".card-gsplat-dl");
+    btn.disabled = true;
+    const prev = btn.textContent;
+    btn.textContent = "Building point cloud…";
+    try {
+      const body = readGsplatBuildBody(panel, scenes, pageUrl);
+      const res = await fetch("/api/ingest/gsplat/build", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data.ok) {
+        throw new Error(data.error || `HTTP ${res.status}`);
+      }
+      const intel2 = await requestVideoIntel(pageUrl);
+      const summary = data.geoSummary || intel2.gsplat?.geoSummary || "";
+      const seg = data.segmentLabel || intel2.gsplat?.segmentLabel;
+      if (statusEl instanceof HTMLElement) {
+        statusEl.textContent = summary;
+        let badge = statusEl.querySelector(".card-gsplat-segment-badge");
+        if (seg) {
+          if (!badge) {
+            badge = document.createElement("span");
+            badge.className = "card-gsplat-segment-badge";
+            statusEl.appendChild(document.createTextNode(" "));
+            statusEl.appendChild(badge);
+          }
+          badge.textContent = seg;
+        } else if (badge) badge.remove();
+      } else if (panel) {
+        const p = document.createElement("p");
+        p.className = "card-gsplat-status";
+        p.textContent = summary;
+        panel.querySelector(".card-intel-muted")?.replaceWith(p);
+      }
+      if (dlEl instanceof HTMLElement) {
+        dlEl.innerHTML = `
+          <a href="${escapeHtml(data.plyUrl)}" download>pointcloud.ply</a>
+          · <a href="${escapeHtml(data.transformsUrl)}" download>transforms.json</a>
+          · <a href="${escapeHtml(data.camerasUrl)}" download>cameras.json</a>`;
+      } else if (panel) {
+        const dl = document.createElement("p");
+        dl.className = "card-gsplat-dl";
+        dl.innerHTML = `
+          <a href="${escapeHtml(data.plyUrl)}" download>pointcloud.ply</a>
+          · <a href="${escapeHtml(data.transformsUrl)}" download>transforms.json</a>
+          · <a href="${escapeHtml(data.camerasUrl)}" download>cameras.json</a>`;
+        panel.insertBefore(dl, btn);
+      }
+      if (cmdEl instanceof HTMLElement && data.gsplatCommand) {
+        cmdEl.hidden = false;
+        cmdEl.textContent = data.gsplatCommand;
+      }
+      btn.dataset.built = "1";
+      btn.textContent = "Rebuild export bundle";
+      patchSceneGeoFromIntel(slot, enrichScenes(Array.isArray(intel2.scenes) ? intel2.scenes : [], intel2, pageUrl));
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      if (panel) {
+        const err = document.createElement("p");
+        err.className = "card-intel-status card-intel-status--err";
+        err.textContent = msg;
+        panel.appendChild(err);
+        window.setTimeout(() => err.remove(), 12_000);
+      }
+      btn.textContent = prev;
+    } finally {
+      btn.disabled = false;
+    }
+  });
+}
+
+/** @param {HTMLElement} slot @param {object[]} scenes */
+function patchSceneGeoFromIntel(slot, scenes) {
+  const cards = slot.querySelectorAll(".card-scene-card");
+  cards.forEach((card, i) => {
+    const sc = scenes[i];
+    if (!sc || !(card instanceof HTMLElement)) return;
+    const dl = card.querySelector(".card-scene-estimates");
+    if (!(dl instanceof HTMLElement)) return;
+    let geoRow = dl.querySelector("[data-geo-gsplat]");
+    if (!sc.geoOverlay) return;
+    if (!geoRow) {
+      geoRow = document.createElement("div");
+      geoRow.setAttribute("data-geo-gsplat", "");
+      geoRow.innerHTML = `<dt>Geo / gsplat</dt><dd></dd>`;
+      dl.appendChild(geoRow);
+    }
+    const dd = geoRow.querySelector("dd");
+    if (dd) dd.textContent = sc.geoOverlay;
+    if (sc.cameraPoseId) {
+      let poseRow = dl.querySelector("[data-cam-pose]");
+      if (!poseRow) {
+        poseRow = document.createElement("div");
+        poseRow.setAttribute("data-cam-pose", "");
+        poseRow.innerHTML = `<dt>Camera pose</dt><dd></dd>`;
+        dl.appendChild(poseRow);
+      }
+      const pdd = poseRow.querySelector("dd");
+      if (pdd) {
+        pdd.textContent = `${sc.cameraPoseId}${sc.cameraPoseSource ? ` · ${sc.cameraPoseSource}` : ""}`;
+      }
+    }
+  });
 }
 
 /** @param {HTMLElement} thumbEl @param {string|null} thumbUrl */
@@ -1054,21 +1841,9 @@ export function renderUxIntel(slot, intel) {
 
 /** @param {HTMLElement} slot @param {object} intel @param {string} pageUrl */
 export function renderStaggerIntel(slot, intel, pageUrl = "") {
-  const scenes = enrichScenes(Array.isArray(intel.scenes) ? intel.scenes : [], intel, pageUrl);
-  const poster = videoPosterFallback(pageUrl, intel);
+  const scenes = Array.isArray(intel.scenes) ? intel.scenes : [];
   const rows = scenes.length
-    ? `<ol class="card-stagger-list">${scenes
-        .map((sc, i) => {
-          const src = sc.thumb || poster || "";
-          const thumb = src
-            ? `<img class="card-stagger-thumb" src="${escapeHtml(src)}"${poster ? ` data-fallback="${escapeHtml(poster)}"` : ""} alt="" width="64" height="36" loading="${i < 6 ? "eager" : "lazy"}" decoding="async" />`
-            : `<span class="card-stagger-thumb-ph" aria-hidden="true"></span>`;
-          return `<li class="card-stagger-item">
-            ${thumb}
-            <span class="card-stagger-meta"><span class="card-stagger-idx">#${String(i + 1).padStart(2, "0")}</span> <time>${escapeHtml(formatIntelClock(sc.start))}</time> — ${escapeHtml(String(sc.title || "Scene"))}</span>
-          </li>`;
-        })
-        .join("")}</ol>`
+    ? sceneThumbStripHtml(scenes, pageUrl, intel)
     : `<p class="card-intel-muted">No scenes to stagger — queue a longer video or one with chapters.</p>`;
 
   slot.innerHTML = `
@@ -1082,13 +1857,26 @@ export function renderStaggerIntel(slot, intel, pageUrl = "") {
   preloadSceneMedia(slot);
 }
 
+/** @param {string} pageUrl */
+function noCaptionsHintHtml(pageUrl) {
+  const u = String(pageUrl || "");
+  if (/pscp\.tv|periscope/i.test(u) || /\.m3u8(\?|$)/i.test(u)) {
+    return `<p class="card-intel-muted">No subtitles on this direct Periscope/HLS replay URL. The stream plays in preview, but <strong>Implementation</strong> transcript needs the original <strong>x.com</strong> link (<code>x.com/i/broadcasts/…</code> or <code>x.com/…/status/…</code>), not the <code>video.pscp.tv</code> playlist. SpaceX YouTube replays usually have auto-captions if you queue those instead.</p>`;
+  }
+  if (/twitter\.com|x\.com/i.test(u)) {
+    return `<p class="card-intel-muted">No captions returned for this X/Twitter URL. Use the full broadcast or status page (not only the CDN <code>.m3u8</code>). If yt-dlp still fails, try <code>yt-dlp --cookies-from-browser safari</code> in Terminal for logged-in access.</p>`;
+  }
+  return `<p class="card-intel-muted">No captions/subtitles found for this URL.</p>`;
+}
+
 /** @param {object} intel */
 export function renderImplIntel(slot, intel) {
   const cap = intel.captions;
+  const pageUrl = String(intel.webpageUrl || "");
   if (!cap) {
     slot.innerHTML = `
       <header class="card-intel-head"><span class="card-intel-cue" aria-hidden="true">&gt;</span> Implementation</header>
-      <p class="card-intel-muted">No captions/subtitles found for this URL.</p>
+      ${noCaptionsHintHtml(pageUrl)}
     `;
     return;
   }

@@ -40,6 +40,8 @@ To reduce contention when lots of other local servers are running, you can **tun
 | `BLANK_KEEP_ALIVE_MS` | `5000` | Shorter HTTP keep-alive so idle sockets free faster vs Node’s long defaults. |
 | `BLANK_HEADERS_TIMEOUT_MS` | `15000` | Abandoned / slow header sends. |
 | `BLANK_REQUEST_TIMEOUT_MS` | `30000` | Whole-request timeout (where supported by your Node version). |
+| `BLANK_INGEST_TIMEOUT_MS` | `600000` | Long ingest routes (intel, gsplat, ffmpeg thumbs). |
+| `BLANK_FFMPEG_CONCURRENCY` | `2` | Parallel ffmpeg cap in `video-intel.mjs` (set in env before start). |
 | `BLANK_QUIET=1` | off | Shorter banner (request lines still print). |
 | `BLANK_LOG_CONNECTIONS=1` | off | Log every TCP connect/disconnect (verbose). |
 
@@ -84,6 +86,44 @@ Same idea as **`mueee-kbatch/video-ingest-hub`**: paste or queue http(s) URLs, p
 - **camera** — menu of local `ffplay` avfoundation commands (no embed ads).
 - **feed** — menu of ad-free sample `ffplay` streams from `videos.json` + active queue; **double-click** queues the default HLS preset.
 - **controls** — full menu: **Play without embed ads** (mustream, yt-dlp→ffplay pipe, direct ffplay) then archive/probe rows.
+- **copy links** (header) / **Resolved links** (per queue row) — after resolve, copy **page URL**, **proxied play** (`/api/ingest/play/:id` for browser/HLS.js), and **CDN stream** (raw yt-dlp URL for ffplay/VLC).
+
+### Scene intel → gsplat export
+
+After queuing a URL, open **IA +** and use **Point cloud → gsplat → Build export bundle**. The server:
+
+1. Pulls scene cuts + optional per-scene JPEG samples (ffmpeg).
+2. Estimates scattered camera poses (WH lawn ENU anchor + caption/geo hints).
+3. Merges lawn/facade priors with frame-edge samples into a voxel-downsampled **PLY**.
+4. Writes **transforms.json** / **cameras.json** (nerfstudio-style) for local training.
+
+API (local server only):
+
+- `POST /api/ingest/gsplat/build` — `{ "url": "…", "useFrames": true }`
+- `GET /api/ingest/gsplat/pointcloud.ply?url=…`
+- `GET /api/ingest/gsplat/transforms.json?url=…`
+
+Export each scene still into `frames/00001.jpg` (scene-thumb URLs or ffmpeg), then run the printed **gsplat** or **ns-train splatfacto** command. This is sparse scatter reconstruction, not full COLMAP/SfM in-repo.
+
+### SuperSplat ([playcanvas/supersplat](https://github.com/playcanvas/supersplat))
+
+SuperSplat is the **editor/viewer for trained Gaussian splats**, not a trainer. Blank does not embed SuperSplat; the handoff is:
+
+| Step | Tool | File |
+|------|------|------|
+| 1. Export kit | blank IA+ or CLI | `pointcloud.ply` (sparse init), `transforms.json`, `frames/*.jpg` |
+| 2. Train | nerfstudio `splatfacto` or [gsplat](https://github.com/nerfstudio-project/gsplat) | `outputs/…/point_cloud.ply` |
+| 3. Edit / publish | [SuperSplat editor](https://supersplat.at/editor) | trained `.ply` → export `.sog` / `.compressed.ply` |
+
+**Do not** drag blank’s `pointcloud.ply` into SuperSplat — it only has `x,y,z,r,g,b` vertices, not Gaussian scale/rotation/opacity.
+
+One-shot folder export (server must be running):
+
+```bash
+node support/scripts/gsplat-export-kit.mjs "https://www.youtube.com/watch?v=…" --out ./gsplat-export
+```
+
+Then follow `gsplat-export/SUPERSPLAT.md`.
 
 ## ffplay (header preview)
 

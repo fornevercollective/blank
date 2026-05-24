@@ -15,6 +15,10 @@ import {
   crossLayoutShadowMeanings,
   layoutWordOverlapPercents,
 } from "./phrase-keyboard-cross.js";
+import {
+  COVERAGE_PACKS,
+  filterIndexByCoveragePack,
+} from "./scene-cinematography-api.js";
 
 const WATCH_KEY = "blank.phrase.watch.v1";
 
@@ -95,6 +99,28 @@ export function buildPhraseIndex(intel, pageUrl, ctx = {}) {
         url: pageUrl,
         sceneIdx: i,
       });
+      const cine = sc.cinematography;
+      if (cine && typeof cine === "object") {
+        push(`scene-cine-${i}`, "cinematography", sceneLabel, [
+          cine.lensMm,
+          cine.lensType,
+          cine.support,
+          cine.framing,
+          cine.movement,
+          cine.locationTag,
+        ]
+          .filter(Boolean)
+          .join(" "),
+          { startSec: start, url: pageUrl, sceneIdx: i },
+        );
+      }
+      if (sc.geoOverlay) {
+        push(`scene-geo-${i}`, "geo", sceneLabel, String(sc.geoOverlay), {
+          startSec: start,
+          url: pageUrl,
+          sceneIdx: i,
+        });
+      }
       for (const row of capLines) {
         const t =
           typeof row.startSec === "number" && Number.isFinite(row.startSec)
@@ -182,6 +208,8 @@ function sourceLabel(source) {
     prompt: "Prompt",
     keyboard: "Keyboard",
     "cross-layout": "Cross-layout",
+    cinematography: "Cinematography",
+    geo: "Geo / scatter",
   };
   return map[source] || source;
 }
@@ -322,6 +350,15 @@ export function initPhraseSearch(feedEl, hooks) {
         <div id="feed-phrase-results-body" class="feed-phrase-results-body" role="list"></div>
       </details>
       <div id="feed-phrase-cross-overlaps" class="feed-phrase-cross-overlaps" hidden></div>
+      <details class="feed-phrase-coverage" id="feed-phrase-coverage">
+        <summary class="feed-phrase-coverage-summary">Coverage packs · camera / geo</summary>
+        <p class="feed-phrase-coverage-hint">Broadcast test: WH lawn &amp; grounds only — ASC lens/support/framing heuristics on scene cards. Open YouTube search or filter the phrase index.</p>
+        <div class="feed-phrase-coverage-actions" id="feed-phrase-coverage-actions"></div>
+        <label class="feed-phrase-coverage-filter-label">
+          <input type="checkbox" id="feed-phrase-coverage-wh-only" class="feed-phrase-coverage-wh-only" />
+          Restrict results to WH lawn / grounds keywords
+        </label>
+      </details>
     </div>
   `;
 
@@ -349,6 +386,12 @@ export function initPhraseSearch(feedEl, hooks) {
 
   watchTa.value = readWatchPhrases().join("\n");
 
+  const getIndex = () =>
+    buildPhraseIndex(cachedIntel, cachedUrl, {
+      queue: hooks.getQueue?.() || [],
+      thread: hooks.getThread?.() || [],
+    });
+
   const kbHost = section.querySelector("#feed-phrase-kb-host");
   if (kbHost instanceof HTMLElement) {
     kbViz = mountPhraseKeyboardViz(kbHost, {
@@ -358,12 +401,6 @@ export function initPhraseSearch(feedEl, hooks) {
         layoutWordOverlapPercents(input.value.trim(), getIndex()),
     });
   }
-
-  const getIndex = () =>
-    buildPhraseIndex(cachedIntel, cachedUrl, {
-      queue: hooks.getQueue?.() || [],
-      thread: hooks.getThread?.() || [],
-    });
 
   /** @param {ReturnType<searchPhraseIndex>} hits */
   function renderResults(hits, query) {
@@ -411,6 +448,38 @@ export function initPhraseSearch(feedEl, hooks) {
     });
   }
 
+  const coverageWhOnly = section.querySelector("#feed-phrase-coverage-wh-only");
+  const coverageActions = section.querySelector("#feed-phrase-coverage-actions");
+  if (coverageActions instanceof HTMLElement) {
+    for (const pack of Object.values(COVERAGE_PACKS)) {
+      const yt = document.createElement("a");
+      yt.className = "feed-phrase-coverage-btn";
+      yt.href = pack.youtubeSearch;
+      yt.target = "_blank";
+      yt.rel = "noopener noreferrer";
+      yt.textContent = `YouTube · ${pack.label}`;
+      coverageActions.appendChild(yt);
+      const queueBtn = document.createElement("button");
+      queueBtn.type = "button";
+      queueBtn.className = "feed-phrase-coverage-btn feed-phrase-coverage-btn--queue";
+      queueBtn.textContent = `Queue search terms`;
+      queueBtn.title = pack.queueQueries.join(", ");
+      queueBtn.addEventListener("click", () => {
+        const q = pack.queueQueries[0] || "white house lawn";
+        input.value = q;
+        runSearch();
+        if (coverageWhOnly instanceof HTMLInputElement) coverageWhOnly.checked = true;
+      });
+      coverageActions.appendChild(queueBtn);
+    }
+  }
+
+  if (coverageWhOnly instanceof HTMLInputElement) {
+    coverageWhOnly.addEventListener("change", () => {
+      if (input.value.trim()) runSearch();
+    });
+  }
+
   function runSearch() {
     const q = input.value.trim();
     kbViz?.repaint();
@@ -427,7 +496,10 @@ export function initPhraseSearch(feedEl, hooks) {
       }
       return;
     }
-    const index = getIndex();
+    let index = getIndex();
+    if (coverageWhOnly instanceof HTMLInputElement && coverageWhOnly.checked) {
+      index = filterIndexByCoveragePack(index, "wh-lawn");
+    }
     lastSearchHits = searchPhraseIndex(index, q);
     renderResults(lastSearchHits, q);
     renderCrossLayoutPanel(crossOverlapEl, findCrossLayoutOverlaps(q, index), q, index);

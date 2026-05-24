@@ -234,11 +234,13 @@ export async function handleIngestApi(req, res, urlPath) {
     handleSceneAudioApi,
     handlePoseThumbApi,
     handleSceneAnalysisThumbApi,
+    handleGsplatApi,
   } = await import("./video-intel.mjs");
   if (await handleSceneThumbApi(req, res)) return true;
   if (await handlePoseThumbApi(req, res)) return true;
   if (await handleSceneAnalysisThumbApi(req, res)) return true;
   if (await handleSceneAudioApi(req, res)) return true;
+  if (await handleGsplatApi(req, res, urlPath)) return true;
   if (await handleIntelApi(req, res, urlPath)) return true;
 
   if (urlPath === "/api/ingest/resolve" && req.method === "POST") {
@@ -267,6 +269,9 @@ export async function handleIngestApi(req, res, urlPath) {
       json(res, 200, {
         ok: true,
         playId: session.playId,
+        pageUrl,
+        streamUrl: session.streamUrl,
+        playPath: `/api/ingest/play/${session.playId}`,
         title: session.title,
         streamKind: isM3u8(session.streamUrl, "", "") ? "hls" : "direct",
         downloadStarted: download,

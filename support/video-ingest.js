@@ -9,13 +9,18 @@ import {
   getYtdlpVideoFormat,
   qualityPayloadForApi,
 } from "./ingest-settings.js";
+import {
+  sceneAnalysisThumbApiUrl,
+  scenePoseThumbApiUrl,
+  PREVIEW_VIEW_MODES,
+} from "./scene-analysis-api.js";
 
 export const QUEUE_KEY = "blank.videoIngest.queue.v1";
 export const PATH_KEY = "blank.videoIngest.paths.v1";
 export const ACTIVE_KEY = "blank.videoIngest.active.v1";
 export const YTDLP_FORMAT = "bv*+ba/b";
 
-/** @typedef {{ id: string, url: string, title?: string, notesHtml?: string, addedAt?: number, playId?: string, streamKind?: string, resolveError?: string }} QueueItem */
+/** @typedef {{ id: string, url: string, title?: string, notesHtml?: string, addedAt?: number, playId?: string, streamKind?: string, streamUrl?: string, resolveError?: string }} QueueItem */
 /** @typedef {"youtube"|"vimeo"|"hls"|"direct"|"tiktok"|"page"|"unknown"} VideoKind */
 /** @typedef {{mustreamDesktop: string, mueeeRoot: string}} Paths */
 
@@ -218,6 +223,12 @@ function ingestNotesHtml(kind) {
   if (kind === "page") {
     return "<p>Watch page — resolve with <code>mustream</code> or yt-dlp (see controls menu).</p>";
   }
+  if (kind === "hls" || kind === "direct") {
+    return (
+      "<p><strong>HLS / direct</strong> — preview uses the local server proxy (avoids browser CORS). " +
+      "Queued URLs auto-resolve; use <strong>resolve</strong> if the session expires.</p>"
+    );
+  }
   return "";
 }
 
@@ -244,6 +255,7 @@ export function classifyUrl(normalized) {
   if (/youtube\.com|youtu\.be/i.test(u)) return "youtube";
   if (/vimeo\.com/.test(u)) return "vimeo";
   if (/tiktok\.com|vm\.tiktok\.com/i.test(u)) return "tiktok";
+  if (/twitter\.com|x\.com/i.test(u)) return "twitter";
   return "page";
 }
 
@@ -289,6 +301,7 @@ function needsPageResolve(kind) {
     kind === "youtube" ||
     kind === "vimeo" ||
     kind === "tiktok" ||
+    kind === "twitter" ||
     kind === "unknown"
   );
 }
@@ -306,6 +319,136 @@ let previewStreamRecovery = null;
 
 /** Avoid tearing down a healthy player on redundant redraw() calls. */
 let mountedPreviewKey = "";
+
+/** @type {'video'|'sam'|'alpha'|'wm'|'scopes'|'pose'} */
+let previewViewMode = "video";
+
+/** @type {QueueItem | null} */
+let mountedPreviewItem = null;
+
+let analysisRefreshTimer = 0;
+
+/** @returns {'video'|'sam'|'alpha'|'wm'|'scopes'|'pose'} */
+export function getPreviewViewMode() {
+  return previewViewMode;
+}
+
+/** @param {'video'|'sam'|'alpha'|'wm'|'scopes'|'pose'} mode */
+export function setPreviewViewMode(mode) {
+  if (!PREVIEW_VIEW_MODES[mode]) return;
+  previewViewMode = mode;
+  syncPreviewViewBar();
+  applyPreviewView(mountedPreviewItem, document.getElementById("ffplay-hint"));
+}
+
+function syncPreviewViewBar() {
+  document.querySelectorAll(".ffplay-view-btn[data-preview-view]").forEach((btn) => {
+    if (!(btn instanceof HTMLButtonElement)) return;
+    const id = btn.dataset.previewView || "";
+    const on = id === previewViewMode;
+    btn.classList.toggle("is-active", on);
+    btn.setAttribute("aria-selected", on ? "true" : "false");
+    const needsQueue = id !== "video";
+    btn.disabled = needsQueue && !mountedPreviewItem?.url?.startsWith("http");
+  });
+}
+
+/** @param {HTMLElement | null} host */
+function getPreviewTimeSec(host) {
+  if (!(host instanceof HTMLElement)) return 0;
+  const video = host.querySelector("video");
+  if (video instanceof HTMLVideoElement && Number.isFinite(video.currentTime)) {
+    return Math.max(0, video.currentTime);
+  }
+  return 0;
+}
+
+/**
+ * @param {QueueItem | null} item
+ * @param {HTMLElement | null} hintHost
+ */
+function applyPreviewView(item, hintHost = null) {
+  const embedHost = document.getElementById("ffplay-embed");
+  const placeholder = document.getElementById("ffplay-placeholder");
+  const analysisWrap = document.getElementById("ffplay-analysis-view");
+  const analysisImg = document.getElementById("ffplay-analysis-img");
+
+  syncPreviewViewBar();
+
+  if (!(embedHost instanceof HTMLElement)) return;
+
+  const showVideo = previewViewMode === "video" || !item?.url?.startsWith("http");
+
+  if (showVideo) {
+    if (analysisWrap instanceof HTMLElement) analysisWrap.hidden = true;
+    embedHost.hidden = embedHost.childElementCount === 0;
+    embedHost.style.visibility = "";
+    embedHost.style.pointerEvents = "";
+    if (placeholder instanceof HTMLElement) {
+      placeholder.hidden = embedHost.childElementCount > 0;
+    }
+    return;
+  }
+
+  const norm = normalizeUrl(item.url);
+  const t = getPreviewTimeSec(embedHost);
+  const mode = PREVIEW_VIEW_MODES[previewViewMode];
+  let src = "";
+  if (previewViewMode === "pose") {
+    src = scenePoseThumbApiUrl(norm, t);
+  } else if (mode?.kind) {
+    src = sceneAnalysisThumbApiUrl(norm, t, mode.kind);
+  }
+
+  if (placeholder instanceof HTMLElement) placeholder.hidden = true;
+  embedHost.hidden = false;
+  embedHost.style.visibility = "hidden";
+  embedHost.style.pointerEvents = "none";
+
+  if (analysisWrap instanceof HTMLElement && analysisImg instanceof HTMLImageElement) {
+    analysisWrap.hidden = false;
+    analysisImg.alt = `${mode?.label || previewViewMode} · ${formatPreviewClock(t)}`;
+    if (src) analysisImg.src = src;
+  }
+
+  if (hintHost) {
+    setPreviewHint(
+      hintHost,
+      `${mode?.label || previewViewMode} · frame ${formatPreviewClock(t)} — queue URL + resolve for video`,
+    );
+    hintHost.hidden = false;
+  }
+}
+
+function formatPreviewClock(sec) {
+  const s = Math.floor(sec);
+  const m = Math.floor(s / 60);
+  const r = s % 60;
+  return `${m}:${String(r).padStart(2, "0")}`;
+}
+
+function scheduleAnalysisRefresh() {
+  window.clearTimeout(analysisRefreshTimer);
+  if (previewViewMode === "video" || !mountedPreviewItem) return;
+  analysisRefreshTimer = window.setTimeout(() => {
+    applyPreviewView(mountedPreviewItem, document.getElementById("ffplay-hint"));
+  }, 400);
+}
+
+/** Wire header preview view mode tabs (call once on load). */
+export function initFfplayPreviewViews() {
+  const bar = document.querySelector(".ffplay-view-bar");
+  if (bar?.dataset.previewViewsBound) return;
+  if (bar) bar.dataset.previewViewsBound = "1";
+  document.querySelectorAll(".ffplay-view-btn[data-preview-view]").forEach((btn) => {
+    if (!(btn instanceof HTMLButtonElement)) return;
+    btn.addEventListener("click", () => {
+      const mode = btn.dataset.previewView;
+      if (mode) setPreviewViewMode(/** @type {'video'|'sam'|'alpha'|'wm'|'scopes'|'pose'} */ (mode));
+    });
+  });
+  syncPreviewViewBar();
+}
 
 /** @param {(reason: string) => void} fn */
 export function onPreviewStreamRecovery(fn) {
@@ -395,6 +538,11 @@ function attachPreviewTelemetry(video) {
       playing,
       timeLabel: playbackTimeLabel(video),
     });
+    if (Number.isFinite(video.currentTime)) {
+      document.dispatchEvent(
+        new CustomEvent("blank:preview-time", { detail: { t: video.currentTime } }),
+      );
+    }
   };
 
   const setScrub = (active) => {
@@ -604,6 +752,9 @@ export function renderEmbed(kind, normalized, hintHost = null) {
     );
     return wrapEmbed(frame);
   }
+  if (needsProxiedPlayback(kind)) {
+    return null;
+  }
   const video = document.createElement("video");
   video.controls = true;
   video.playsInline = true;
@@ -614,7 +765,7 @@ export function renderEmbed(kind, normalized, hintHost = null) {
   video.addEventListener("error", () => {
     setPreviewHint(
       hintHost,
-      "Browser blocked inline playback (CORS). Use yt-dlp, mustream, or ffplay.",
+      "Browser blocked inline playback (CORS). Use resolve, yt-dlp, mustream, or ffplay.",
     );
   });
   video.addEventListener("loadeddata", () => clearPreviewHint(hintHost));
@@ -854,7 +1005,7 @@ export function readQueue() {
 
 /** Ephemeral fields — not persisted (server play cache is in-memory). */
 function queueForStorage(q) {
-  return q.map(({ playId, streamKind, resolveError, ...rest }) => rest);
+  return q.map(({ playId, streamKind, streamUrl, resolveError, ...rest }) => rest);
 }
 
 /** @param {QueueItem[]} q */
@@ -997,10 +1148,15 @@ export function escapeHtml(s) {
     .replaceAll(">", "&gt;");
 }
 
+/** HLS and direct files need same-origin proxy — never attach CDN URL to video directly. */
+function needsProxiedPlayback(kind) {
+  return kind === "hls" || kind === "direct";
+}
+
 /** TikTok / generic pages — not YouTube/Vimeo (those use iframe embed first). */
 export function shouldAutoResolve(kind) {
   if (kind === "youtube" || kind === "vimeo") return false;
-  return needsPageResolve(kind);
+  return needsPageResolve(kind) || needsProxiedPlayback(kind);
 }
 
 function canEmbedPreview(kind) {
@@ -1093,7 +1249,14 @@ export async function refreshIngestApiCheck() {
   if (ingestApiProbe) return ingestApiProbe;
   ingestApiProbe = (async () => {
     try {
-      const r = await fetch("/api/ingest/resolve", { method: "OPTIONS", cache: "no-store" });
+      const ac = new AbortController();
+      const timer = window.setTimeout(() => ac.abort(), 8000);
+      const r = await fetch("/api/ingest/resolve", {
+        method: "OPTIONS",
+        cache: "no-store",
+        signal: ac.signal,
+      });
+      window.clearTimeout(timer);
       ingestApiOk = r.status === 204 || r.ok;
     } catch {
       ingestApiOk = false;
@@ -1135,6 +1298,99 @@ export function renderIngestActions(actions, handlers) {
   }
 
   return actionsEl;
+}
+
+/** @param {QueueItem} item */
+export function resolvedLinkRows(item) {
+  const norm = normalizeUrl(item.url);
+  const origin =
+    typeof globalThis.location !== "undefined" && globalThis.location.origin
+      ? globalThis.location.origin
+      : "http://127.0.0.1:5173";
+  /** @type {{ id: string, label: string, url: string, hint?: string }[]} */
+  const rows = [{ id: "page", label: "Page URL", url: norm }];
+  if (item.playId) {
+    rows.push({
+      id: "play",
+      label: "Proxied play (browser / HLS.js)",
+      url: `${origin}/api/ingest/play/${encodeURIComponent(item.playId)}`,
+      hint: "Same-origin; use in a tab or repaste for blank preview testing.",
+    });
+  }
+  if (item.streamUrl) {
+    rows.push({
+      id: "stream",
+      label: "Resolved stream (CDN)",
+      url: item.streamUrl,
+      hint: "Raw yt-dlp URL — ffplay/VLC; often blocked in browser (CORS).",
+    });
+  }
+  return rows;
+}
+
+/** @param {QueueItem} item */
+export function formatResolvedLinksBlock(item) {
+  return resolvedLinkRows(item)
+    .map((r) => `${r.label}: ${r.url}`)
+    .join("\n");
+}
+
+/** @param {QueueItem} item */
+export function renderResolvedLinksPanel(item) {
+  const rows = resolvedLinkRows(item);
+  const details = document.createElement("details");
+  details.className = "ingest-row-links";
+  if (item.playId || item.streamUrl) details.open = true;
+  details.innerHTML = "<summary>Resolved links</summary>";
+
+  const ul = document.createElement("ul");
+  ul.className = "ingest-link-list";
+
+  for (const row of rows) {
+    const li = document.createElement("li");
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "ingest-link-btn";
+    const hint = row.hint ? `<span class="ingest-link-hint">${escapeHtml(row.hint)}</span>` : "";
+    btn.innerHTML =
+      `<span class="ingest-link-label">${escapeHtml(row.label)}</span>` +
+      `<code class="ingest-link-url">${escapeHtml(row.url)}</code>` +
+      hint;
+    btn.title = `Copy ${row.label}`;
+    btn.addEventListener("click", () => void copyText(btn, row.url));
+    const open = document.createElement("a");
+    open.className = "ingest-link-open";
+    open.href = row.url;
+    open.target = "_blank";
+    open.rel = "noopener noreferrer";
+    open.textContent = "Open";
+    open.title = `Open ${row.label} in new tab`;
+    li.append(btn, open);
+    ul.appendChild(li);
+  }
+
+  details.appendChild(ul);
+
+  const bar = document.createElement("div");
+  bar.className = "ingest-link-bar";
+  const copyAll = document.createElement("button");
+  copyAll.type = "button";
+  copyAll.className = "ingest-link-copy-all";
+  copyAll.textContent = "Copy all";
+  copyAll.addEventListener("click", () => void copyText(copyAll, formatResolvedLinksBlock(item)));
+  bar.appendChild(copyAll);
+  details.appendChild(bar);
+
+  if (!item.playId && !item.streamUrl) {
+    const note = document.createElement("p");
+    note.className = "ingest-link-pending";
+    note.textContent = item.resolveError
+      ? `Resolve failed: ${item.resolveError}`
+      : "Resolve this item (header resolve or auto on queue) to copy proxied play and CDN stream URLs.";
+    details.appendChild(note);
+  }
+
+  return details;
 }
 
 export function renderIngestChecklist(item, paths, handlers, apiOk = null) {
@@ -1258,8 +1514,13 @@ function mountPlaySession(host, playId, hintHost) {
     });
   }
 
+  const onTime = () => scheduleAnalysisRefresh();
+  video.addEventListener("timeupdate", onTime);
+  video.addEventListener("seeked", onTime);
+
   host.appendChild(shell);
   syncPreviewTelemetry(host);
+  applyPreviewView(mountedPreviewItem, hintHost);
   void video.play().catch(() => {
     /* autoplay blocked until user taps play */
   });
@@ -1268,11 +1529,13 @@ function mountPlaySession(host, playId, hintHost) {
 
 /** @param {HTMLElement} host @param {QueueItem|null} item @param {HTMLElement|null} [hintHost] */
 export function mountPreview(host, item, hintHost = null) {
+  mountedPreviewItem = item;
   const previewKey = item
     ? `${item.id}|${item.playId || ""}|${item.resolveError || ""}`
     : "";
   if (previewKey && previewKey === mountedPreviewKey && host.childElementCount > 0) {
     syncPreviewTelemetry(host);
+    applyPreviewView(item, hintHost);
     return;
   }
   mountedPreviewKey = previewKey;
@@ -1283,6 +1546,8 @@ export function mountPreview(host, item, hintHost = null) {
   if (!item) {
     host.hidden = true;
     mountedPreviewKey = "";
+    mountedPreviewItem = null;
+    applyPreviewView(null, hintHost);
     return;
   }
   if (item.playId) {
@@ -1296,6 +1561,7 @@ export function mountPreview(host, item, hintHost = null) {
         return;
       }
       mountPlaySession(host, item.playId, hintHost);
+      applyPreviewView(item, hintHost);
     });
     return;
   }
@@ -1312,12 +1578,19 @@ export function mountPreview(host, item, hintHost = null) {
   if (emb) {
     host.appendChild(emb);
     syncPreviewTelemetry(host);
+    applyPreviewView(item, hintHost);
     return;
   }
   if (shouldAutoResolve(kind)) {
-    setPreviewHint(hintHost, "Resolving with yt-dlp…");
+    setPreviewHint(
+      hintHost,
+      needsProxiedPlayback(kind)
+        ? "Proxying stream for inline playback (yt-dlp)…"
+        : "Resolving with yt-dlp…",
+    );
     host.hidden = true;
     resetRailPlayback();
+    applyPreviewView(item, hintHost);
     return;
   }
   if (kind === "tiktok") {
@@ -1334,4 +1607,6 @@ export function mountPreview(host, item, hintHost = null) {
     setPreviewHint(hintHost, "Malformed URL.");
   }
   host.hidden = true;
+  applyPreviewView(item, hintHost);
 }
+

@@ -7,6 +7,42 @@ import http from "node:http";
 
 const INTEL_TTL_MS = 30 * 60 * 1000;
 
+const FFMPEG_CONCURRENCY = Math.max(
+  1,
+  Math.min(4, Number(process.env.BLANK_FFMPEG_CONCURRENCY) || 2),
+);
+let ffmpegActive = 0;
+/** @type {Array<() => void>} */
+const ffmpegWait = [];
+
+/** Serialize ffmpeg (scene thumbs, gsplat frames) to avoid stampedes + browser aborts. */
+function runFfmpegQueued(fn) {
+  return new Promise((resolve, reject) => {
+    const run = () => {
+      ffmpegActive++;
+      Promise.resolve()
+        .then(fn)
+        .then(resolve, reject)
+        .finally(() => {
+          ffmpegActive--;
+          const next = ffmpegWait.shift();
+          if (next) next();
+        });
+    };
+    if (ffmpegActive < FFMPEG_CONCURRENCY) run();
+    else ffmpegWait.push(run);
+  });
+}
+
+/** @param {import("node:http").IncomingMessage} req @param {import("node:http").ServerResponse} res */
+function onClientGone(req, res, fn) {
+  const fire = () => {
+    if (!res.writableEnded) fn();
+  };
+  req.once("aborted", fire);
+  res.once("close", fire);
+}
+
 /** @type {Map<string, { data: object, created: number }>} */
 const intelCache = new Map();
 
@@ -15,6 +51,12 @@ const sceneThumbCache = new Map();
 
 /** @type {Map<string, { buf: Buffer, created: number }>} */
 const sceneAudioCache = new Map();
+
+/** @type {Map<string, { rgb: Uint8Array, created: number }>} */
+const sceneRgbCache = new Map();
+
+/** @type {Map<string, { bundle: object, created: number }>} */
+const gsplatCache = new Map();
 
 function sceneThumbApiUrl(pageUrl, startSec) {
   const q = new URLSearchParams({
@@ -36,6 +78,14 @@ import {
   sceneAnalysisThumbApiUrl,
   SCENE_ANALYSIS_KINDS,
 } from "./scene-analysis-api.js";
+import {
+  decodeJpegToRgb,
+  analysisSvgFromRgb,
+  poseJointsFromRgb,
+  poseSvgFromJoints,
+} from "./scene-frame-analysis.mjs";
+import { estimateCinematography } from "./scene-cinematography.mjs";
+import { buildGsplatBundle } from "./scene-gsplat-pipeline.mjs";
 
 export { sceneAnalysisThumbApiUrl, SCENE_ANALYSIS_KINDS };
 
@@ -230,22 +280,58 @@ export function buildSceneAnalysisSvg(pageUrl, tSec, kind) {
 </svg>`;
   }
 
-  return buildPoseEstimateSvg(pageUrl, tSec);
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 104 88" width="104" height="88">
+  <rect width="104" height="88" fill="#141414"/>
+  <text x="52" y="48" text-anchor="middle" fill="#6b7280" font-size="7" font-family="ui-monospace,monospace">analysis</text>
+</svg>`;
 }
-  const blob = `${sc.title} ${segLines.map((l) => l.text).join(" ")}`.toLowerCase();
+
+/** @param {object} sc @param {{ text: string }[]} segLines @param {object} data */
+function estimateSceneExtras(sc, segLines, data) {
+  const programCtx = `${data.title || ""} ${data.description || ""}`.slice(0, 6000);
+  const blob = `${sc.title} ${segLines.map((l) => l.text).join(" ")} ${programCtx}`.toLowerCase();
   let shot = "Medium";
   let angle = "Eye-level";
   let movement = "Static";
   let sceneType = "Studio segment";
   let ikPose = "Presenter · seated";
 
+  if (
+    /\b(spacex|starbase|starship|falcon|dragon\s*spacecraft)\b/.test(blob) ||
+    /\b(launch\s*(pad|site|complex|area)|liftoff|booster|lc-39|kennedy\s*space|cape\s*canaveral)\b/.test(
+      blob,
+    )
+  ) {
+    sceneType = "SpaceX Launch area";
+    ikPose = /launch|liftoff|pad|booster|rocket/.test(blob)
+      ? "Pad / vehicle · exterior"
+      : "Mission control · seated";
+    if (/wide|establish|aerial|drone|exterior|pad/.test(blob)) shot = "Wide";
+    if (/close|tight|engine|plume|flame/.test(blob)) shot = "Close-up";
+    if (/aerial|drone|helicopter|tracking/.test(blob)) movement = "Aerial / track";
+  }
   if (/wide|establish|exterior|crowd/.test(blob)) shot = "Wide";
   if (/close|tight|face|head\s*shot/.test(blob)) shot = "Close-up";
   if (/graphic|chart|screen|ticker|data|b-roll|broll/.test(blob)) {
     sceneType = "Graphics / B-roll";
     ikPose = "No figure · screen content";
   }
-  if (/interview|guest|panel|conversation/.test(blob)) {
+  if (
+    /\b(two|2|dual)\s*(host|anchor|presenter)s?\b/.test(blob) ||
+    /\bco-?hosts?\b/.test(blob) ||
+    /\b(host|anchor)s?\s+(desk|studio|table)\b/.test(blob) ||
+    /\bpersonnel\s+behind\b/.test(blob) ||
+    /\b(crew|staff|producers?|team)\s+behind\b/.test(blob) ||
+    /\bbehind\s+the\s+(desk|anchors?|hosts?)\b/.test(blob) ||
+    /\bnews\s+desk\b/.test(blob) ||
+    /\bjoining (me|us)|with us (today|now)|both anchors\b/.test(blob)
+  ) {
+    ikPose = "Two hosts · personnel behind";
+    if (sceneType === "Studio segment") {
+      shot = /wide|establish/.test(blob) ? "Wide" : "Medium";
+    }
+  } else if (/interview|guest|panel|conversation/.test(blob)) {
     sceneType = "Interview / dialogue";
     ikPose = "Two-shot · conversational";
   }
@@ -267,11 +353,50 @@ export function buildSceneAnalysisSvg(pageUrl, tSec, kind) {
       ? `${w}×${h}${data.fps ? ` @ ${Math.round(data.fps)}fps` : ""}`
       : data.format_note || "unknown";
 
+  const cine = estimateCinematography(
+    {},
+    {
+      title: [sc.title, data.title].filter(Boolean).join(" · "),
+      lines: segLines,
+    },
+    {
+      width: w,
+      height: h,
+      fps: data.fps,
+      vcodec: data.vcodec,
+      programContext: programCtx,
+    },
+  );
+
+  if (
+    ikPose === "Presenter · seated" &&
+    (/\b(closing bell|squawk box|fast money|power lunch|worldwide exchange)\b/.test(blob) ||
+      /\btwo-shot\b/i.test(cine.framing || ""))
+  ) {
+    ikPose = "Two hosts · personnel behind";
+  }
+
+  const sceneEstimate = (() => {
+    if (!cine.locationTag) return sceneType;
+    const st = sceneType.toLowerCase();
+    const lt = cine.locationTag.toLowerCase();
+    if (
+      (st.includes("spacex") && lt.includes("spacex")) ||
+      (st.includes("wh") && lt.includes("wh"))
+    ) {
+      return sceneType;
+    }
+    return `${sceneType} · ${cine.locationTag}`;
+  })();
+
   return {
-    cameraEstimate: `${shot} · ${angle} · ${movement}`,
-    sceneEstimate: sceneType,
+    cameraEstimate: `${shot} · ${angle} · ${movement} · ${cine.lensMm}`,
+    sceneEstimate,
     ikPoseEstimate: ikPose,
     lensHint: lens,
+    cinematography: cine,
+    geoOverlay: cine.geoHint,
+    cameraPoseSource: "heuristic-scatter",
   };
 }
 
@@ -318,9 +443,32 @@ async function resolveStreamForThumb(pageUrl) {
   return lines[0];
 }
 
-/** @param {string} pageUrl @param {number} tSec */
-async function captureSceneThumb(pageUrl, tSec) {
+/** @param {string} pageUrl @param {number} tSec @param {{ isAborted?: () => boolean }} [opts] */
+async function loadSceneRgb(pageUrl, tSec, opts = {}) {
+  const key = `${pageUrl}\0${Math.floor(tSec)}`;
+  const cached = sceneRgbCache.get(key);
+  if (cached && Date.now() - cached.created < INTEL_TTL_MS) return cached.rgb;
+
+  try {
+    const jpeg = await captureSceneThumb(pageUrl, tSec, opts);
+    const rgb = await decodeJpegToRgb(jpeg);
+    if (rgb) sceneRgbCache.set(key, { rgb, created: Date.now() });
+    return rgb;
+  } catch {
+    return null;
+  }
+}
+
+/** @param {string} pageUrl @param {number} tSec @param {{ isAborted?: () => boolean }} [opts] */
+async function captureSceneThumb(pageUrl, tSec, opts = {}) {
+  if (opts.isAborted?.()) throw new Error("client aborted");
+  return runFfmpegQueued(() => captureSceneThumbFfmpeg(pageUrl, tSec, opts));
+}
+
+/** @param {string} pageUrl @param {number} tSec @param {{ isAborted?: () => boolean }} [opts] */
+async function captureSceneThumbFfmpeg(pageUrl, tSec, opts = {}) {
   const streamUrl = await resolveStreamForThumb(pageUrl);
+  if (opts.isAborted?.()) throw new Error("client aborted");
   return new Promise((resolve, reject) => {
     const child = spawn(
       "ffmpeg",
@@ -345,25 +493,47 @@ async function captureSceneThumb(pageUrl, tSec) {
     /** @type {Buffer[]} */
     const chunks = [];
     let err = "";
+    let settled = false;
+    const finish = (fn) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      fn();
+    };
     const timer = setTimeout(() => {
       child.kill("SIGTERM");
-      reject(new Error("ffmpeg scene thumb timed out"));
+      finish(() => reject(new Error("ffmpeg scene thumb timed out")));
     }, 25_000);
+    const abortCheck = () => {
+      if (opts.isAborted?.()) {
+        child.kill("SIGTERM");
+        finish(() => reject(new Error("client aborted")));
+      }
+    };
+    const abortIv = setInterval(abortCheck, 200);
     child.stdout.on("data", (d) => chunks.push(d));
     child.stderr.on("data", (d) => {
       err += d.toString();
     });
     child.on("error", (e) => {
-      clearTimeout(timer);
-      reject(e.code === "ENOENT" ? new Error("ffmpeg not found on PATH") : e);
+      clearInterval(abortIv);
+      finish(() =>
+        reject(e.code === "ENOENT" ? new Error("ffmpeg not found on PATH") : e),
+      );
     });
     child.on("close", (code) => {
-      clearTimeout(timer);
-      if (code !== 0) {
-        reject(new Error(err.trim() || `ffmpeg exit ${code}`));
-        return;
-      }
-      resolve(Buffer.concat(chunks));
+      clearInterval(abortIv);
+      finish(() => {
+        if (opts.isAborted?.()) {
+          reject(new Error("client aborted"));
+          return;
+        }
+        if (code !== 0) {
+          reject(new Error(err.trim() || `ffmpeg exit ${code}`));
+          return;
+        }
+        resolve(Buffer.concat(chunks));
+      });
     });
   });
 }
@@ -702,8 +872,12 @@ export async function handleSceneThumbApi(req, res) {
     return true;
   }
 
+  let aborted = false;
+  onClientGone(req, res, () => {
+    aborted = true;
+  });
   try {
-    const buf = await captureSceneThumb(pageUrl, t);
+    const buf = await captureSceneThumb(pageUrl, t, { isAborted: () => aborted });
     if (buf.length > 64) {
       sceneThumbCache.set(cacheKey, { buf, created: Date.now() });
       res.writeHead(200, {
@@ -747,7 +921,20 @@ export async function handlePoseThumbApi(req, res) {
     return true;
   }
 
-  const svg = buildPoseEstimateSvg(pageUrl, t);
+  let aborted = false;
+  onClientGone(req, res, () => {
+    aborted = true;
+  });
+  let svg = buildPoseEstimateSvg(pageUrl, t);
+  try {
+    const rgb = await loadSceneRgb(pageUrl, t, { isAborted: () => aborted });
+    if (rgb) {
+      const { joints, noFigure } = poseJointsFromRgb(rgb);
+      if (!noFigure) svg = poseSvgFromJoints(joints, false);
+    }
+  } catch {
+    /* seeded fallback */
+  }
   const buf = Buffer.from(svg, "utf8");
   res.writeHead(200, {
     "Content-Type": "image/svg+xml; charset=utf-8",
@@ -780,7 +967,17 @@ export async function handleSceneAnalysisThumbApi(req, res) {
     return true;
   }
 
-  const svg = buildSceneAnalysisSvg(pageUrl, t, kind);
+  let aborted = false;
+  onClientGone(req, res, () => {
+    aborted = true;
+  });
+  let svg = buildSceneAnalysisSvg(pageUrl, t, kind);
+  try {
+    const rgb = await loadSceneRgb(pageUrl, t, { isAborted: () => aborted });
+    if (rgb) svg = analysisSvgFromRgb(rgb, kind);
+  } catch {
+    /* decorative fallback */
+  }
   const buf = Buffer.from(svg, "utf8");
   res.writeHead(200, {
     "Content-Type": "image/svg+xml; charset=utf-8",
@@ -822,7 +1019,7 @@ export async function handleSceneAudioApi(req, res) {
   }
 
   try {
-    const buf = await captureSceneAudio(pageUrl, t, d);
+    const buf = await runFfmpegQueued(() => captureSceneAudio(pageUrl, t, d));
     if (buf.length > 128) {
       sceneAudioCache.set(cacheKey, { buf, created: Date.now() });
       res.writeHead(200, {
@@ -840,6 +1037,166 @@ export async function handleSceneAudioApi(req, res) {
   res.writeHead(404, { "Content-Type": "text/plain; charset=utf-8" });
   res.end("scene audio unavailable");
   return true;
+}
+
+function getGsplatBundle(pageUrl) {
+  const row = gsplatCache.get(pageUrl);
+  if (!row || Date.now() - row.created > INTEL_TTL_MS) return null;
+  return row.bundle;
+}
+
+/** @param {Record<string, unknown>} parsed */
+function parseGsplatSceneFilter(parsed) {
+  /** @type {Record<string, unknown>} */
+  const sceneFilter = {};
+  if (Array.isArray(parsed.sceneIndices)) {
+    sceneFilter.sceneIndices = parsed.sceneIndices
+      .map((n) => Number(n))
+      .filter((n) => Number.isFinite(n) && n >= 0);
+  }
+  if (Array.isArray(parsed.filterTypes)) {
+    sceneFilter.filterTypes = parsed.filterTypes.filter((t) => typeof t === "string" && t);
+  } else if (typeof parsed.filterType === "string" && parsed.filterType) {
+    sceneFilter.filterTypes = [parsed.filterType];
+  }
+  if (typeof parsed.captionQuery === "string" && parsed.captionQuery.trim()) {
+    sceneFilter.captionQuery = parsed.captionQuery.trim();
+  }
+  for (const key of ["timeStart", "timeEnd", "maxDurationSec", "minDurationSec"]) {
+    const n = Number(parsed[key]);
+    if (Number.isFinite(n)) sceneFilter[key] = n;
+  }
+  return sceneFilter;
+}
+
+/** @param {import("node:http").IncomingMessage} req @param {import("node:http").ServerResponse} res @param {string} urlPath */
+export async function handleGsplatApi(req, res, urlPath) {
+  let u;
+  try {
+    u = new URL(req.url || "/", "http://127.0.0.1");
+  } catch {
+    return false;
+  }
+
+  const pageUrl = (u.searchParams.get("url") || "").trim();
+  const needsUrl =
+    urlPath.startsWith("/api/ingest/gsplat/") &&
+    urlPath !== "/api/ingest/gsplat/build";
+
+  if (urlPath === "/api/ingest/gsplat/build" && req.method === "POST") {
+    let body = "";
+    for await (const chunk of req) body += chunk;
+    let parsed;
+    try {
+      parsed = JSON.parse(body || "{}");
+    } catch {
+      json(res, 400, { ok: false, error: "invalid JSON" });
+      return true;
+    }
+    const buildUrl = typeof parsed.url === "string" ? parsed.url.trim() : "";
+    if (!buildUrl.startsWith("http://") && !buildUrl.startsWith("https://")) {
+      json(res, 400, { ok: false, error: "need http(s) url" });
+      return true;
+    }
+    try {
+      const captionPref =
+        typeof parsed.captionPref === "string" ? parsed.captionPref : "en-auto";
+      const intel = await fetchVideoIntel(buildUrl, captionPref);
+      const useFrames = parsed.useFrames !== false;
+      const sceneFilter = parseGsplatSceneFilter(parsed);
+      const bundle = await buildGsplatBundle({
+        pageUrl: buildUrl,
+        intel,
+        sampleRgb: useFrames ? (url, t) => loadSceneRgb(url, t) : undefined,
+        maxScenes: Math.min(24, Math.max(1, Number(parsed.maxScenes) || 14)),
+        sceneFilter,
+      });
+      gsplatCache.set(buildUrl, { bundle, created: Date.now(), sceneFilter });
+      json(res, 200, {
+        ok: true,
+        pointCount: bundle.pointCount,
+        cameraCount: bundle.cameraCount,
+        meanBaselineM: bundle.meanBaselineM,
+        geoSummary: bundle.geoSummary,
+        segmentLabel: bundle.segmentLabel,
+        includedScenes: bundle.includedScenes,
+        metaUrl: `/api/ingest/gsplat/meta?url=${encodeURIComponent(buildUrl)}`,
+        plyUrl: `/api/ingest/gsplat/pointcloud.ply?url=${encodeURIComponent(buildUrl)}`,
+        transformsUrl: `/api/ingest/gsplat/transforms.json?url=${encodeURIComponent(buildUrl)}`,
+        camerasUrl: `/api/ingest/gsplat/cameras.json?url=${encodeURIComponent(buildUrl)}`,
+        gsplatCommand: bundle.gsplatCommand,
+      });
+    } catch (e) {
+      json(res, 502, { ok: false, error: e instanceof Error ? e.message : String(e) });
+    }
+    return true;
+  }
+
+  if (needsUrl && !pageUrl.startsWith("http://") && !pageUrl.startsWith("https://")) {
+    json(res, 400, { ok: false, error: "need http(s) url" });
+    return true;
+  }
+
+  const bundle = needsUrl ? getGsplatBundle(pageUrl) : null;
+  if (needsUrl && !bundle) {
+    json(res, 404, {
+      ok: false,
+      error: "no gsplat bundle — POST /api/ingest/gsplat/build first",
+    });
+    return true;
+  }
+
+  if (urlPath === "/api/ingest/gsplat/meta" && req.method === "GET") {
+    json(res, 200, {
+      ok: true,
+      pointCount: bundle.pointCount,
+      cameraCount: bundle.cameraCount,
+      meanBaselineM: bundle.meanBaselineM,
+      geoSummary: bundle.geoSummary,
+      segmentLabel: bundle.segmentLabel,
+      includedScenes: bundle.includedScenes,
+      sceneOrigin: bundle.sceneOrigin,
+      plyUrl: `/api/ingest/gsplat/pointcloud.ply?url=${encodeURIComponent(pageUrl)}`,
+      transformsUrl: `/api/ingest/gsplat/transforms.json?url=${encodeURIComponent(pageUrl)}`,
+    });
+    return true;
+  }
+
+  if (urlPath === "/api/ingest/gsplat/pointcloud.ply" && req.method === "GET") {
+    const body = Buffer.from(bundle.ply, "utf8");
+    res.writeHead(200, {
+      "Content-Type": "text/plain; charset=utf-8",
+      "Content-Disposition": `attachment; filename="blank-scene-${hashSeed(pageUrl) % 100000}.ply"`,
+      "Content-Length": body.length,
+      "Cache-Control": "private, max-age=3600",
+    });
+    res.end(body);
+    return true;
+  }
+
+  if (urlPath === "/api/ingest/gsplat/transforms.json" && req.method === "GET") {
+    sendJsonAttachment(res, bundle.transforms, "transforms.json");
+    return true;
+  }
+
+  if (urlPath === "/api/ingest/gsplat/cameras.json" && req.method === "GET") {
+    sendJsonAttachment(res, bundle.cameras, "cameras.json");
+    return true;
+  }
+
+  return false;
+}
+
+/** @param {import("node:http").ServerResponse} res @param {object} obj @param {string} filename */
+function sendJsonAttachment(res, obj, filename) {
+  const body = Buffer.from(JSON.stringify(obj, null, 2), "utf8");
+  res.writeHead(200, {
+    "Content-Type": "application/json; charset=utf-8",
+    "Content-Disposition": `attachment; filename="${filename}"`,
+    "Content-Length": body.length,
+    "Cache-Control": "private, max-age=3600",
+  });
+  res.end(body);
 }
 
 /** @param {import("node:http").IncomingMessage} req @param {import("node:http").ServerResponse} res */
@@ -864,6 +1221,29 @@ export async function handleIntelApi(req, res, urlPath) {
     const captionPref =
       typeof parsed.captionPref === "string" ? parsed.captionPref : "en-auto";
     const intel = await fetchVideoIntel(pageUrl, captionPref);
+    const gsplat = getGsplatBundle(pageUrl);
+    if (gsplat) {
+      intel.gsplat = {
+        pointCount: gsplat.pointCount,
+        cameraCount: gsplat.cameraCount,
+        meanBaselineM: gsplat.meanBaselineM,
+        geoSummary: gsplat.geoSummary,
+        metaUrl: `/api/ingest/gsplat/meta?url=${encodeURIComponent(pageUrl)}`,
+        plyUrl: `/api/ingest/gsplat/pointcloud.ply?url=${encodeURIComponent(pageUrl)}`,
+        transformsUrl: `/api/ingest/gsplat/transforms.json?url=${encodeURIComponent(pageUrl)}`,
+        camerasUrl: `/api/ingest/gsplat/cameras.json?url=${encodeURIComponent(pageUrl)}`,
+        gsplatCommand: gsplat.gsplatCommand,
+        segmentLabel: gsplat.segmentLabel,
+        includedScenes: gsplat.includedScenes,
+        cameras: (gsplat.cameras || []).map((c) => ({
+          id: c.id,
+          t: c.t,
+          position: c.position,
+          source: c.source,
+          fovDeg: c.fovDeg,
+        })),
+      };
+    }
     json(res, 200, intel);
   } catch (e) {
     json(res, 502, { ok: false, error: e instanceof Error ? e.message : String(e) });

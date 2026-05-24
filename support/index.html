@@ -85,6 +85,14 @@
       </div>
       <div class="header-main">
         <div class="header-settings-row" id="header-quality-bar" role="group" aria-label="Ingest quality">
+          <p class="header-runtime-stats" id="header-runtime-stats" role="status" aria-live="polite">
+            <span data-stat-tokens>tokens —</span>
+            <span class="header-runtime-sep" aria-hidden="true">·</span>
+            <span data-stat-cpu>cpu —</span>
+            <span class="header-runtime-sep" aria-hidden="true">·</span>
+            <span data-stat-gpu>gpu —</span>
+          </p>
+          <div class="header-quality-chips">
           <details class="header-quality-chip" data-quality="video">
             <summary class="header-quality-name">video</summary>
             <div class="header-quality-panel">
@@ -115,6 +123,7 @@
               <ul id="quality-download" class="header-quality-list" role="listbox" aria-label="Download quality"></ul>
             </div>
           </details>
+          </div>
         </div>
         <div class="header-title-row">
           <img
@@ -171,7 +180,9 @@
               </div>
             </div>
             <div class="header-prompts-scroll" id="header-prompts-scroll">
-              <nav class="header-prompts-track" id="header-prompts" aria-label="Message prompts"></nav>
+              <nav class="header-prompts-track" id="header-prompts" aria-label="Message prompts">
+                <div id="header-scene-chips" class="header-scene-chips" hidden aria-label="Scene cuts"></div>
+              </nav>
             </div>
           </div>
           <button
@@ -199,6 +210,7 @@
           <button type="button" class="header-prompt-btn" id="ingest-paste">Paste</button>
           <button type="button" class="header-prompt-btn" id="ingest-clear">Clear</button>
           <button type="button" class="header-prompt-btn" id="ingest-resolve">resolve</button>
+          <button type="button" class="header-prompt-btn" id="ingest-copy-links" title="Copy resolved play + stream URLs for the active queue item">copy links</button>
           <button type="button" class="header-prompt-btn" id="ingest-download">download</button>
           <details class="ingest-paths header-prompt-paths">
             <summary>Path defaults</summary>
@@ -228,9 +240,28 @@
                 <div class="ffplay-broadcast-screen">
                   <span class="ffplay-thumb-inner" id="ffplay-placeholder"></span>
                   <div id="ffplay-embed" class="ffplay-embed-host" hidden></div>
+                  <div id="ffplay-analysis-view" class="ffplay-analysis-view" hidden>
+                    <img
+                      id="ffplay-analysis-img"
+                      class="ffplay-analysis-img"
+                      alt=""
+                      width="280"
+                      height="158"
+                      decoding="async"
+                      crossorigin="anonymous"
+                    />
+                  </div>
                 </div>
               </div>
             </div>
+          </div>
+          <div class="ffplay-view-bar" role="tablist" aria-label="Preview view mode">
+            <button type="button" class="ffplay-view-btn is-active" data-preview-view="video" aria-selected="true">Video</button>
+            <button type="button" class="ffplay-view-btn" data-preview-view="sam" aria-selected="false">SAM</button>
+            <button type="button" class="ffplay-view-btn" data-preview-view="alpha" aria-selected="false">Alpha</button>
+            <button type="button" class="ffplay-view-btn" data-preview-view="wm" aria-selected="false">WM</button>
+            <button type="button" class="ffplay-view-btn" data-preview-view="scopes" aria-selected="false">Scopes</button>
+            <button type="button" class="ffplay-view-btn" data-preview-view="pose" aria-selected="false">IK Pose</button>
           </div>
           <div class="ffplay-toolbar" role="toolbar" aria-label="Playback controls">
             <button
