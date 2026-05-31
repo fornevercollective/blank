@@ -4,19 +4,33 @@
 import {
   loadArtistCatalog,
   alphaRailHtml,
+  alphaScriptTabsHtml,
   artistsForLetter,
+  artistCatalogCount,
+  ARTIST_REGIONS,
   autocompleteArtists,
+  countArtistsMatchingQuery,
+  countArtistsFor,
+  formatLetterLabel,
+  regionById,
   setActiveLetter,
   getActiveLetter,
+  setActiveScript,
+  getActiveScript,
+  setActiveRegion,
+  getActiveRegion,
 } from "./live-concerts-artists.js";
 import { addWatchPhrases, focusPhraseSearch } from "./phrase-search.js";
 import { paintArtistAlbums } from "./live-concerts-albums.js";
+import { LIVE_GENRE_TABS, LIVE_FEED_REGION_TABS } from "./live-concerts-genres.mjs";
 
 const MULTIVIEW_KEY = "blank.live.multiview.v1";
 
-/** @type {{ window: string, query: string, events: object[], loading: boolean }} */
+/** @type {{ window: string, genre: string, region: string, query: string, events: object[], loading: boolean }} */
 let state = {
   window: "now",
+  genre: "all",
+  region: "all",
   query: "",
   events: [],
   loading: false,
@@ -47,6 +61,8 @@ export function initLiveConcerts(onQueue) {
   const multiviewBtn = document.getElementById("live-concerts-multiview");
   const queueBtn = document.getElementById("live-concerts-queue");
   const refreshBtn = document.getElementById("live-concerts-refresh");
+  const regionsEl = document.getElementById("live-concerts-feed-regions");
+  const genresEl = document.getElementById("live-concerts-genres");
   const albumsPanel = document.getElementById("live-concerts-albums");
   const albumsScroll = document.getElementById("live-concerts-albums-scroll");
   const albumsHint = document.getElementById("live-concerts-albums-hint");
@@ -61,6 +77,44 @@ export function initLiveConcerts(onQueue) {
     window.clearTimeout(discoverDebounce);
     discoverDebounce = window.setTimeout(() => void discover(statusEl, listEl, force), 380);
   };
+
+  if (regionsEl) {
+    regionsEl.innerHTML = LIVE_FEED_REGION_TABS.map(
+      (r) =>
+        `<button type="button" class="live-concerts-feed-region${state.region === r.id ? " is-active" : ""}" data-live-region="${r.id}" role="tab" aria-selected="${state.region === r.id ? "true" : "false"}" style="--region-tab-bg:${r.tab.bg};--region-tab-ink:${r.tab.ink};--region-tab-border:${r.tab.border}">${escapeHtml(r.label)}</button>`,
+    ).join("");
+    regionsEl.querySelectorAll("[data-live-region]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const r = btn.getAttribute("data-live-region");
+        if (!r) return;
+        state.region = r;
+        regionsEl.querySelectorAll("[data-live-region]").forEach((b) => {
+          b.classList.toggle("is-active", b === btn);
+          b.setAttribute("aria-selected", b === btn ? "true" : "false");
+        });
+        scheduleDiscover(true);
+      });
+    });
+  }
+
+  if (genresEl) {
+    genresEl.innerHTML = LIVE_GENRE_TABS.map(
+      (g) =>
+        `<button type="button" class="live-concerts-genre${state.genre === g.id ? " is-active" : ""}" data-live-genre="${g.id}" role="tab" aria-selected="${state.genre === g.id ? "true" : "false"}">${escapeHtml(g.label)}</button>`,
+    ).join("");
+    genresEl.querySelectorAll("[data-live-genre]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const g = btn.getAttribute("data-live-genre");
+        if (!g) return;
+        state.genre = g;
+        genresEl.querySelectorAll("[data-live-genre]").forEach((b) => {
+          b.classList.toggle("is-active", b === btn);
+          b.setAttribute("aria-selected", b === btn ? "true" : "false");
+        });
+        scheduleDiscover(true);
+      });
+    });
+  }
 
   panel.querySelectorAll("[data-live-window]").forEach((btn) => {
     btn.addEventListener("click", () => {
@@ -134,6 +188,8 @@ function initArtistAlpha(panel, searchInput, statusEl, onArtistChosen, scheduleD
 
   void loadArtistCatalog()
     .then(() => {
+      paintAlphaRail(alphaNav);
+      updateAlphaCount(alphaNav, getActiveLetter());
       fillDatalist(datalist);
       if (searchInput) bindAutocomplete(searchInput, acList, statusEl, onArtistChosen);
     })
@@ -143,10 +199,85 @@ function initArtistAlpha(panel, searchInput, statusEl, onArtistChosen, scheduleD
       }
     });
 
+  /**
+   * @param {HTMLElement} el
+   * @param {string} primary
+   * @param {string} suffix
+   * @param {string} title
+   */
+  function paintArtistCountBadge(el, primary, suffix, title) {
+    el.title = title;
+    el.innerHTML = `<span class="live-concerts-alpha-count-num">${escapeHtml(primary)}</span><span class="live-concerts-alpha-count-suffix">${escapeHtml(suffix)}</span>`;
+  }
+
+  /** @param {HTMLElement | null} nav @param {string | null} letter */
+  function updateAlphaCount(nav, letter) {
+    if (!nav) return;
+    let countEl = nav.querySelector("#live-concerts-alpha-count, .live-concerts-alpha-count");
+    if (!(countEl instanceof HTMLElement)) {
+      countEl = document.createElement("span");
+      countEl.className = "live-concerts-alpha-count";
+      countEl.id = "live-concerts-alpha-count";
+      countEl.setAttribute("aria-live", "polite");
+      nav.appendChild(countEl);
+    }
+    const total = artistCatalogCount();
+    if (!total) {
+      countEl.textContent = "…";
+      countEl.title = "Loading artist catalog";
+      return;
+    }
+
+    const searchQ = searchInput instanceof HTMLInputElement ? searchInput.value.trim() : "";
+    if (searchQ) {
+      const matches = countArtistsMatchingQuery(searchQ);
+      const scope = letter
+        ? formatLetterLabel(letter, getActiveScript())
+        : getActiveRegion() !== "all"
+          ? regionById(getActiveRegion()).label
+          : "catalog";
+      paintArtistCountBadge(
+        countEl,
+        String(matches),
+        "artists",
+        `${matches} artist${matches === 1 ? "" : "s"} match “${searchQ}” in ${scope} (${total} in catalog)`,
+      );
+      return;
+    }
+
+    if (letter) {
+      const n = countArtistsFor(letter, getActiveRegion());
+      const letterTotal = countArtistsFor(letter, "all");
+      const label = formatLetterLabel(letter, getActiveScript());
+      const reg = getActiveRegion();
+      const regLabel = reg === "all" ? "" : ` · ${regionById(reg).label}`;
+      const primary = reg === "all" ? String(letterTotal) : String(n);
+      const suffix = reg === "all" ? `/ ${total} artists` : `/ ${letterTotal} artists`;
+      paintArtistCountBadge(
+        countEl,
+        primary,
+        suffix,
+        `${n} artists · ${label}${regLabel} (${letterTotal} in letter, ${total} total)`,
+      );
+    } else {
+      paintArtistCountBadge(countEl, String(total), "artists", `${total} artists in catalog`);
+    }
+  }
+
   /** @param {HTMLElement | null} nav */
   function paintAlphaRail(nav) {
     if (!nav) return;
-    nav.innerHTML = alphaRailHtml();
+    nav.innerHTML = `<div class="live-concerts-alpha-scripts" role="tablist" aria-label="Alphabet language">${alphaScriptTabsHtml()}</div><div class="live-concerts-alpha-letters" role="toolbar" aria-label="Filter artists by letter">${alphaRailHtml()}<span class="live-concerts-alpha-count" id="live-concerts-alpha-count" aria-live="polite">…</span></div>`;
+    updateAlphaCount(nav, getActiveLetter());
+    nav.querySelectorAll("[data-alpha-script]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const scriptId = btn.getAttribute("data-alpha-script");
+        if (!scriptId) return;
+        setActiveScript(scriptId);
+        paintAlphaRail(nav);
+        paintArtistPicks(picksEl, null);
+      });
+    });
     nav.querySelectorAll("[data-alpha]").forEach((btn) => {
       btn.addEventListener("click", () => {
         const key = btn.getAttribute("data-alpha");
@@ -155,6 +286,7 @@ function initArtistAlpha(panel, searchInput, statusEl, onArtistChosen, scheduleD
         nav.querySelectorAll("[data-alpha]").forEach((b) => {
           b.classList.toggle("is-active", b === btn);
         });
+        updateAlphaCount(nav, letter);
         paintArtistPicks(picksEl, letter);
       });
     });
@@ -163,30 +295,65 @@ function initArtistAlpha(panel, searchInput, statusEl, onArtistChosen, scheduleD
   /** @param {HTMLElement | null} el @param {string | null} letter */
   function paintArtistPicks(el, letter) {
     if (!el) return;
-    const rows = letter === null ? [] : artistsForLetter(letter === "" ? null : letter);
     if (!letter) {
       el.hidden = true;
       el.innerHTML = "";
       return;
     }
+    const rows = artistsForLetter(letter);
+    const label = formatLetterLabel(letter, getActiveScript());
+    const region = getActiveRegion();
+    const regionRow = regionTabsHtml(region);
+    const letterTotal = countArtistsFor(letter, "all");
+    const regLabel = regionById(region).label;
+    const countNote =
+      region === "all"
+        ? `${rows.length} artists`
+        : `${rows.length} · ${regLabel} (${letterTotal} in ${label})`;
+
     el.hidden = false;
-    const label = letter === "#" ? "0–9" : letter;
-    el.innerHTML = `<p class="live-concerts-picks-label">${label} · ${rows.length} artists — click to search live</p>
-      <div class="live-concerts-picks-scroll">${rows
-        .map(
-          (a) =>
-            `<button type="button" class="live-concerts-pick" data-artist="${escapeHtml(a.name)}">${escapeHtml(a.name)}</button>`,
-        )
-        .join("")}</div>`;
+    el.innerHTML = `${regionRow}
+      <p class="live-concerts-picks-label">${label} · ${countNote} — click to search live</p>
+      <div class="live-concerts-picks-scroll">${rows.length ? rows.map((a) => artistPickHtml(a)).join("") : `<span class="live-concerts-picks-empty">No artists in ${regLabel} for ${label}</span>`}</div>`;
+
+    el.querySelectorAll("[data-live-region]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const r = btn.getAttribute("data-live-region");
+        if (!r) return;
+        setActiveRegion(r);
+        el.querySelectorAll("[data-live-region]").forEach((b) => {
+          b.classList.toggle("is-active", b === btn);
+          b.setAttribute("aria-selected", b === btn ? "true" : "false");
+        });
+        updateAlphaCount(alphaNav, letter);
+        paintArtistPicks(el, letter);
+      });
+    });
+
     el.querySelectorAll("[data-artist]").forEach((btn) => {
       btn.addEventListener("click", () => {
         const name = btn.getAttribute("data-artist") || "";
         if (searchInput) searchInput.value = name;
+        updateAlphaCount(alphaNav, letter);
         state.query = name;
         onArtistChosen?.(name);
-        scheduleDiscover(true);
+        scheduleDiscover?.(true);
       });
     });
+  }
+
+  /** @param {string} active */
+  function regionTabsHtml(active) {
+    return `<div class="live-concerts-regions" role="tablist" aria-label="Artist region">${ARTIST_REGIONS.map((r) => {
+      const on = active === r.id;
+      return `<button type="button" class="live-concerts-region${on ? " is-active" : ""}" data-live-region="${r.id}" role="tab" aria-selected="${on ? "true" : "false"}" style="--region-tab-bg:${r.tab.bg};--region-tab-ink:${r.tab.ink};--region-tab-border:${r.tab.border}">${escapeHtml(r.label)}</button>`;
+    }).join("")}</div>`;
+  }
+
+  /** @param {{ name: string, region?: string }} a */
+  function artistPickHtml(a) {
+    const r = regionById(a.region || "us");
+    return `<button type="button" class="live-concerts-pick" data-artist="${escapeHtml(a.name)}" data-region="${escapeHtml(a.region || "us")}" style="--pick-bg:${r.pick.bg};--pick-border:${r.pick.border};--pick-ink:${r.pick.ink}" title="${escapeHtml(r.label)}">${escapeHtml(a.name)}</button>`;
   }
 
   /** @param {HTMLDataListElement | null} list */
@@ -228,6 +395,7 @@ function initArtistAlpha(panel, searchInput, statusEl, onArtistChosen, scheduleD
           ev.preventDefault();
           const name = row.getAttribute("data-artist") || "";
           input.value = name;
+          updateAlphaCount(alphaNav, getActiveLetter());
           state.query = name;
           acList.hidden = true;
           onArtistChosen?.(name);
@@ -236,6 +404,7 @@ function initArtistAlpha(panel, searchInput, statusEl, onArtistChosen, scheduleD
       });
     };
     input.addEventListener("input", () => {
+      updateAlphaCount(alphaNav, getActiveLetter());
       window.clearTimeout(debounce);
       debounce = window.setTimeout(updateAc, 120);
     });
@@ -296,7 +465,7 @@ function initLyricBridge(panel) {
  * @param {boolean} [force]
  */
 async function discover(statusEl, listEl, force = false) {
-  const key = `${state.window}|${state.query}`;
+  const key = `${state.window}|${state.genre}|${state.region}|${state.query}`;
   if (!force && state.loading && key === lastDiscoverKey) return;
   lastDiscoverKey = key;
 
@@ -322,7 +491,12 @@ async function discover(statusEl, listEl, force = false) {
     const res = await fetch("/api/live/discover", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ window: state.window, query: state.query }),
+      body: JSON.stringify({
+        window: state.window,
+        genre: state.genre,
+        region: state.region,
+        query: state.query,
+      }),
       signal,
     });
     const data = await res.json().catch(() => ({}));
@@ -332,7 +506,11 @@ async function discover(statusEl, listEl, force = false) {
     state.events = Array.isArray(data.events) ? data.events : [];
     const errNote = data.errors?.length ? ` · ${data.errors.length} source(s) skipped` : "";
     if (statusEl) {
-      statusEl.textContent = `${data.feedCount || 0} feeds · ${state.events.length} events · ${windowLabel(state.window)}${errNote}`;
+      const genreLabel =
+        LIVE_GENRE_TABS.find((g) => g.id === state.genre)?.label || state.genre;
+      const regionLabel =
+        LIVE_FEED_REGION_TABS.find((r) => r.id === state.region)?.label || state.region;
+      statusEl.textContent = `${data.feedCount || 0} feeds · ${state.events.length} events · ${regionLabel} · ${genreLabel} · ${windowLabel(state.window)}${errNote}`;
     }
     paintList(listEl);
   } catch (e) {
@@ -361,7 +539,7 @@ function paintList(listEl) {
   if (!listEl) return;
   if (!state.events.length) {
     listEl.innerHTML =
-      '<p class="live-concerts-empty">No matching live concerts — try another window or search term.</p>';
+      '<p class="live-concerts-empty">No matching live concerts — try another genre, window, or search term.</p>';
     return;
   }
   listEl.innerHTML = state.events

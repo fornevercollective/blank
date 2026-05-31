@@ -362,8 +362,11 @@ export function initPhraseSearch(feedEl, hooks) {
     </div>
   `;
 
-  const intro = feedEl.querySelector(".feed-intro");
-  if (intro) intro.after(section);
+  const anchor =
+    feedEl.querySelector("#thread-deliverables") ||
+    feedEl.querySelector(".feed-deliverables-cards") ||
+    feedEl.querySelector(".feed-intro");
+  if (anchor) anchor.after(section);
   else feedEl.prepend(section);
 
   const form = section.querySelector("#feed-phrase-form");

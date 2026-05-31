@@ -119,7 +119,7 @@ export function mountAlbumWall(scrollEl, albums, hooks = {}) {
     titleEl.textContent = a.title || "";
 
     btn.append(img, yearEl, titleEl);
-    btn.addEventListener("click", () => hooks.onTileClick?.(a));
+    btn.addEventListener("click", () => hooks.onTileClick?.(a, btn));
     btn.addEventListener("mouseenter", () => {
       const hi = btn.dataset.fullCover;
       if (hi && img instanceof HTMLImageElement && img.src !== hi && img.dataset.loaded === "1") {

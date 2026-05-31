@@ -1,2658 +1,4260 @@
 {
-  "version": 2,
-  "count": 663,
+  "version": 4,
+  "count": 709,
   "artists": [
     {
       "name": "A Tribe Called Quest",
-      "letter": "A"
+      "letter": "A",
+      "script": "latin",
+      "region": "us"
+    },
+    {
+      "name": "A. R. Rahman",
+      "letter": "A",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "ABBA",
-      "letter": "A"
+      "letter": "A",
+      "script": "latin",
+      "region": "eu"
     },
     {
       "name": "AC/DC",
-      "letter": "A"
+      "letter": "A",
+      "script": "latin",
+      "region": "ca-oc"
     },
     {
       "name": "Adele",
-      "letter": "A"
+      "letter": "A",
+      "script": "latin",
+      "region": "uk"
     },
     {
       "name": "Aerosmith",
-      "letter": "A"
+      "letter": "A",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Air Supply",
-      "letter": "A"
+      "letter": "A",
+      "script": "latin",
+      "region": "us"
+    },
+    {
+      "name": "AKB48",
+      "letter": "A",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Alabama Shakes",
-      "letter": "A"
+      "letter": "A",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Alice Cooper",
-      "letter": "A"
+      "letter": "A",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Alicia Keys",
-      "letter": "A"
+      "letter": "A",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Allman Brothers Band",
-      "letter": "A"
+      "letter": "A",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Alt-J",
-      "letter": "A"
+      "letter": "A",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "America",
-      "letter": "A"
+      "letter": "A",
+      "script": "latin",
+      "region": "us"
+    },
+    {
+      "name": "Amr Diab",
+      "letter": "A",
+      "script": "latin",
+      "region": "africa-me"
     },
     {
       "name": "Amy Winehouse",
-      "letter": "A"
+      "letter": "A",
+      "script": "latin",
+      "region": "uk"
     },
     {
       "name": "André 3000",
-      "letter": "A"
+      "letter": "A",
+      "script": "latin",
+      "region": "latam"
     },
     {
       "name": "Andrea Bocelli",
-      "letter": "A"
+      "letter": "A",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Anthrax",
-      "letter": "A"
+      "letter": "A",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Aphex Twin",
-      "letter": "A"
+      "letter": "A",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Arcade Fire",
-      "letter": "A"
+      "letter": "A",
+      "script": "latin",
+      "region": "ca-oc"
     },
     {
       "name": "Arctic Monkeys",
-      "letter": "A"
+      "letter": "A",
+      "script": "latin",
+      "region": "uk"
     },
     {
       "name": "Aretha Franklin",
-      "letter": "A"
+      "letter": "A",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Ariana Grande",
-      "letter": "A"
+      "letter": "A",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "August Burns Red",
-      "letter": "A"
+      "letter": "A",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Avicii",
-      "letter": "A"
+      "letter": "A",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "B.B. King",
-      "letter": "B"
+      "letter": "B",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Backstreet Boys",
-      "letter": "B"
+      "letter": "B",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Bad Bunny",
-      "letter": "B"
+      "letter": "B",
+      "script": "latin",
+      "region": "latam"
     },
     {
       "name": "Barbra Streisand",
-      "letter": "B"
+      "letter": "B",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Barry White",
-      "letter": "B"
+      "letter": "B",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Basement Jaxx",
-      "letter": "B"
+      "letter": "B",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Beastie Boys",
-      "letter": "B"
+      "letter": "B",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Beck",
-      "letter": "B"
+      "letter": "B",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Bee Gees",
-      "letter": "B"
+      "letter": "B",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Ben Folds",
-      "letter": "B"
+      "letter": "B",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Benny Goodman",
-      "letter": "B"
+      "letter": "B",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Beyoncé",
-      "letter": "B"
+      "letter": "B",
+      "script": "latin",
+      "region": "us"
+    },
+    {
+      "name": "BIGBANG",
+      "letter": "B",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Billie Eilish",
-      "letter": "B"
+      "letter": "B",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Billy Idol",
-      "letter": "B"
+      "letter": "B",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Billy Joel",
-      "letter": "B"
+      "letter": "B",
+      "script": "latin",
+      "region": "us"
+    },
+    {
+      "name": "Bird Thongchai",
+      "letter": "B",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Björk",
-      "letter": "B"
+      "letter": "B",
+      "script": "latin",
+      "region": "eu"
     },
     {
       "name": "Black Eyed Peas",
-      "letter": "B"
+      "letter": "B",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Black Sabbath",
-      "letter": "B"
+      "letter": "B",
+      "script": "latin",
+      "region": "us"
+    },
+    {
+      "name": "BLACKPINK",
+      "letter": "B",
+      "script": "latin",
+      "region": "apac"
     },
     {
       "name": "Blondie",
-      "letter": "B"
+      "letter": "B",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Blue Öyster Cult",
-      "letter": "B"
+      "letter": "B",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Blur",
-      "letter": "B"
+      "letter": "B",
+      "script": "latin",
+      "region": "uk"
     },
     {
       "name": "Bo Diddley",
-      "letter": "B"
+      "letter": "B",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Bob Dylan",
-      "letter": "B"
+      "letter": "B",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Bob Marley",
-      "letter": "B"
+      "letter": "B",
+      "script": "latin",
+      "region": "africa-me"
     },
     {
       "name": "Bon Iver",
-      "letter": "B"
+      "letter": "B",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Bon Jovi",
-      "letter": "B"
+      "letter": "B",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Boston",
-      "letter": "B"
+      "letter": "B",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Boyz II Men",
-      "letter": "B"
+      "letter": "B",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Brandi Carlile",
-      "letter": "B"
+      "letter": "B",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Breaking Benjamin",
-      "letter": "B"
+      "letter": "B",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Bring Me the Horizon",
-      "letter": "B"
+      "letter": "B",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Britney Spears",
-      "letter": "B"
+      "letter": "B",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Bruce Springsteen",
-      "letter": "B"
+      "letter": "B",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Bruno Mars",
-      "letter": "B"
+      "letter": "B",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Bryan Adams",
-      "letter": "B"
+      "letter": "B",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "BTS",
-      "letter": "B"
+      "letter": "B",
+      "script": "latin",
+      "region": "apac"
     },
     {
       "name": "Buddy Guy",
-      "letter": "B"
+      "letter": "B",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Buddy Holly",
-      "letter": "B"
+      "letter": "B",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Burna Boy",
-      "letter": "B"
+      "letter": "B",
+      "script": "latin",
+      "region": "africa-me"
     },
     {
       "name": "Cage the Elephant",
-      "letter": "C"
+      "letter": "C",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Calvin Harris",
-      "letter": "C"
+      "letter": "C",
+      "script": "latin",
+      "region": "uk"
     },
     {
       "name": "Camila Cabello",
-      "letter": "C"
+      "letter": "C",
+      "script": "latin",
+      "region": "us"
+    },
+    {
+      "name": "Carabao",
+      "letter": "C",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Cardi B",
-      "letter": "C"
+      "letter": "C",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Carly Rae Jepsen",
-      "letter": "C"
+      "letter": "C",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Carole King",
-      "letter": "C"
+      "letter": "C",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Carpenters",
-      "letter": "C"
+      "letter": "C",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Cat Stevens",
-      "letter": "C"
+      "letter": "C",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Celine Dion",
-      "letter": "C"
+      "letter": "C",
+      "script": "latin",
+      "region": "ca-oc"
     },
     {
       "name": "Chaka Khan",
-      "letter": "C"
+      "letter": "C",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Chance the Rapper",
-      "letter": "C"
+      "letter": "C",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Charli XCX",
-      "letter": "C"
+      "letter": "C",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Cher",
-      "letter": "C"
+      "letter": "C",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Chevelle",
-      "letter": "C"
+      "letter": "C",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Chicago",
-      "letter": "C"
+      "letter": "C",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Childish Gambino",
-      "letter": "C"
+      "letter": "C",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Chris Brown",
-      "letter": "C"
+      "letter": "C",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Chris Stapleton",
-      "letter": "C"
+      "letter": "C",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Christina Aguilera",
-      "letter": "C"
+      "letter": "C",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Christina Perri",
-      "letter": "C"
+      "letter": "C",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Chuck Berry",
-      "letter": "C"
+      "letter": "C",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Coheed and Cambria",
-      "letter": "C"
+      "letter": "C",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Coldplay",
-      "letter": "C"
+      "letter": "C",
+      "script": "latin",
+      "region": "uk"
     },
     {
       "name": "Common",
-      "letter": "C"
+      "letter": "C",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Counting Crows",
-      "letter": "C"
+      "letter": "C",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Creedence Clearwater Revival",
-      "letter": "C"
+      "letter": "C",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Crowded House",
-      "letter": "C"
+      "letter": "C",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Crystal Castles",
-      "letter": "C"
+      "letter": "C",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Culture Club",
-      "letter": "C"
+      "letter": "C",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Cyndi Lauper",
-      "letter": "C"
+      "letter": "C",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Cypress Hill",
-      "letter": "C"
+      "letter": "C",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "DaBaby",
-      "letter": "D"
+      "letter": "D",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Daft Punk",
-      "letter": "D"
+      "letter": "D",
+      "script": "latin",
+      "region": "eu"
     },
     {
       "name": "Dashboard Confessional",
-      "letter": "D"
+      "letter": "D",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Dave Matthews Band",
-      "letter": "D"
+      "letter": "D",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "David Bowie",
-      "letter": "D"
+      "letter": "D",
+      "script": "latin",
+      "region": "uk"
     },
     {
       "name": "Deadmau5",
-      "letter": "D"
+      "letter": "D",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Death Cab for Cutie",
-      "letter": "D"
+      "letter": "D",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Deep Purple",
-      "letter": "D"
+      "letter": "D",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Def Leppard",
-      "letter": "D"
+      "letter": "D",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Deftones",
-      "letter": "D"
+      "letter": "D",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Depeche Mode",
-      "letter": "D"
+      "letter": "D",
+      "script": "latin",
+      "region": "eu"
     },
     {
       "name": "Destiny's Child",
-      "letter": "D"
+      "letter": "D",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Diana Ross",
-      "letter": "D"
+      "letter": "D",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Diplo",
-      "letter": "D"
+      "letter": "D",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Dire Straits",
-      "letter": "D"
+      "letter": "D",
+      "script": "latin",
+      "region": "uk"
     },
     {
       "name": "Dixie Chicks",
-      "letter": "D"
+      "letter": "D",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "DMX",
-      "letter": "D"
+      "letter": "D",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Doja Cat",
-      "letter": "D"
+      "letter": "D",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Dolly Parton",
-      "letter": "D"
+      "letter": "D",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Don Henley",
-      "letter": "D"
+      "letter": "D",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Drake",
-      "letter": "D"
+      "letter": "D",
+      "script": "latin",
+      "region": "ca-oc"
     },
     {
       "name": "Dropkick Murphys",
-      "letter": "D"
+      "letter": "D",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Dua Lipa",
-      "letter": "D"
+      "letter": "D",
+      "script": "latin",
+      "region": "uk"
     },
     {
       "name": "Duke Ellington",
-      "letter": "D"
+      "letter": "D",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Duran Duran",
-      "letter": "D"
+      "letter": "D",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Eagles",
-      "letter": "E"
+      "letter": "E",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Earth, Wind & Fire",
-      "letter": "E"
+      "letter": "E",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Ed Sheeran",
-      "letter": "E"
+      "letter": "E",
+      "script": "latin",
+      "region": "uk"
     },
     {
       "name": "Electric Light Orchestra",
-      "letter": "E"
+      "letter": "E",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Ella Fitzgerald",
-      "letter": "E"
+      "letter": "E",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Ellie Goulding",
-      "letter": "E"
+      "letter": "E",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Elton John",
-      "letter": "E"
+      "letter": "E",
+      "script": "latin",
+      "region": "uk"
     },
     {
       "name": "Elvis Presley",
-      "letter": "E"
+      "letter": "E",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Emeli Sandé",
-      "letter": "E"
+      "letter": "E",
+      "script": "latin",
+      "region": "latam"
     },
     {
       "name": "Eminem",
-      "letter": "E"
+      "letter": "E",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "En Vogue",
-      "letter": "E"
+      "letter": "E",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Enya",
-      "letter": "E"
+      "letter": "E",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Eric Church",
-      "letter": "E"
+      "letter": "E",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Eric Clapton",
-      "letter": "E"
+      "letter": "E",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Eurythmics",
-      "letter": "E"
+      "letter": "E",
+      "script": "latin",
+      "region": "uk"
     },
     {
       "name": "Evanescence",
-      "letter": "E"
+      "letter": "E",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Everclear",
-      "letter": "E"
+      "letter": "E",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Faith Hill",
-      "letter": "F"
+      "letter": "F",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Faith No More",
-      "letter": "F"
+      "letter": "F",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Fall Out Boy",
-      "letter": "F"
+      "letter": "F",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Fatboy Slim",
-      "letter": "F"
+      "letter": "F",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Fats Domino",
-      "letter": "F"
+      "letter": "F",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Fela Kuti",
-      "letter": "F"
+      "letter": "F",
+      "script": "latin",
+      "region": "africa-me"
     },
     {
       "name": "Fitz and the Tantrums",
-      "letter": "F"
+      "letter": "F",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Fleet Foxes",
-      "letter": "F"
+      "letter": "F",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Fleetwood Mac",
-      "letter": "F"
+      "letter": "F",
+      "script": "latin",
+      "region": "uk"
     },
     {
       "name": "Florence + The Machine",
-      "letter": "F"
+      "letter": "F",
+      "script": "latin",
+      "region": "uk"
     },
     {
       "name": "Florence and the Machine",
-      "letter": "F"
+      "letter": "F",
+      "script": "latin",
+      "region": "uk"
     },
     {
       "name": "Flyleaf",
-      "letter": "F"
+      "letter": "F",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Foo Fighters",
-      "letter": "F"
+      "letter": "F",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Foreigner",
-      "letter": "F"
+      "letter": "F",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Foster the People",
-      "letter": "F"
+      "letter": "F",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Fountains of Wayne",
-      "letter": "F"
+      "letter": "F",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Four Tops",
-      "letter": "F"
+      "letter": "F",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Frank Ocean",
-      "letter": "F"
+      "letter": "F",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Frank Sinatra",
-      "letter": "F"
+      "letter": "F",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Frank Turner",
-      "letter": "F"
+      "letter": "F",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Frank Zappa",
-      "letter": "F"
+      "letter": "F",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Franz Ferdinand",
-      "letter": "F"
+      "letter": "F",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Freddie Mercury",
-      "letter": "F"
+      "letter": "F",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Fugees",
-      "letter": "F"
+      "letter": "F",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Future",
-      "letter": "F"
+      "letter": "F",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Garbage",
-      "letter": "G"
+      "letter": "G",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Genesis",
-      "letter": "G"
+      "letter": "G",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "George Harrison",
-      "letter": "G"
+      "letter": "G",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "George Michael",
-      "letter": "G"
+      "letter": "G",
+      "script": "latin",
+      "region": "uk"
     },
     {
       "name": "Ghost",
-      "letter": "G"
+      "letter": "G",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Gin Blossoms",
-      "letter": "G"
+      "letter": "G",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Gloria Estefan",
-      "letter": "G"
+      "letter": "G",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Goo Goo Dolls",
-      "letter": "G"
+      "letter": "G",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Gorillaz",
-      "letter": "G"
+      "letter": "G",
+      "script": "latin",
+      "region": "uk"
     },
     {
       "name": "Grateful Dead",
-      "letter": "G"
+      "letter": "G",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Green Day",
-      "letter": "G"
+      "letter": "G",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Greta Van Fleet",
-      "letter": "G"
+      "letter": "G",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Guns N' Roses",
-      "letter": "G"
+      "letter": "G",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Haim",
-      "letter": "H"
+      "letter": "H",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Hall & Oates",
-      "letter": "H"
+      "letter": "H",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Halsey",
-      "letter": "H"
+      "letter": "H",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Hank Williams",
-      "letter": "H"
+      "letter": "H",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Hanson",
-      "letter": "H"
+      "letter": "H",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Harry Styles",
-      "letter": "H"
+      "letter": "H",
+      "script": "latin",
+      "region": "uk"
     },
     {
       "name": "Heart",
-      "letter": "H"
+      "letter": "H",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Herbie Hancock",
-      "letter": "H"
+      "letter": "H",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Hoobastank",
-      "letter": "H"
+      "letter": "H",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Hootie & the Blowfish",
-      "letter": "H"
+      "letter": "H",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Hozier",
-      "letter": "H"
+      "letter": "H",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Huey Lewis and the News",
-      "letter": "H"
+      "letter": "H",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Hüsker Dü",
-      "letter": "H"
+      "letter": "H",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Ice Cube",
-      "letter": "I"
+      "letter": "I",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Iggy Pop",
-      "letter": "I"
+      "letter": "I",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Imagine Dragons",
-      "letter": "I"
+      "letter": "I",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Incubus",
-      "letter": "I"
+      "letter": "I",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Interpol",
-      "letter": "I"
+      "letter": "I",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "INXS",
-      "letter": "I"
+      "letter": "I",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Iron & Wine",
-      "letter": "I"
+      "letter": "I",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Iron Maiden",
-      "letter": "I"
+      "letter": "I",
+      "script": "latin",
+      "region": "uk"
     },
     {
       "name": "Isley Brothers",
-      "letter": "I"
+      "letter": "I",
+      "script": "latin",
+      "region": "us"
+    },
+    {
+      "name": "IU",
+      "letter": "I",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Jack Harlow",
-      "letter": "J"
+      "letter": "J",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Jack White",
-      "letter": "J"
+      "letter": "J",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Jackson 5",
-      "letter": "J"
+      "letter": "J",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "James Bay",
-      "letter": "J"
+      "letter": "J",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "James Blake",
-      "letter": "J"
+      "letter": "J",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "James Brown",
-      "letter": "J"
+      "letter": "J",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "James Taylor",
-      "letter": "J"
+      "letter": "J",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Jamiroquai",
-      "letter": "J"
+      "letter": "J",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Janelle Monáe",
-      "letter": "J"
+      "letter": "J",
+      "script": "latin",
+      "region": "latam"
     },
     {
       "name": "Janet Jackson",
-      "letter": "J"
+      "letter": "J",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Janis Joplin",
-      "letter": "J"
+      "letter": "J",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Jason Aldean",
-      "letter": "J"
+      "letter": "J",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Jason Mraz",
-      "letter": "J"
+      "letter": "J",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Jay-Z",
-      "letter": "J"
+      "letter": "J",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Jeff Buckley",
-      "letter": "J"
+      "letter": "J",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Jefferson Airplane",
-      "letter": "J"
+      "letter": "J",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Jennifer Lopez",
-      "letter": "J"
+      "letter": "J",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Jeremih",
-      "letter": "J"
+      "letter": "J",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Jerry Garcia",
-      "letter": "J"
+      "letter": "J",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Jessie J",
-      "letter": "J"
+      "letter": "J",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Jethro Tull",
-      "letter": "J"
+      "letter": "J",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Jewel",
-      "letter": "J"
+      "letter": "J",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Jill Scott",
-      "letter": "J"
+      "letter": "J",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Jimi Hendrix",
-      "letter": "J"
+      "letter": "J",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Jimmy Buffett",
-      "letter": "J"
+      "letter": "J",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Jimmy Eat World",
-      "letter": "J"
+      "letter": "J",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Joan Baez",
-      "letter": "J"
+      "letter": "J",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Joan Jett",
-      "letter": "J"
+      "letter": "J",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Joe Bonamassa",
-      "letter": "J"
+      "letter": "J",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Joe Cocker",
-      "letter": "J"
+      "letter": "J",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "John Denver",
-      "letter": "J"
+      "letter": "J",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "John Fogerty",
-      "letter": "J"
+      "letter": "J",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "John Legend",
-      "letter": "J"
+      "letter": "J",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "John Mayer",
-      "letter": "J"
+      "letter": "J",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "John Mellencamp",
-      "letter": "J"
+      "letter": "J",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Johnny Cash",
-      "letter": "J"
+      "letter": "J",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Jonas Brothers",
-      "letter": "J"
+      "letter": "J",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Joni Mitchell",
-      "letter": "J"
+      "letter": "J",
+      "script": "latin",
+      "region": "ca-oc"
     },
     {
       "name": "Jordin Sparks",
-      "letter": "J"
+      "letter": "J",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Journey",
-      "letter": "J"
+      "letter": "J",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Joy Division",
-      "letter": "J"
+      "letter": "J",
+      "script": "latin",
+      "region": "uk"
     },
     {
       "name": "Judas Priest",
-      "letter": "J"
+      "letter": "J",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Juice WRLD",
-      "letter": "J"
+      "letter": "J",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Julio Iglesias",
-      "letter": "J"
+      "letter": "J",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Justin Bieber",
-      "letter": "J"
+      "letter": "J",
+      "script": "latin",
+      "region": "ca-oc"
     },
     {
       "name": "Juvenile",
-      "letter": "J"
+      "letter": "J",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Kacey Musgraves",
-      "letter": "K"
+      "letter": "K",
+      "script": "latin",
+      "region": "ca-oc"
     },
     {
       "name": "Kaleo",
-      "letter": "K"
+      "letter": "K",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Kansas",
-      "letter": "K"
+      "letter": "K",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Kanye West",
-      "letter": "K"
+      "letter": "K",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Kate Bush",
-      "letter": "K"
+      "letter": "K",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Katy Perry",
-      "letter": "K"
+      "letter": "K",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Keane",
-      "letter": "K"
+      "letter": "K",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Kehlani",
-      "letter": "K"
+      "letter": "K",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Keith Urban",
-      "letter": "K"
+      "letter": "K",
+      "script": "latin",
+      "region": "ca-oc"
     },
     {
       "name": "Kelly Clarkson",
-      "letter": "K"
+      "letter": "K",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Kendrick Lamar",
-      "letter": "K"
+      "letter": "K",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Kenny Chesney",
-      "letter": "K"
+      "letter": "K",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Kenny Rogers",
-      "letter": "K"
+      "letter": "K",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Kesha",
-      "letter": "K"
+      "letter": "K",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Khalid",
-      "letter": "K"
+      "letter": "K",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Khruangbin",
-      "letter": "K"
+      "letter": "K",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Kid Cudi",
-      "letter": "K"
+      "letter": "K",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Kid Rock",
-      "letter": "K"
+      "letter": "K",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "King Crimson",
-      "letter": "K"
+      "letter": "K",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Kings of Convenience",
-      "letter": "K"
+      "letter": "K",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Kings of Leon",
-      "letter": "K"
+      "letter": "K",
+      "script": "latin",
+      "region": "us"
+    },
+    {
+      "name": "Kishore Kumar",
+      "letter": "K",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "KISS",
-      "letter": "K"
+      "letter": "K",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Kool & the Gang",
-      "letter": "K"
+      "letter": "K",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Korn",
-      "letter": "K"
+      "letter": "K",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Kraftwerk",
-      "letter": "K"
+      "letter": "K",
+      "script": "latin",
+      "region": "eu"
     },
     {
       "name": "KRS-One",
-      "letter": "K"
+      "letter": "K",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Kygo",
-      "letter": "K"
+      "letter": "K",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Lady Gaga",
-      "letter": "L"
+      "letter": "L",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Lana Del Rey",
-      "letter": "L"
+      "letter": "L",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Lauryn Hill",
-      "letter": "L"
+      "letter": "L",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "LCD Soundsystem",
-      "letter": "L"
+      "letter": "L",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Le Tigre",
-      "letter": "L"
+      "letter": "L",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "LeAnn Rimes",
-      "letter": "L"
+      "letter": "L",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Led Zeppelin",
-      "letter": "L"
+      "letter": "L",
+      "script": "latin",
+      "region": "uk"
     },
     {
       "name": "Leonard Cohen",
-      "letter": "L"
+      "letter": "L",
+      "script": "latin",
+      "region": "ca-oc"
     },
     {
       "name": "Lil Nas X",
-      "letter": "L"
+      "letter": "L",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Lil Wayne",
-      "letter": "L"
+      "letter": "L",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Limp Bizkit",
-      "letter": "L"
+      "letter": "L",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Linda Ronstadt",
-      "letter": "L"
+      "letter": "L",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Linkin Park",
-      "letter": "L"
+      "letter": "L",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Lionel Richie",
-      "letter": "L"
+      "letter": "L",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Little Richard",
-      "letter": "L"
+      "letter": "L",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Lizzo",
-      "letter": "L"
+      "letter": "L",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "LL Cool J",
-      "letter": "L"
+      "letter": "L",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Logic",
-      "letter": "L"
+      "letter": "L",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Lorde",
-      "letter": "L"
+      "letter": "L",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Los Lobos",
-      "letter": "L"
+      "letter": "L",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Los Lonely Boys",
-      "letter": "L"
+      "letter": "L",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Lou Reed",
-      "letter": "L"
+      "letter": "L",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Louis Armstrong",
-      "letter": "L"
+      "letter": "L",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Ludacris",
-      "letter": "L"
+      "letter": "L",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Luke Combs",
-      "letter": "L"
+      "letter": "L",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Luther Vandross",
-      "letter": "L"
+      "letter": "L",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Lynyrd Skynyrd",
-      "letter": "L"
+      "letter": "L",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "M.I.A.",
-      "letter": "M"
+      "letter": "M",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Mac Miller",
-      "letter": "M"
+      "letter": "M",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Machine Gun Kelly",
-      "letter": "M"
+      "letter": "M",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Macy Gray",
-      "letter": "M"
+      "letter": "M",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Madonna",
-      "letter": "M"
+      "letter": "M",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Manic Street Preachers",
-      "letter": "M"
+      "letter": "M",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Mariah Carey",
-      "letter": "M"
+      "letter": "M",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Maroon 5",
-      "letter": "M"
+      "letter": "M",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Martina McBride",
-      "letter": "M"
+      "letter": "M",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Marvin Gaye",
-      "letter": "M"
+      "letter": "M",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Mary J. Blige",
-      "letter": "M"
+      "letter": "M",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Massive Attack",
-      "letter": "M"
+      "letter": "M",
+      "script": "latin",
+      "region": "uk"
     },
     {
       "name": "Matchbox Twenty",
-      "letter": "M"
+      "letter": "M",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Maxwell",
-      "letter": "M"
+      "letter": "M",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Meat Loaf",
-      "letter": "M"
+      "letter": "M",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Megadeth",
-      "letter": "M"
+      "letter": "M",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Megan Thee Stallion",
-      "letter": "M"
+      "letter": "M",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Melanie Martinez",
-      "letter": "M"
+      "letter": "M",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Merle Haggard",
-      "letter": "M"
+      "letter": "M",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Metallica",
-      "letter": "M"
+      "letter": "M",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Method Man",
-      "letter": "M"
+      "letter": "M",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "MGMT",
-      "letter": "M"
+      "letter": "M",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Michael Bublé",
-      "letter": "M"
+      "letter": "M",
+      "script": "latin",
+      "region": "latam"
     },
     {
       "name": "Michael Jackson",
-      "letter": "M"
+      "letter": "M",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Michelle Branch",
-      "letter": "M"
+      "letter": "M",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Migos",
-      "letter": "M"
+      "letter": "M",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Miles Davis",
-      "letter": "M"
+      "letter": "M",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Miley Cyrus",
-      "letter": "M"
+      "letter": "M",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Miranda Lambert",
-      "letter": "M"
+      "letter": "M",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Missy Elliott",
-      "letter": "M"
+      "letter": "M",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Mitski",
-      "letter": "M"
+      "letter": "M",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Moby",
-      "letter": "M"
+      "letter": "M",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Modest Mouse",
-      "letter": "M"
+      "letter": "M",
+      "script": "latin",
+      "region": "us"
+    },
+    {
+      "name": "Mohammed Abdu",
+      "letter": "M",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Monica",
-      "letter": "M"
+      "letter": "M",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Morgan Wallen",
-      "letter": "M"
+      "letter": "M",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Morrissey",
-      "letter": "M"
+      "letter": "M",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Mötley Crüe",
-      "letter": "M"
+      "letter": "M",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Motörhead",
-      "letter": "M"
+      "letter": "M",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Mumford & Sons",
-      "letter": "M"
+      "letter": "M",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Muse",
-      "letter": "M"
+      "letter": "M",
+      "script": "latin",
+      "region": "uk"
     },
     {
       "name": "My Chemical Romance",
-      "letter": "M"
+      "letter": "M",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "My Morning Jacket",
-      "letter": "M"
+      "letter": "M",
+      "script": "latin",
+      "region": "us"
+    },
+    {
+      "name": "Nana Mouskouri",
+      "letter": "N",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Nas",
-      "letter": "N"
+      "letter": "N",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Nat King Cole",
-      "letter": "N"
+      "letter": "N",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Natasha Bedingfield",
-      "letter": "N"
+      "letter": "N",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Ne-Yo",
-      "letter": "N"
+      "letter": "N",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Neil Diamond",
-      "letter": "N"
+      "letter": "N",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Neil Young",
-      "letter": "N"
+      "letter": "N",
+      "script": "latin",
+      "region": "ca-oc"
     },
     {
       "name": "Neutral Milk Hotel",
-      "letter": "N"
+      "letter": "N",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "New Kids on the Block",
-      "letter": "N"
+      "letter": "N",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "New Order",
-      "letter": "N"
+      "letter": "N",
+      "script": "latin",
+      "region": "uk"
+    },
+    {
+      "name": "NewJeans",
+      "letter": "N",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Nick Cave and the Bad Seeds",
-      "letter": "N"
+      "letter": "N",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Nicki Minaj",
-      "letter": "N"
+      "letter": "N",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Nico",
-      "letter": "N"
+      "letter": "N",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Nightwish",
-      "letter": "N"
+      "letter": "N",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Nina Kraviz",
-      "letter": "N"
+      "letter": "N",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Nina Simone",
-      "letter": "N"
+      "letter": "N",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Nine Inch Nails",
-      "letter": "N"
+      "letter": "N",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Nirvana",
-      "letter": "N"
+      "letter": "N",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "No Doubt",
-      "letter": "N"
+      "letter": "N",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Noah Kahan",
-      "letter": "N"
+      "letter": "N",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Norah Jones",
-      "letter": "N"
+      "letter": "N",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "O.A.R.",
-      "letter": "O"
+      "letter": "O",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Oasis",
-      "letter": "O"
+      "letter": "O",
+      "script": "latin",
+      "region": "uk"
     },
     {
       "name": "Ocean Alley",
-      "letter": "O"
+      "letter": "O",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Of Monsters and Men",
-      "letter": "O"
+      "letter": "O",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "OK Go",
-      "letter": "O"
+      "letter": "O",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Old Dominion",
-      "letter": "O"
+      "letter": "O",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Olivia Newton-John",
-      "letter": "O"
+      "letter": "O",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Olivia Rodrigo",
-      "letter": "O"
+      "letter": "O",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "OMC",
-      "letter": "O"
+      "letter": "O",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "One Direction",
-      "letter": "O"
+      "letter": "O",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "One OK Rock",
-      "letter": "O"
+      "letter": "O",
+      "script": "latin",
+      "region": "us"
+    },
+    {
+      "name": "ONE OK ROCK",
+      "letter": "O",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "OneRepublic",
-      "letter": "O"
+      "letter": "O",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Opeth",
-      "letter": "O"
+      "letter": "O",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Orbital",
-      "letter": "O"
+      "letter": "O",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Os Mutantes",
-      "letter": "O"
+      "letter": "O",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Otis Redding",
-      "letter": "O"
+      "letter": "O",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "OutKast",
-      "letter": "O"
+      "letter": "O",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Ozzy Osbourne",
-      "letter": "O"
+      "letter": "O",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "P.O.D.",
-      "letter": "P"
+      "letter": "P",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Panic! at the Disco",
-      "letter": "P"
+      "letter": "P",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Paramore",
-      "letter": "P"
+      "letter": "P",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Parliament-Funkadelic",
-      "letter": "P"
+      "letter": "P",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Passenger",
-      "letter": "P"
+      "letter": "P",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Pat Benatar",
-      "letter": "P"
+      "letter": "P",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Patti LaBelle",
-      "letter": "P"
+      "letter": "P",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Patti Smith",
-      "letter": "P"
+      "letter": "P",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Paul McCartney",
-      "letter": "P"
+      "letter": "P",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Paul Simon",
-      "letter": "P"
+      "letter": "P",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Paula Abdul",
-      "letter": "P"
+      "letter": "P",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Pavement",
-      "letter": "P"
+      "letter": "P",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Pearl Jam",
-      "letter": "P"
+      "letter": "P",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Peggy Lee",
-      "letter": "P"
+      "letter": "P",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Pentatonix",
-      "letter": "P"
+      "letter": "P",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Pet Shop Boys",
-      "letter": "P"
+      "letter": "P",
+      "script": "latin",
+      "region": "uk"
     },
     {
       "name": "Peter Frampton",
-      "letter": "P"
+      "letter": "P",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Peter Gabriel",
-      "letter": "P"
+      "letter": "P",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Pharrell Williams",
-      "letter": "P"
+      "letter": "P",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Phil Collins",
-      "letter": "P"
+      "letter": "P",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Phish",
-      "letter": "P"
+      "letter": "P",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Phoenix",
-      "letter": "P"
+      "letter": "P",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Pierce the Veil",
-      "letter": "P"
+      "letter": "P",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Pink",
-      "letter": "P"
+      "letter": "P",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Pink Floyd",
-      "letter": "P"
+      "letter": "P",
+      "script": "latin",
+      "region": "uk"
     },
     {
       "name": "Pitbull",
-      "letter": "P"
+      "letter": "P",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Pixies",
-      "letter": "P"
+      "letter": "P",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "PJ Harvey",
-      "letter": "P"
+      "letter": "P",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Placebo",
-      "letter": "P"
+      "letter": "P",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Playboi Carti",
-      "letter": "P"
+      "letter": "P",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Poco",
-      "letter": "P"
+      "letter": "P",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Portishead",
-      "letter": "P"
+      "letter": "P",
+      "script": "latin",
+      "region": "uk"
     },
     {
       "name": "Post Malone",
-      "letter": "P"
+      "letter": "P",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Preservation Hall Jazz Band",
-      "letter": "P"
+      "letter": "P",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Primus",
-      "letter": "P"
+      "letter": "P",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Prince",
-      "letter": "P"
+      "letter": "P",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Public Enemy",
-      "letter": "P"
+      "letter": "P",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Puddle of Mudd",
-      "letter": "P"
+      "letter": "P",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Puff Daddy",
-      "letter": "P"
+      "letter": "P",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Puscifer",
-      "letter": "P"
+      "letter": "P",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Queen",
-      "letter": "Q"
+      "letter": "Q",
+      "script": "latin",
+      "region": "uk"
     },
     {
       "name": "Queens of the Stone Age",
-      "letter": "Q"
+      "letter": "Q",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Queensrÿche",
-      "letter": "Q"
+      "letter": "Q",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Quincy Jones",
-      "letter": "Q"
+      "letter": "Q",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "R.E.M.",
-      "letter": "R"
+      "letter": "R",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Radiohead",
-      "letter": "R"
+      "letter": "R",
+      "script": "latin",
+      "region": "uk"
     },
     {
       "name": "Rage Against the Machine",
-      "letter": "R"
+      "letter": "R",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Rammstein",
-      "letter": "R"
+      "letter": "R",
+      "script": "latin",
+      "region": "eu"
     },
     {
       "name": "Randy Travis",
-      "letter": "R"
+      "letter": "R",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Ray Charles",
-      "letter": "R"
+      "letter": "R",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Ray LaMontagne",
-      "letter": "R"
+      "letter": "R",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Reba McEntire",
-      "letter": "R"
+      "letter": "R",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Rebelution",
-      "letter": "R"
+      "letter": "R",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Red Hot Chili Peppers",
-      "letter": "R"
+      "letter": "R",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Regina Spektor",
-      "letter": "R"
+      "letter": "R",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "REM",
-      "letter": "R"
+      "letter": "R",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Ricky Martin",
-      "letter": "R"
+      "letter": "R",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Rihanna",
-      "letter": "R"
+      "letter": "R",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Rise Against",
-      "letter": "R"
+      "letter": "R",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Rob Zombie",
-      "letter": "R"
+      "letter": "R",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Robert Palmer",
-      "letter": "R"
+      "letter": "R",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Robin Thicke",
-      "letter": "R"
+      "letter": "R",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Rod Stewart",
-      "letter": "R"
+      "letter": "R",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Rodgers and Hammerstein",
-      "letter": "R"
+      "letter": "R",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Roger Miller",
-      "letter": "R"
+      "letter": "R",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Roger Waters",
-      "letter": "R"
+      "letter": "R",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Rosalía",
-      "letter": "R"
+      "letter": "R",
+      "script": "latin",
+      "region": "latam"
     },
     {
       "name": "Roxette",
-      "letter": "R"
+      "letter": "R",
+      "script": "latin",
+      "region": "eu"
     },
     {
       "name": "Roy Orbison",
-      "letter": "R"
+      "letter": "R",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Royksopp",
-      "letter": "R"
+      "letter": "R",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Rufus Wainwright",
-      "letter": "R"
+      "letter": "R",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Run-D.M.C.",
-      "letter": "R"
+      "letter": "R",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Rush",
-      "letter": "R"
+      "letter": "R",
+      "script": "latin",
+      "region": "ca-oc"
     },
     {
       "name": "Sabaton",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Sabrina Carpenter",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Sam Cooke",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Sam Hunt",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Sam Smith",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "uk"
     },
     {
       "name": "Sammy Hagar",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Santana",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Santigold",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Sarah Bareilles",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Sarah McLachlan",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Scissor Sisters",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Scorpions",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Seether",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Selena",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "latam"
     },
     {
       "name": "Selena Gomez",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "latam"
     },
     {
       "name": "Sepultura",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "us"
+    },
+    {
+      "name": "SEVENTEEN",
+      "letter": "S",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Sex Pistols",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Shaggy",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Shakira",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "latam"
+    },
+    {
+      "name": "Shalom Hanoch",
+      "letter": "S",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Shania Twain",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "ca-oc"
     },
     {
       "name": "Shawn Mendes",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Sheryl Crow",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Shinedown",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Sia",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "ca-oc"
     },
     {
       "name": "Sigur Rós",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "latam"
     },
     {
       "name": "Silversun Pickups",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Simon & Garfunkel",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Simple Minds",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Sister Hazel",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Skillet",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Skrillex",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Slayer",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Slipknot",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Smash Mouth",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Smashing Pumpkins",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Smokey Robinson",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Snoop Dogg",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Snow Patrol",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Social Distortion",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Solange",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Son Volt",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Soul Asylum",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Soundgarden",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Spice Girls",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Spoon",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Staind",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Static X",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Steely Dan",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Steppenwolf",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Steve Earle",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Steve Winwood",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Stevie Ray Vaughan",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Stevie Wonder",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Sting",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "uk"
     },
     {
       "name": "Stone Sour",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Stone Temple Pilots",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Stray Cats",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Sturgill Simpson",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Styx",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Sublime",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Sum 41",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Supertramp",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Switchfoot",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "System of a Down",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "SZA",
-      "letter": "S"
+      "letter": "S",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "T-Pain",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
+    },
+    {
+      "name": "t.A.T.u.",
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Talking Heads",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Tame Impala",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "ca-oc"
     },
     {
       "name": "Taylor Swift",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Tears for Fears",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Tegan and Sara",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Temple of the Dog",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Tesla",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "The 1975",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "The All-American Rejects",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "The Band",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "The Beach Boys",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "The Beatles",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "uk"
     },
     {
       "name": "The Black Keys",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "The Chainsmokers",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "The Clash",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "uk"
     },
     {
       "name": "The Cranberries",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "The Damned",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "The Decemberists",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "The Doobie Brothers",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "The Doors",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "The Flaming Lips",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "The Fray",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "The Gaslight Anthem",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "The Goo Goo Dolls",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "The Head and the Heart",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "The Human League",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "The Jam",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "The Jesus and Mary Chain",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "The Killers",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "The Kinks",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "uk"
     },
     {
       "name": "The Lumineers",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "The Mamas & the Papas",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "The Mars Volta",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "The Monkees",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "The National",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "The Notorious B.I.G.",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "The Offspring",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "The Pointer Sisters",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "The Police",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "uk"
     },
     {
       "name": "The Pretenders",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "The Prodigy",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "uk"
     },
     {
       "name": "The Psychedelic Furs",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "The Raconteurs",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "The Ramones",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "The Replacements",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "The Rolling Stones",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "uk"
     },
     {
       "name": "The Script",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "The Shins",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "The Smashing Pumpkins",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "The Specials",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "The Stone Roses",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "The Stranglers",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "The Strokes",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "The Sundays",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "The Supremes",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "The Temptations",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "The Ting Tings",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "The Velvet Underground",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "The Verve",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "uk"
     },
     {
       "name": "The War on Drugs",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "The Weeknd",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "ca-oc"
     },
     {
       "name": "The White Stripes",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "The Who",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "uk"
     },
     {
       "name": "The xx",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Thin Lizzy",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Third Eye Blind",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Thirty Seconds to Mars",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Three Days Grace",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Tiësto",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "eu"
     },
     {
       "name": "Tiesto",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Timbaland",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Tina Turner",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Tinashe",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "TLC",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Toby Keith",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "TobyMac",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Tokio Hotel",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Tom Jones",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Tom Morello",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Tom Petty",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Tom Waits",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Toni Braxton",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Tony Bennett",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Tool",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Tori Amos",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Toto",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Tower of Power",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Tracy Chapman",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Train",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Trapt",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Travis Scott",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Trivium",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Troye Sivan",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Tupac Shakur",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Turnstile",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Twenty One Pilots",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Two Door Cinema Club",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Tycho",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Tyler, the Creator",
-      "letter": "T"
+      "letter": "T",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "U2",
-      "letter": "U"
+      "letter": "U",
+      "script": "latin",
+      "region": "eu"
     },
     {
       "name": "UB40",
-      "letter": "U"
+      "letter": "U",
+      "script": "latin",
+      "region": "us"
+    },
+    {
+      "name": "Umm Kulthum",
+      "letter": "U",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Underworld",
-      "letter": "U"
+      "letter": "U",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Usher",
-      "letter": "U"
+      "letter": "U",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Vampire Weekend",
-      "letter": "V"
+      "letter": "V",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Van Halen",
-      "letter": "V"
+      "letter": "V",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Van Morrison",
-      "letter": "V"
+      "letter": "V",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Vanessa Carlton",
-      "letter": "V"
+      "letter": "V",
+      "script": "latin",
+      "region": "us"
+    },
+    {
+      "name": "Vangelis",
+      "letter": "V",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Village People",
-      "letter": "V"
+      "letter": "V",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Vince Gill",
-      "letter": "V"
+      "letter": "V",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Violent Femmes",
-      "letter": "V"
+      "letter": "V",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Wale",
-      "letter": "W"
+      "letter": "W",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Walk the Moon",
-      "letter": "W"
+      "letter": "W",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "War",
-      "letter": "W"
+      "letter": "W",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Weezer",
-      "letter": "W"
+      "letter": "W",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Wet Leg",
-      "letter": "W"
+      "letter": "W",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Wham!",
-      "letter": "W"
+      "letter": "W",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "White Stripes",
-      "letter": "W"
+      "letter": "W",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Whitney Houston",
-      "letter": "W"
+      "letter": "W",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Wilco",
-      "letter": "W"
+      "letter": "W",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Will Young",
-      "letter": "W"
+      "letter": "W",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Willie Nelson",
-      "letter": "W"
+      "letter": "W",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Wilson Pickett",
-      "letter": "W"
+      "letter": "W",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Wings",
-      "letter": "W"
+      "letter": "W",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Within Temptation",
-      "letter": "W"
+      "letter": "W",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Wiz Khalifa",
-      "letter": "W"
+      "letter": "W",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Wolf Alice",
-      "letter": "W"
+      "letter": "W",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Wolfgang Amadeus Mozart",
-      "letter": "W"
+      "letter": "W",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Wu-Tang Clan",
-      "letter": "W"
+      "letter": "W",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Wyclef Jean",
-      "letter": "W"
+      "letter": "W",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "X Ambassadors",
-      "letter": "X"
+      "letter": "X",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "XXXTentacion",
-      "letter": "X"
+      "letter": "X",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Xzibit",
-      "letter": "X"
+      "letter": "X",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Ye",
-      "letter": "Y"
+      "letter": "Y",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Yeah Yeah Yeahs",
-      "letter": "Y"
+      "letter": "Y",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Yellowcard",
-      "letter": "Y"
+      "letter": "Y",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Yes",
-      "letter": "Y"
+      "letter": "Y",
+      "script": "latin",
+      "region": "us"
+    },
+    {
+      "name": "YOASOBI",
+      "letter": "Y",
+      "script": "latin",
+      "region": "apac"
     },
     {
       "name": "Yola",
-      "letter": "Y"
+      "letter": "Y",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Young the Giant",
-      "letter": "Y"
+      "letter": "Y",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Young Thug",
-      "letter": "Y"
+      "letter": "Y",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Yungblud",
-      "letter": "Y"
+      "letter": "Y",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Yusuf / Cat Stevens",
-      "letter": "Y"
+      "letter": "Y",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Zac Brown Band",
-      "letter": "Z"
+      "letter": "Z",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Zach Bryan",
-      "letter": "Z"
+      "letter": "Z",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Zapp & Roger",
-      "letter": "Z"
+      "letter": "Z",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Zara Larsson",
-      "letter": "Z"
+      "letter": "Z",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Zayn",
-      "letter": "Z"
+      "letter": "Z",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Zedd",
-      "letter": "Z"
+      "letter": "Z",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "Zucchero",
-      "letter": "Z"
+      "letter": "Z",
+      "script": "latin",
+      "region": "us"
     },
     {
       "name": "ZZ Top",
-      "letter": "Z"
+      "letter": "Z",
+      "script": "latin",
+      "region": "us"
+    },
+    {
+      "name": "Μάνος Χατζιδάκις",
+      "letter": "Μ",
+      "script": "greek",
+      "region": "us"
+    },
+    {
+      "name": "Ария",
+      "letter": "А",
+      "script": "cyrillic",
+      "region": "us"
+    },
+    {
+      "name": "Би-2",
+      "letter": "Б",
+      "script": "cyrillic",
+      "region": "us"
+    },
+    {
+      "name": "ДДТ",
+      "letter": "Д",
+      "script": "cyrillic",
+      "region": "us"
+    },
+    {
+      "name": "Земфира",
+      "letter": "З",
+      "script": "cyrillic",
+      "region": "us"
+    },
+    {
+      "name": "Кино",
+      "letter": "К",
+      "script": "cyrillic",
+      "region": "us"
+    },
+    {
+      "name": "Любэ",
+      "letter": "Л",
+      "script": "cyrillic",
+      "region": "us"
+    },
+    {
+      "name": "Манго Манго",
+      "letter": "М",
+      "script": "cyrillic",
+      "region": "us"
+    },
+    {
+      "name": "Мумий Тролль",
+      "letter": "М",
+      "script": "cyrillic",
+      "region": "us"
+    },
+    {
+      "name": "Полина Гагарина",
+      "letter": "П",
+      "script": "cyrillic",
+      "region": "us"
+    },
+    {
+      "name": "Сектор Газа",
+      "letter": "С",
+      "script": "cyrillic",
+      "region": "us"
+    },
+    {
+      "name": "Сплин",
+      "letter": "С",
+      "script": "cyrillic",
+      "region": "us"
+    },
+    {
+      "name": "עפרה חזה",
+      "letter": "ע",
+      "script": "hebrew",
+      "region": "us"
+    },
+    {
+      "name": "فيروز",
+      "letter": "ف",
+      "script": "arabic",
+      "region": "us"
+    },
+    {
+      "name": "लता मंगेशकर",
+      "letter": "ल",
+      "script": "devanagari",
+      "region": "us"
+    },
+    {
+      "name": "ไมค์ ภิรมพร",
+      "letter": "ไ",
+      "script": "thai",
+      "region": "us"
+    },
+    {
+      "name": "방탄소년단",
+      "letter": "ㅂ",
+      "script": "hangul",
+      "region": "apac"
+    },
+    {
+      "name": "あいみょん",
+      "letter": "あ",
+      "script": "hiragana",
+      "region": "apac"
+    },
+    {
+      "name": "五月天",
+      "letter": "五",
+      "script": "cjk",
+      "region": "apac"
+    },
+    {
+      "name": "周杰伦",
+      "letter": "周",
+      "script": "cjk",
+      "region": "apac"
+    },
+    {
+      "name": "宇多田ヒカル",
+      "letter": "宇",
+      "script": "cjk",
+      "region": "apac"
+    },
+    {
+      "name": "嵐",
+      "letter": "嵐",
+      "script": "cjk",
+      "region": "apac"
+    },
+    {
+      "name": "椎名林檎",
+      "letter": "椎",
+      "script": "cjk",
+      "region": "apac"
+    },
+    {
+      "name": "王菲",
+      "letter": "王",
+      "script": "cjk",
+      "region": "apac"
+    },
+    {
+      "name": "米津玄師",
+      "letter": "米",
+      "script": "cjk",
+      "region": "apac"
+    },
+    {
+      "name": "邓丽君",
+      "letter": "邓",
+      "script": "cjk",
+      "region": "apac"
+    },
+    {
+      "name": "邓紫棋",
+      "letter": "邓",
+      "script": "cjk",
+      "region": "apac"
     }
   ]
 }

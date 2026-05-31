@@ -4,6 +4,8 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { inferRegion } from "../live-concerts-regions.mjs";
+import { letterForName } from "../live-concerts-alphabets.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const outPath = path.join(__dirname, "..", "artists-major.json");
@@ -131,6 +133,17 @@ const NAMES = [
   "Within Temptation", "Wiz Khalifa", "Wolf Alice", "Wolfgang Amadeus Mozart", "X Ambassadors",
   "Xzibit", "Yeah Yeah Yeahs", "Yellowcard", "Yola", "Young the Giant", "Yusuf / Cat Stevens",
   "Zac Brown Band", "Zapp & Roger", "Zucchero",
+  "Ария", "Би-2", "Кино", "Мумий Тролль", "Земфира", "Любэ", "t.A.T.u.",
+  "Манго Манго", "Полина Гагарина", "Сектор Газа", "Сплин", "ДДТ",
+  "Μάνος Χατζιδάκις", "Nana Mouskouri", "Vangelis",
+  "فيروز", "Amr Diab", "Umm Kulthum", "Mohammed Abdu",
+  "עפרה חזה", "Shalom Hanoch",
+  "방탄소년단", "BLACKPINK", "IU", "BIGBANG", "SEVENTEEN", "NewJeans",
+  "宇多田ヒカル", "米津玄師", "YOASOBI", "あいみょん", "椎名林檎",
+  "嵐", "AKB48", "ONE OK ROCK",
+  "邓丽君", "周杰伦", "王菲", "邓紫棋", "五月天",
+  "लता मंगेशकर", "A. R. Rahman", "Kishore Kumar",
+  "ไมค์ ภิรมพร", "Carabao", "Bird Thongchai",
 ];
 
 const uniq = [...new Set(NAMES.map((n) => n.trim()).filter(Boolean))].sort((a, b) =>
@@ -138,12 +151,10 @@ const uniq = [...new Set(NAMES.map((n) => n.trim()).filter(Boolean))].sort((a, b
 );
 
 const artists = uniq.map((name) => {
-  const base = name.normalize("NFD").replace(/\p{M}/gu, "");
-  const ch = base[0]?.toUpperCase() || "#";
-  const letter = /[A-Z]/.test(ch) ? ch : "#";
-  return { name, letter };
+  const { letter, script } = letterForName(name);
+  return { name, letter, script, region: inferRegion(name) };
 });
 
-const payload = { version: 2, count: artists.length, artists };
+const payload = { version: 4, count: artists.length, artists };
 fs.writeFileSync(outPath, `${JSON.stringify(payload, null, 2)}\n`);
 console.log(`Wrote ${artists.length} artists to ${outPath}`);

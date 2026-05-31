@@ -1,6 +1,7 @@
 /**
  * Accreditation, per-song PRO credits, and charting UI for live concerts.
  */
+import { addWatchPhrases, focusPhraseSearch } from "./phrase-search.js";
 
 /** @param {string} artist @param {string} [mbid] */
 export async function fetchArtistMeta(artist, mbid) {
@@ -29,22 +30,22 @@ export async function fetchAlbumMeta(rgMbid, artist) {
 export function paintArtistMeta(root, data) {
   if (!(root instanceof HTMLElement)) return;
   const a = data.accreditation || {};
-  root.hidden = false;
+  const wrap = document.getElementById("live-concerts-meta-wrap");
+  if (wrap instanceof HTMLDetailsElement) {
+    wrap.hidden = false;
+    const sum = wrap.querySelector(".live-concerts-meta-summary");
+    if (sum) sum.textContent = `Artist accreditation · ${data.artist || ""}`;
+  }
   root.innerHTML = `
-    <details class="live-concerts-meta-block" open>
-      <summary>Artist accreditation · ${escapeHtml(data.artist || "")}</summary>
-      ${section("Promo & press kit", linkList(a.promoKit))}
-      ${section("Agencies & management", peopleList(a.agencies))}
-      ${section("Technicians & production", peopleList(a.technicians))}
-      ${section("Tour companies", peopleList(a.tourCompanies))}
-      ${section("Rights holders & labels", peopleList(a.rightsHolders))}
-      ${section("Sponsors & brands", peopleList(a.sponsors))}
-      ${section("Videos", linkList(a.videos))}
-      ${section("Charting", chartList(data.charts))}
-      ${data.tags?.length ? section("Tags", `<p class="live-concerts-meta-tags">${data.tags.map((t) => `<span>${escapeHtml(t)}</span>`).join("")}</p>`) : ""}
-    </details>
-    <p class="live-concerts-meta-note">PRO societies (ASCAP, BMI, SESAC, PRS) and Billboard peaks load per album/track below. Click an album cover.</p>
-    <div id="live-concerts-album-meta" class="live-concerts-album-meta" hidden></div>
+    ${section("Promo & press kit", linkList(a.promoKit))}
+    ${section("Agencies & management", peopleList(a.agencies))}
+    ${section("Technicians & production", peopleList(a.technicians))}
+    ${section("Tour companies", peopleList(a.tourCompanies))}
+    ${section("Rights holders & labels", peopleList(a.rightsHolders))}
+    ${section("Sponsors & brands", peopleList(a.sponsors))}
+    ${section("Videos", linkList(a.videos))}
+    ${section("Charting", chartList(data.charts))}
+    ${data.tags?.length ? section("Tags", `<p class="live-concerts-meta-tags">${data.tags.map((t) => `<span>${escapeHtml(t)}</span>`).join("")}</p>`) : ""}
   `;
 }
 
@@ -57,9 +58,22 @@ export function paintAlbumMeta(slot, data) {
   slot.hidden = false;
   const a = data.accreditation || {};
   const songs = Array.isArray(data.songs) ? data.songs : [];
+  const title = data.title || "Album";
+  const year = data.year ? String(data.year) : "";
+
   slot.innerHTML = `
-    <details class="live-concerts-meta-block" open>
-      <summary>${escapeHtml(data.title || "Album")}${data.year ? ` · ${data.year}` : ""}</summary>
+    <header class="live-concerts-album-focus-head">
+      <h3 class="live-concerts-album-focus-title">${escapeHtml(title)}${year ? ` <span class="live-concerts-album-focus-year">${escapeHtml(year)}</span>` : ""}</h3>
+      ${data.labels?.length ? `<p class="live-concerts-album-focus-labels">${data.labels.map((l) => escapeHtml(l.name + (l.catalog ? ` · ${l.catalog}` : ""))).join(" · ")}</p>` : ""}
+    </header>
+    <details class="live-concerts-meta-block live-concerts-album-lyrics" open>
+      <summary>Songs · lyrics & PRO (${songs.length})</summary>
+      <ol class="live-concerts-song-list">
+        ${songs.length ? songs.map((s) => songRow(s, title, year)).join("") : "<li class=\"live-concerts-picks-empty\">No track listing in MusicBrainz for this release.</li>"}
+      </ol>
+    </details>
+    <details class="live-concerts-meta-block">
+      <summary>Album accreditation</summary>
       ${section("Images / artwork", imageList(a.images))}
       ${section("Videos", linkList(a.videos))}
       ${section("Agencies", peopleList(a.agencies))}
@@ -70,21 +84,35 @@ export function paintAlbumMeta(slot, data) {
       ${section("Promo kit", linkList(a.promoKit))}
       ${section("Charting", chartList(data.charts))}
     </details>
-    <details class="live-concerts-meta-block" open>
-      <summary>Songs · lyrics & studio credits (${songs.length})</summary>
-      <ol class="live-concerts-song-list">
-        ${songs.map((s) => songRow(s)).join("")}
-      </ol>
-    </details>
   `;
-  slot.scrollIntoView({ behavior: "smooth", block: "nearest" });
+
+  slot.querySelectorAll("[data-lyric-phrase]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const phrase = btn.getAttribute("data-lyric-phrase") || "";
+      const lyric = document.getElementById("live-concerts-lyric");
+      if (lyric instanceof HTMLInputElement && phrase) {
+        lyric.value = phrase;
+        lyric.focus();
+        lyric.dispatchEvent(new Event("input", { bubbles: true }));
+      }
+    });
+  });
+  slot.querySelectorAll("[data-lyric-search]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const phrase = btn.getAttribute("data-lyric-search") || "";
+      if (!phrase) return;
+      focusPhraseSearch(phrase);
+      addWatchPhrases([phrase]);
+    });
+  });
 }
 
-/** @param {object} s */
-function songRow(s) {
+/** @param {object} s @param {string} albumTitle @param {string} albumYear */
+function songRow(s, albumTitle, albumYear) {
   const writers = peopleList(s.writers);
   const studios = peopleList(s.studios);
   const tech = peopleList(s.technicians);
+  const phrase = [s.title, albumTitle, albumYear].filter(Boolean).join(" ").trim();
   const pro = (s.proSocieties || [])
     .map(
       (p) =>
@@ -92,9 +120,15 @@ function songRow(s) {
     )
     .join(" ");
   return `<li class="live-concerts-song">
-    <span class="live-concerts-song-pos">${s.position}.</span>
-    <strong class="live-concerts-song-title">${escapeHtml(s.title)}</strong>
-    ${s.isrc ? `<code class="live-concerts-isrc">${escapeHtml(s.isrc)}</code>` : ""}
+    <div class="live-concerts-song-head">
+      <span class="live-concerts-song-pos">${s.position}.</span>
+      <strong class="live-concerts-song-title">${escapeHtml(s.title)}</strong>
+      ${s.isrc ? `<code class="live-concerts-isrc">${escapeHtml(s.isrc)}</code>` : ""}
+      <span class="live-concerts-song-actions">
+        <button type="button" class="live-concerts-song-btn" data-lyric-phrase="${escapeHtml(phrase)}">Lyric</button>
+        <button type="button" class="live-concerts-song-btn" data-lyric-search="${escapeHtml(phrase)}">Search</button>
+      </span>
+    </div>
     ${writers ? `<div class="live-concerts-song-credit"><span>Writers</span>${writers}</div>` : ""}
     ${studios ? `<div class="live-concerts-song-credit"><span>Studios</span>${studios}</div>` : ""}
     ${tech ? `<div class="live-concerts-song-credit"><span>Credits</span>${tech}</div>` : ""}

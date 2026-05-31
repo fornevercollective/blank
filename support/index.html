@@ -371,7 +371,7 @@
                     class="live-concerts-alpha-row"
                     id="live-concerts-alpha-inline"
                     role="toolbar"
-                    aria-label="Filter artists A–Z"
+                    aria-label="Filter artists by alphabet and script"
                   ></nav>
                   <button type="button" class="live-concerts-btn" id="live-concerts-search-btn">Search</button>
                   <button type="button" class="live-concerts-btn" id="live-concerts-refresh" title="Refresh discovery">↻</button>
@@ -404,8 +404,17 @@
                       aria-label="Album cover load progress"
                     ></progress>
                   </div>
+                  <div
+                    class="live-concerts-album-detail"
+                    id="live-concerts-album-detail"
+                    hidden
+                    aria-live="polite"
+                  ></div>
                   <div class="live-concerts-albums-scroll" id="live-concerts-albums-scroll" role="list"></div>
-                  <div class="live-concerts-meta" id="live-concerts-meta" hidden aria-live="polite"></div>
+                  <details class="live-concerts-meta-wrap" id="live-concerts-meta-wrap" hidden>
+                    <summary class="live-concerts-meta-summary">Artist accreditation & charts</summary>
+                    <div class="live-concerts-meta" id="live-concerts-meta"></div>
+                  </details>
                 </div>
                 <div class="live-concerts-actions">
                   <button type="button" class="live-concerts-btn live-concerts-btn--primary" id="live-concerts-multiview">Multi-angle sync</button>
@@ -414,7 +423,21 @@
                 <p class="live-concerts-status" id="live-concerts-status" aria-live="polite">Starting discovery…</p>
                 <div class="live-concerts-artist-picks" id="live-concerts-artist-picks" hidden></div>
               </div>
-              <div class="live-concerts-list" id="live-concerts-list" role="list"></div>
+              <div class="live-concerts-feed-wrap">
+                <div
+                  class="live-concerts-feed-regions"
+                  id="live-concerts-feed-regions"
+                  role="tablist"
+                  aria-label="World region"
+                ></div>
+                <div
+                  class="live-concerts-genres"
+                  id="live-concerts-genres"
+                  role="tablist"
+                  aria-label="Genre section"
+                ></div>
+                <div class="live-concerts-list" id="live-concerts-list" role="list"></div>
+              </div>
         </div>
       </details>
       <details class="ingest-panel" id="ingest-panel" open>
@@ -428,8 +451,21 @@
         </div>
       </details>
       <div class="feed" id="feed">
-        <p class="feed-intro">Thread deliverables below; use the header bar to queue video — preview is top right.</p>
-        <!-- Phrase search mount point (populated by phrase-search.js after intro) -->
+        <p class="feed-intro">Thread deliverables on the right; prompts stay in the menu drawer. Queue video from the header — preview is top right.</p>
+        <section class="feed-deliverables" id="thread-deliverables" aria-labelledby="thread-deliverables-title">
+          <header class="feed-deliverables-head">
+            <h2 class="feed-deliverables-title" id="thread-deliverables-title">Deliverables</h2>
+            <p class="feed-deliverables-hint">Shipped output from the thread — select a section to jump.</p>
+          </header>
+          <div class="feed-deliverables-layout">
+            <div class="feed-deliverables-cards" id="feed-deliverables-cards" role="feed" aria-label="Thread deliverable cards"></div>
+            <nav
+              class="feed-deliverables-outline"
+              id="feed-deliverables-outline"
+              aria-label="Thread sections"
+            ></nav>
+          </div>
+        </section>
       </div>
     </main>
   </div>

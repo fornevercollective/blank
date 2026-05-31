@@ -7,6 +7,12 @@ import {
   fetchArtistAccreditation,
   fetchAlbumDetail,
 } from "./live-concerts-metadata.mjs";
+import {
+  feedRegionById,
+  genreTabById,
+  filterDiscoverEvents,
+  queriesForDiscover,
+} from "./live-concerts-genres.mjs";
 
 const CACHE_TTL_MS = 3 * 60 * 1000;
 const DISCOVER_TIMEOUT_MS = 90_000;
@@ -240,21 +246,28 @@ async function flatPlaylistEntries(pageUrl, limit = 20) {
 }
 
 /**
- * @param {{ window?: string, query?: string }} opts
+ * @param {{ window?: string, query?: string, genre?: string, region?: string }} opts
  */
 export async function discoverLiveConcerts(opts = {}) {
   const window = ["now", "hour", "today", "tomorrow"].includes(opts.window)
     ? opts.window
     : "now";
   const userQ = String(opts.query || "").trim();
-  const cacheKey = `${window}\0${userQ.toLowerCase()}`;
+  const genre = genreTabById(String(opts.genre || "all")).id;
+  const region = feedRegionById(String(opts.region || "all")).id;
+  const cacheKey = `${window}\0${genre}\0${region}\0${userQ.toLowerCase()}`;
   const cached = discoverCache.get(cacheKey);
   if (cached && Date.now() - cached.created < CACHE_TTL_MS) {
     return cached.data;
   }
 
   const bounds = windowBounds(window);
-  const queries = userQ ? [userQ, `${userQ} live stream`, `${userQ} live concert`] : DEFAULT_QUERIES;
+  const queries = queriesForDiscover({
+    genreId: genre,
+    regionId: region,
+    userQ,
+    defaultQueries: DEFAULT_QUERIES,
+  });
 
   /** @type {Map<string, ReturnType<typeof normalizeFeed>>} */
   const feedByUrl = new Map();
@@ -291,9 +304,10 @@ export async function discoverLiveConcerts(opts = {}) {
     }
   }
 
-  let events = [...eventMap.values()]
-    .filter((e) => e.feeds.length > 0)
-    .sort((a, b) => {
+  let events = filterDiscoverEvents([...eventMap.values()], genre, region).filter(
+    (e) => e.feeds.length > 0,
+  );
+  events = events.sort((a, b) => {
       const liveA = a.feeds.some((f) => f.isLive) ? 1 : 0;
       const liveB = b.feeds.some((f) => f.isLive) ? 1 : 0;
       if (liveB !== liveA) return liveB - liveA;
@@ -313,6 +327,10 @@ export async function discoverLiveConcerts(opts = {}) {
   const result = {
     ok: true,
     window,
+    genre,
+    genreLabel: genreTabById(genre).label,
+    region,
+    regionLabel: feedRegionById(region).label,
     query: userQ || null,
     fetchedAt: Date.now(),
     bounds: {
@@ -349,6 +367,8 @@ export async function handleLiveConcertsApi(req, res, urlPath) {
       const data = await discoverLiveConcerts({
         window: typeof parsed.window === "string" ? parsed.window : "now",
         query: typeof parsed.query === "string" ? parsed.query : "",
+        genre: typeof parsed.genre === "string" ? parsed.genre : "all",
+        region: typeof parsed.region === "string" ? parsed.region : "all",
       });
       json(res, 200, data);
     } catch (e) {
@@ -366,6 +386,8 @@ export async function handleLiveConcertsApi(req, res, urlPath) {
       const data = await discoverLiveConcerts({
         window: u.searchParams.get("window") || "now",
         query: u.searchParams.get("q") || "",
+        genre: u.searchParams.get("genre") || "all",
+        region: u.searchParams.get("region") || "all",
       });
       json(res, 200, data);
     } catch (e) {

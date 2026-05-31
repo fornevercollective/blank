@@ -336,6 +336,9 @@ function setActiveNav(index) {
   document.querySelectorAll(".header-prompt-chip").forEach((btn, i) => {
     btn.classList.toggle("is-active", i === index);
   });
+  document.querySelectorAll(".feed-deliverables-link").forEach((btn, i) => {
+    btn.classList.toggle("is-active", i === index);
+  });
 }
 
 /**
@@ -777,11 +780,15 @@ function buildUi(thread, initialActiveIndex) {
   const headerPrompts = document.getElementById("header-prompts");
   const drawerPrompts = document.getElementById("drawer-prompts");
   const feed = document.getElementById("feed");
+  const cardsRoot = document.getElementById("feed-deliverables-cards");
+  const outlineNav = document.getElementById("feed-deliverables-outline");
   if (!headerPrompts || !drawerPrompts || !feed) return;
 
   headerPrompts.querySelectorAll(".header-prompt-chip").forEach((c) => c.remove());
   drawerPrompts.replaceChildren();
-  feed.querySelectorAll(".card").forEach((c) => c.remove());
+  if (outlineNav) outlineNav.replaceChildren();
+  const cardHost = cardsRoot || feed;
+  cardHost.querySelectorAll(".card").forEach((c) => c.remove());
 
   bindDrawerControls();
   currentThread = thread;
@@ -823,6 +830,20 @@ function buildUi(thread, initialActiveIndex) {
     });
     drawerPrompts.appendChild(dp);
 
+    if (outlineNav) {
+      const outlineBtn = document.createElement("button");
+      outlineBtn.type = "button";
+      outlineBtn.className = "feed-deliverables-link";
+      outlineBtn.dataset.index = String(i);
+      outlineBtn.innerHTML = `<span class="feed-deliverables-link-idx">#${stamp.n}</span><span class="feed-deliverables-link-title">${escapeHtml(item.title || truncate(item.prompt, 48))}</span>`;
+      outlineBtn.addEventListener("click", () => {
+        setActiveNav(i);
+        saveActive(i);
+        scrollToCard(i);
+      });
+      outlineNav.appendChild(outlineBtn);
+    }
+
     const section = document.createElement("details");
     section.className = "card";
     section.dataset.cardIndex = String(i);
@@ -851,7 +872,7 @@ function buildUi(thread, initialActiveIndex) {
       </div>
     `;
 
-    feed.appendChild(section);
+    cardHost.appendChild(section);
   });
 
   const cards = Array.from(document.querySelectorAll(".card"));

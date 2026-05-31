@@ -1,7 +1,7 @@
 /**
  * Main window ↔ TV cast window sync (BroadcastChannel).
  */
-import { TV_CAST_CHANNEL } from "./tv-reframe.js";
+import { TV_CAST_CHANNEL, REFRAME_PRESETS } from "./tv-reframe.js";
 
 /** @type {Window | null} */
 let castWin = null;
@@ -10,6 +10,34 @@ const ch =
   typeof BroadcastChannel !== "undefined"
     ? new BroadcastChannel(TV_CAST_CHANNEL)
     : null;
+
+/** @type {{ reframeId: string, layoutId: string, sideMode: string, customNote: string }} */
+let castPrefs = {
+  reframeId: "grok",
+  layoutId: "sidecar",
+  sideMode: "intel",
+  customNote: "",
+};
+
+/** @returns {HTMLSelectElement | null} */
+function reframeSelectEl() {
+  const el = document.getElementById("tv-cast-reframe");
+  return el instanceof HTMLSelectElement ? el : null;
+}
+
+/** @param {HTMLSelectElement} sel */
+function fillReframeSelect(sel) {
+  const prev = sel.value || castPrefs.reframeId;
+  sel.replaceChildren();
+  for (const preset of Object.values(REFRAME_PRESETS)) {
+    const opt = document.createElement("option");
+    opt.value = preset.id;
+    opt.textContent = preset.label;
+    sel.appendChild(opt);
+  }
+  sel.value = REFRAME_PRESETS[prev] ? prev : castPrefs.reframeId;
+  castPrefs.reframeId = sel.value;
+}
 
 /**
  * @param {{
@@ -25,20 +53,13 @@ const ch =
  * }} deps
  */
 export function initTvCast(deps) {
-  const reframeSel = document.getElementById("tv-cast-reframe");
+  const reframeSel = reframeSelectEl();
   const openBtn = document.getElementById("ffplay-tv-cast");
 
-  /** @type {{ reframeId: string, layoutId: string, sideMode: string, customNote: string }} */
-  let prefs = {
-    reframeId: "grok",
-    layoutId: "sidecar",
-    sideMode: "intel",
-    customNote: "",
-  };
-
-  if (reframeSel instanceof HTMLSelectElement) {
+  if (reframeSel) {
+    fillReframeSelect(reframeSel);
     reframeSel.addEventListener("change", () => {
-      prefs.reframeId = reframeSel.value;
+      castPrefs.reframeId = reframeSel.value;
       pushCastState(deps);
     });
   }
@@ -75,14 +96,13 @@ export function initTvCast(deps) {
       }
       if (msg.type === "prefs") {
         if (msg.reframeId) {
-          prefs.reframeId = msg.reframeId;
-          if (reframeSel instanceof HTMLSelectElement) {
-            reframeSel.value = msg.reframeId;
-          }
+          castPrefs.reframeId = msg.reframeId;
+          const sel = reframeSelectEl();
+          if (sel) sel.value = msg.reframeId;
         }
-        if (msg.layoutId) prefs.layoutId = msg.layoutId;
-        if (msg.sideMode) prefs.sideMode = msg.sideMode;
-        if (typeof msg.customNote === "string") prefs.customNote = msg.customNote;
+        if (msg.layoutId) castPrefs.layoutId = msg.layoutId;
+        if (msg.sideMode) castPrefs.sideMode = msg.sideMode;
+        if (typeof msg.customNote === "string") castPrefs.customNote = msg.customNote;
       }
     };
   }
@@ -95,6 +115,11 @@ export function initTvCast(deps) {
 /** @param {Parameters<typeof initTvCast>[0]} deps */
 function pushCastState(deps) {
   if (!ch) return;
+  const reframeSel = reframeSelectEl();
+  if (reframeSel) {
+    castPrefs.reframeId = reframeSel.value || castPrefs.reframeId;
+  }
+
   const pageUrl = deps.getPageUrl();
   const item = deps.getQueueItem();
   const intel = pageUrl ? deps.getIntel(pageUrl) : undefined;
@@ -109,7 +134,10 @@ function pushCastState(deps) {
   if (intel?.viewCount != null) meta.push(["Views", String(intel.viewCount)]);
   const cam = intel?.camera;
   if (cam?.width && cam?.height) {
-    meta.push(["Camera", `${cam.width}×${cam.height}${cam.fps ? ` · ${Math.round(cam.fps)} fps` : ""}`]);
+    meta.push([
+      "Camera",
+      `${cam.width}×${cam.height}${cam.fps ? ` · ${Math.round(cam.fps)} fps` : ""}`,
+    ]);
   }
 
   const capLines = Array.isArray(intel?.captions?.lines)
@@ -141,10 +169,6 @@ function pushCastState(deps) {
     framing = String(sc.cinematography?.framing || "");
   }
 
-  if (reframeSel instanceof HTMLSelectElement) {
-    prefs.reframeId = reframeSel.value || prefs.reframeId;
-  }
-
   ch.postMessage({
     type: "cast-state",
     state: {
@@ -157,10 +181,10 @@ function pushCastState(deps) {
       resolveError: item?.resolveError,
       durationLabel: intel?.durationLabel,
       uploader: intel?.uploader,
-      reframeId: prefs.reframeId,
-      layoutId: prefs.layoutId,
-      sideMode: prefs.sideMode,
-      customNote: prefs.customNote,
+      reframeId: castPrefs.reframeId,
+      layoutId: castPrefs.layoutId,
+      sideMode: castPrefs.sideMode,
+      customNote: castPrefs.customNote,
       sceneTitle,
       sceneEstimate,
       ikHint,
