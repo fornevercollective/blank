@@ -3,6 +3,10 @@
  * Groups multi-platform feeds into event clusters for multi-angle viewing.
  */
 import { spawn } from "node:child_process";
+import {
+  fetchArtistAccreditation,
+  fetchAlbumDetail,
+} from "./live-concerts-metadata.mjs";
 
 const CACHE_TTL_MS = 3 * 60 * 1000;
 const DISCOVER_TIMEOUT_MS = 90_000;
@@ -388,6 +392,38 @@ export async function handleLiveConcertsApi(req, res, urlPath) {
     return true;
   }
 
+  if (urlPath === "/api/live/artist-meta" && (req.method === "GET" || req.method === "HEAD")) {
+    const u = new URL(req.url || "/", "http://127.0.0.1");
+    const artist = (u.searchParams.get("artist") || "").trim();
+    const mbid = (u.searchParams.get("mbid") || "").trim();
+    try {
+      const data = await fetchArtistAccreditation(artist, mbid || undefined);
+      json(res, 200, data);
+    } catch (e) {
+      json(res, 502, {
+        ok: false,
+        error: e instanceof Error ? e.message : String(e),
+      });
+    }
+    return true;
+  }
+
+  if (urlPath === "/api/live/album-detail" && (req.method === "GET" || req.method === "HEAD")) {
+    const u = new URL(req.url || "/", "http://127.0.0.1");
+    const rgMbid = (u.searchParams.get("rgMbid") || u.searchParams.get("mbid") || "").trim();
+    const artist = (u.searchParams.get("artist") || "").trim();
+    try {
+      const data = await fetchAlbumDetail(rgMbid, artist);
+      json(res, 200, data);
+    } catch (e) {
+      json(res, 502, {
+        ok: false,
+        error: e instanceof Error ? e.message : String(e),
+      });
+    }
+    return true;
+  }
+
   return false;
 }
 
@@ -438,14 +474,24 @@ export async function fetchArtistAlbums(artistName) {
   );
   const groups = Array.isArray(rgs["release-groups"]) ? rgs["release-groups"] : [];
   const albums = groups
-    .map((rg) => ({
-      title: String(rg.title || "").trim(),
-      year: yearFromIso(rg["first-release-date"]),
-      mbid: rg.id,
-      coverUrl: rg.id
-        ? `https://coverartarchive.org/release-group/${rg.id}/front-250`
-        : "",
-    }))
+    .map((rg) => {
+      const mbid = rg.id;
+      const base = mbid ? `https://coverartarchive.org/release-group/${mbid}` : "";
+      const preview = base ? `${base}/front-250` : "";
+      const full = base ? `${base}/front-500` : "";
+      return {
+        title: String(rg.title || "").trim(),
+        year: yearFromIso(rg["first-release-date"]),
+        mbid,
+        coverUrl: preview,
+        variantUrls: preview
+          ? [
+              { url: preview, role: "preview", maxEdge: 250 },
+              ...(full ? [{ url: full, role: "full", maxEdge: 500 }] : []),
+            ]
+          : [],
+      };
+    })
     .filter((a) => a.title && a.mbid)
     .sort((a, b) => {
       const ya = a.year ?? 9999;

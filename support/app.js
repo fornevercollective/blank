@@ -380,6 +380,7 @@ let intelPullTimer = 0;
 let intelSyncTimer = 0;
 let lastIntelSyncUrl = "";
 let liveIntelTimer = 0;
+let intelSyncInFlight = false;
 /** @type {ReturnType<typeof initTvCast> | null} */
 let tvCastBridge = null;
 
@@ -896,6 +897,7 @@ function syncFeedIntelFromQueue() {
 }
 
 async function syncFeedIntelNow() {
+  if (intelSyncInFlight) return;
   const slots = getFeedIntelSlots();
   if (!slots.iaSlot && !slots.implSlot && !slots.uxSlot && !slots.staggerSlot) return;
   const pageUrl = getWatchUrlForIntel();
@@ -911,6 +913,12 @@ async function syncFeedIntelNow() {
     return;
   }
   const cachedIntel = queueIntelByUrl.get(normalizeUrl(pageUrl));
+  if (
+    pageUrl === lastIntelSyncUrl &&
+    slots.iaSlot?.dataset.state === "loading"
+  ) {
+    return;
+  }
   if (
     pageUrl === lastIntelSyncUrl &&
     slots.iaSlot?.dataset.state === "ready" &&
@@ -945,21 +953,32 @@ async function syncFeedIntelNow() {
   }
 
   const wasLive = Boolean(cachedIntel?.isLive);
+  const silent =
+    wasLive ||
+    (pageUrl === lastIntelSyncUrl && slots.iaSlot?.dataset.state === "ready");
   lastIntelSyncUrl = pageUrl;
-  void refreshFeedIntel(pageUrl, slots, {
-    silent: wasLive,
-    onIntel(intel) {
-      queueIntelByUrl.set(normalizeUrl(pageUrl), intel);
-      syncHeaderPromptsMetaFromIntel(intel);
-      updatePhraseSearchIntel(intel, pageUrl);
-      if (intel?.title) patchQueueByUrl(pageUrl, { title: intel.title });
-      globalThis.blankIngest?.redraw?.(readQueue());
-      scheduleLiveIntelRefresh(intel, pageUrl);
-      tvCastBridge?.pushCastState?.();
-    },
-  }).catch(() => {
+  intelSyncInFlight = true;
+  const main = document.getElementById("main-scroll");
+  const scrollTop = main instanceof HTMLElement ? main.scrollTop : 0;
+  try {
+    await refreshFeedIntel(pageUrl, slots, {
+      silent,
+      onIntel(intel) {
+        queueIntelByUrl.set(normalizeUrl(pageUrl), intel);
+        syncHeaderPromptsMetaFromIntel(intel);
+        updatePhraseSearchIntel(intel, pageUrl);
+        if (intel?.title) patchQueueByUrl(pageUrl, { title: intel.title });
+        globalThis.blankIngest?.redraw?.(readQueue());
+        scheduleLiveIntelRefresh(intel, pageUrl);
+        tvCastBridge?.pushCastState?.();
+      },
+    });
+  } catch {
     lastIntelSyncUrl = "";
-  });
+  } finally {
+    intelSyncInFlight = false;
+    if (main instanceof HTMLElement) main.scrollTop = scrollTop;
+  }
 }
 
 /** Re-pull intel on a fast cadence for live broadcasts so scenes roll forward,

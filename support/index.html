@@ -393,8 +393,19 @@
                   <button type="button" class="live-concerts-btn" id="live-concerts-lyric-sync" title="Sync lyric search with phrase keyboard">Sync ↓</button>
                 </div>
                 <div class="live-concerts-albums" id="live-concerts-albums" hidden>
-                  <p class="live-concerts-albums-hint" id="live-concerts-albums-hint">Album art · year order</p>
+                  <div class="live-concerts-albums-head">
+                    <p class="live-concerts-albums-hint" id="live-concerts-albums-hint">Album art · year order</p>
+                    <progress
+                      class="live-concerts-albums-progress"
+                      id="live-concerts-albums-progress"
+                      max="100"
+                      value="0"
+                      hidden
+                      aria-label="Album cover load progress"
+                    ></progress>
+                  </div>
                   <div class="live-concerts-albums-scroll" id="live-concerts-albums-scroll" role="list"></div>
+                  <div class="live-concerts-meta" id="live-concerts-meta" hidden aria-live="polite"></div>
                 </div>
                 <div class="live-concerts-actions">
                   <button type="button" class="live-concerts-btn live-concerts-btn--primary" id="live-concerts-multiview">Multi-angle sync</button>

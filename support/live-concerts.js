@@ -25,6 +25,14 @@ let state = {
 /** @type {Set<string>} */
 const selectedFeedUrls = new Set();
 
+/** @type {AbortController | null} */
+let discoverAbort = null;
+
+let discoverDebounce = 0;
+
+/** @type {string | null} */
+let lastDiscoverKey = null;
+
 /**
  * @param {() => void} [onQueue]
  */
@@ -42,10 +50,16 @@ export function initLiveConcerts(onQueue) {
   const albumsPanel = document.getElementById("live-concerts-albums");
   const albumsScroll = document.getElementById("live-concerts-albums-scroll");
   const albumsHint = document.getElementById("live-concerts-albums-hint");
-
+  const albumsProgress = document.getElementById("live-concerts-albums-progress");
   /** @param {string} name */
   const loadAlbums = (name) => {
-    void paintArtistAlbums(name, albumsPanel, albumsScroll, albumsHint);
+    void paintArtistAlbums(name, albumsPanel, albumsScroll, albumsHint, albumsProgress);
+  };
+
+  /** @param {boolean} [force] */
+  const scheduleDiscover = (force = false) => {
+    window.clearTimeout(discoverDebounce);
+    discoverDebounce = window.setTimeout(() => void discover(statusEl, listEl, force), 380);
   };
 
   panel.querySelectorAll("[data-live-window]").forEach((btn) => {
@@ -57,7 +71,7 @@ export function initLiveConcerts(onQueue) {
         b.classList.toggle("is-active", b === btn);
         b.setAttribute("aria-selected", b === btn ? "true" : "false");
       });
-      void discover(statusEl, listEl);
+      scheduleDiscover(true);
     });
   });
 
@@ -66,16 +80,16 @@ export function initLiveConcerts(onQueue) {
       state.query = searchInput.value.trim();
       if (state.query) loadAlbums(state.query);
     }
-    void discover(statusEl, listEl);
+    scheduleDiscover(true);
   });
   searchInput?.addEventListener("keydown", (ev) => {
     if (ev.key === "Enter") {
       state.query = searchInput.value.trim();
       if (state.query) loadAlbums(state.query);
-      void discover(statusEl, listEl);
+      scheduleDiscover(true);
     }
   });
-  refreshBtn?.addEventListener("click", () => void discover(statusEl, listEl));
+  refreshBtn?.addEventListener("click", () => scheduleDiscover(true));
 
   queueBtn?.addEventListener("click", () => {
     const urls = [...selectedFeedUrls];
@@ -90,10 +104,17 @@ export function initLiveConcerts(onQueue) {
 
   multiviewBtn?.addEventListener("click", () => openMultiview());
 
-  initArtistAlpha(panel, searchInput, statusEl, loadAlbums);
+  initArtistAlpha(panel, searchInput, statusEl, loadAlbums, scheduleDiscover);
   initLyricBridge(panel);
 
-  void discover(statusEl, listEl);
+  if (panel instanceof HTMLDetailsElement) {
+    panel.addEventListener("toggle", () => {
+      if (panel.open) scheduleDiscover(false);
+    });
+    if (panel.open) scheduleDiscover(false);
+  } else {
+    scheduleDiscover(false);
+  }
 }
 
 /**
@@ -101,8 +122,9 @@ export function initLiveConcerts(onQueue) {
  * @param {HTMLInputElement | null} searchInput
  * @param {HTMLElement | null} statusEl
  * @param {(name: string) => void} [onArtistChosen]
+ * @param {(force?: boolean) => void} [scheduleDiscover]
  */
-function initArtistAlpha(panel, searchInput, statusEl, onArtistChosen) {
+function initArtistAlpha(panel, searchInput, statusEl, onArtistChosen, scheduleDiscover) {
   const alphaNav = document.getElementById("live-concerts-alpha-inline");
   const picksEl = document.getElementById("live-concerts-artist-picks");
   const datalist = document.getElementById("live-concerts-artist-datalist");
@@ -162,7 +184,7 @@ function initArtistAlpha(panel, searchInput, statusEl, onArtistChosen) {
         if (searchInput) searchInput.value = name;
         state.query = name;
         onArtistChosen?.(name);
-        void discover(statusEl, document.getElementById("live-concerts-list"));
+        scheduleDiscover(true);
       });
     });
   }
@@ -209,7 +231,7 @@ function initArtistAlpha(panel, searchInput, statusEl, onArtistChosen) {
           state.query = name;
           acList.hidden = true;
           onArtistChosen?.(name);
-          void discover(statusEl, document.getElementById("live-concerts-list"));
+          scheduleDiscover(true);
         });
       });
     };
@@ -268,17 +290,40 @@ function initLyricBridge(panel) {
   });
 }
 
-async function discover(statusEl, listEl) {
+/**
+ * @param {HTMLElement | null} statusEl
+ * @param {HTMLElement | null} listEl
+ * @param {boolean} [force]
+ */
+async function discover(statusEl, listEl, force = false) {
+  const key = `${state.window}|${state.query}`;
+  if (!force && state.loading && key === lastDiscoverKey) return;
+  lastDiscoverKey = key;
+
+  const main = document.getElementById("main-scroll");
+  const scrollTop = main instanceof HTMLElement ? main.scrollTop : 0;
+
+  discoverAbort?.abort();
+  discoverAbort = new AbortController();
+  const { signal } = discoverAbort;
+
   state.loading = true;
   if (statusEl) {
     statusEl.textContent = "Searching YouTube + Twitch for live concerts…";
   }
-  if (listEl) listEl.innerHTML = "";
+  if (listEl && !listEl.querySelector(".live-concerts-event")) {
+    listEl.innerHTML =
+      '<p class="live-concerts-empty live-concerts-loading">Discovering live feeds…</p>';
+  } else if (listEl) {
+    listEl.setAttribute("aria-busy", "true");
+  }
+
   try {
     const res = await fetch("/api/live/discover", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ window: state.window, query: state.query }),
+      signal,
     });
     const data = await res.json().catch(() => ({}));
     if (!res.ok || !data.ok) {
@@ -291,6 +336,7 @@ async function discover(statusEl, listEl) {
     }
     paintList(listEl);
   } catch (e) {
+    if (e instanceof Error && e.name === "AbortError") return;
     const msg = e instanceof Error ? e.message : String(e);
     if (statusEl) statusEl.textContent = msg;
     if (listEl) {
@@ -298,6 +344,8 @@ async function discover(statusEl, listEl) {
     }
   } finally {
     state.loading = false;
+    listEl?.removeAttribute("aria-busy");
+    if (main instanceof HTMLElement) main.scrollTop = scrollTop;
   }
 }
 

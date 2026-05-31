@@ -1652,6 +1652,9 @@ body.drawer-open .drawer {
   min-height: 0;
   padding: 0;
   overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
   background: var(--bone);
 }
 
@@ -4152,11 +4155,55 @@ body.drawer-open .drawer {
   display: none;
 }
 
+.live-concerts-albums-head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.4rem;
+}
+
 .live-concerts-albums-hint {
-  margin: 0 0 0.4rem;
+  margin: 0;
+  flex: 1 1 auto;
   font-size: 0.62rem;
   font-weight: 600;
   color: var(--ink-soft);
+}
+
+.live-concerts-albums-progress {
+  flex: 0 0 5rem;
+  height: 0.35rem;
+  margin: 0;
+  accent-color: #7c3aed;
+}
+
+.live-concerts-albums-progress[hidden] {
+  display: none;
+}
+
+.live-concerts-album-cover.is-pending {
+  background: linear-gradient(
+    110deg,
+    var(--bone-wash) 8%,
+    var(--bone-deep) 18%,
+    var(--bone-wash) 33%
+  );
+  background-size: 200% 100%;
+  animation: live-album-shimmer 1.2s ease-in-out infinite;
+}
+
+@keyframes live-album-shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+.live-concerts-album.is-loaded .live-concerts-album-cover {
+  animation: none;
+}
+
+.live-concerts-loading {
+  font-style: italic;
 }
 
 .live-concerts-albums-scroll {
@@ -4223,6 +4270,153 @@ body.drawer-open .drawer {
 }
 
 .live-concerts-album:hover .live-concerts-album-cover {
+  border-color: var(--stamp);
+}
+
+.live-concerts-meta {
+  margin-top: 0.65rem;
+  padding: 0.5rem 0.55rem;
+  border: 1px solid var(--line-subtle);
+  border-radius: 4px;
+  background: var(--bone-wash);
+  max-height: min(50vh, 22rem);
+  overflow: auto;
+}
+
+.live-concerts-meta[hidden],
+.live-concerts-album-meta[hidden] {
+  display: none;
+}
+
+.live-concerts-meta-block {
+  margin-bottom: 0.5rem;
+}
+
+.live-concerts-meta-block summary {
+  font-size: 0.7rem;
+  font-weight: 700;
+  cursor: pointer;
+  color: var(--ink-mute);
+}
+
+.live-concerts-meta-section {
+  margin: 0.4rem 0 0.2rem;
+}
+
+.live-concerts-meta-h4 {
+  margin: 0 0 0.25rem;
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink-soft);
+}
+
+.live-concerts-meta-list {
+  margin: 0;
+  padding-left: 1.1rem;
+  font-size: 0.68rem;
+  line-height: 1.4;
+}
+
+.live-concerts-meta-links a {
+  color: var(--stamp);
+  word-break: break-all;
+}
+
+.live-concerts-meta-role {
+  color: var(--ink-soft);
+  font-weight: 500;
+}
+
+.live-concerts-meta-note {
+  margin: 0.35rem 0 0;
+  font-size: 0.6rem;
+  color: var(--ink-soft);
+}
+
+.live-concerts-meta-tags span {
+  display: inline-block;
+  margin: 0.1rem 0.2rem 0.1rem 0;
+  padding: 0.1rem 0.35rem;
+  border-radius: 2px;
+  background: var(--surface);
+  font-size: 0.58rem;
+}
+
+.live-concerts-meta-images {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.live-concerts-meta-thumb {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+  font-size: 0.52rem;
+  color: var(--ink-soft);
+  text-decoration: none;
+}
+
+.live-concerts-meta-thumb img {
+  object-fit: cover;
+  border-radius: 2px;
+  border: 1px solid var(--line);
+}
+
+.live-concerts-album-meta {
+  margin-top: 0.5rem;
+}
+
+.live-concerts-song-list {
+  margin: 0.35rem 0 0;
+  padding-left: 1.2rem;
+  font-size: 0.68rem;
+}
+
+.live-concerts-song {
+  margin-bottom: 0.45rem;
+}
+
+.live-concerts-song-pos {
+  color: var(--ink-soft);
+  margin-right: 0.25rem;
+}
+
+.live-concerts-isrc {
+  margin-left: 0.35rem;
+  font-size: 0.58rem;
+  color: var(--ink-mute);
+}
+
+.live-concerts-song-credit,
+.live-concerts-song-pro {
+  margin-top: 0.15rem;
+  color: var(--ink-soft);
+}
+
+.live-concerts-song-credit span,
+.live-concerts-song-pro span {
+  font-weight: 600;
+  margin-right: 0.25rem;
+}
+
+.live-concerts-pro-link {
+  display: inline-block;
+  margin: 0.1rem 0.25rem 0.1rem 0;
+  padding: 0.08rem 0.3rem;
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  background: var(--surface);
+  font-size: 0.58rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--ink);
+}
+
+.live-concerts-pro-link:hover {
   border-color: var(--stamp);
 }
 
