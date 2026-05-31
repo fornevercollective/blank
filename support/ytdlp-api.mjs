@@ -228,6 +228,9 @@ function fetchUpstream(url, headers = {}) {
 
 /** @param {import("node:http").IncomingMessage} req @param {import("node:http").ServerResponse} res */
 export async function handleIngestApi(req, res, urlPath) {
+  const { handleLocalIngestApi } = await import("./local-ingest.mjs");
+  if (await handleLocalIngestApi(req, res, urlPath)) return true;
+
   const {
     handleIntelApi,
     handleSceneThumbApi,
@@ -419,6 +422,8 @@ export async function handleIngestApi(req, res, urlPath) {
 /** @param {import("node:http").ServerResponse} res @param {number} code @param {object} obj */
 function json(res, code, obj) {
   const body = Buffer.from(JSON.stringify(obj), "utf8");
+  /** @type {import("node:http").ServerResponse & { __blankOutBytes?: number }} */ (res).__blankOutBytes =
+    body.length;
   res.writeHead(code, {
     "Content-Type": "application/json; charset=utf-8",
     "Content-Length": body.length,

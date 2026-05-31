@@ -2,8 +2,8 @@
  * Live concert genre sections — discovery queries per tab.
  */
 import { FEED_REGION_MATCH, FEED_REGION_QUERIES } from "./live-concerts-regions.mjs";
-
 import { ARTIST_REGIONS } from "./live-concerts-regions.mjs";
+import { feedSubregionById, filterEventsBySubregion } from "./live-concerts-subregions.mjs";
 
 /** @type {typeof ARTIST_REGIONS} */
 export const LIVE_FEED_REGION_TABS = ARTIST_REGIONS.map((r) =>
@@ -125,21 +125,25 @@ export function feedRegionById(id) {
 }
 
 /**
- * @param {{ genreId: string, regionId: string, userQ: string, defaultQueries: string[] }} opts
+ * @param {{ genreId: string, regionId: string, subregionId?: string, userQ: string, defaultQueries: string[] }} opts
  */
 export function queriesForDiscover(opts) {
-  const { genreId, regionId, userQ, defaultQueries } = opts;
+  const { genreId, regionId, subregionId = "all", userQ, defaultQueries } = opts;
   const g = genreTabById(genreId);
   const r = feedRegionById(regionId);
+  const sub = feedSubregionById(regionId, subregionId);
   const u = userQ.trim();
   if (u) {
     const parts = [u, `${u} live stream`, `${u} live concert`];
     if (g.id !== "all") parts.push(`${u} ${g.label} live`);
     if (r.id !== "all") parts.push(`${u} ${r.label} live stream`);
+    if (sub.id !== "all" && sub.label) parts.push(`${u} ${sub.label} live stream`);
     return [...new Set(parts)];
   }
   const parts = [];
-  if (r.id !== "all" && FEED_REGION_QUERIES[r.id]) {
+  if (sub.id !== "all" && sub.queries?.length) {
+    parts.push(...sub.queries);
+  } else if (r.id !== "all" && FEED_REGION_QUERIES[r.id]) {
     parts.push(...FEED_REGION_QUERIES[r.id]);
   }
   if (g.id !== "all" && g.queries) {
@@ -162,7 +166,10 @@ export function filterEventsByRegion(events, regionId) {
     .filter(Boolean);
 }
 
-/** @param {object[]} events @param {string} genreId @param {string} regionId */
-export function filterDiscoverEvents(events, genreId, regionId) {
-  return filterEventsByGenre(filterEventsByRegion(events, regionId), genreId);
+/** @param {object[]} events @param {string} genreId @param {string} regionId @param {string} [subregionId] */
+export function filterDiscoverEvents(events, genreId, regionId, subregionId = "all") {
+  return filterEventsByGenre(
+    filterEventsBySubregion(filterEventsByRegion(events, regionId), regionId, subregionId),
+    genreId,
+  );
 }

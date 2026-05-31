@@ -20,7 +20,7 @@ export const PATH_KEY = "blank.videoIngest.paths.v1";
 export const ACTIVE_KEY = "blank.videoIngest.active.v1";
 export const YTDLP_FORMAT = "bv*+ba/b";
 
-/** @typedef {{ id: string, url: string, title?: string, notesHtml?: string, addedAt?: number, playId?: string, streamKind?: string, streamUrl?: string, resolveError?: string }} QueueItem */
+/** @typedef {{ id: string, url: string, title?: string, notesHtml?: string, addedAt?: number, playId?: string, filePlayId?: string, blobUrl?: string, streamKind?: string, streamUrl?: string, resolveError?: string }} QueueItem */
 /** @typedef {"youtube"|"vimeo"|"twitch"|"hls"|"direct"|"tiktok"|"page"|"unknown"} VideoKind */
 /** @typedef {{mustreamDesktop: string, mueeeRoot: string}} Paths */
 
@@ -415,6 +415,51 @@ export function getPreviewTimeSec(host) {
 }
 
 /**
+ * @param {HTMLElement | null} host
+ * @returns {{ kind: "video" | "iframe" | "none", currentTime?: number, duration?: number, paused?: boolean, muted?: boolean } | null}
+ */
+export function getPreviewPlaybackState(host) {
+  if (!(host instanceof HTMLElement)) return { kind: "none" };
+  const video = host.querySelector("video");
+  if (video instanceof HTMLVideoElement) {
+    return {
+      kind: "video",
+      currentTime: Number.isFinite(video.currentTime) ? video.currentTime : 0,
+      duration: Number.isFinite(video.duration) ? video.duration : 0,
+      paused: video.paused,
+      muted: video.muted,
+    };
+  }
+  if (host.querySelector("iframe")) return { kind: "iframe" };
+  return { kind: "none" };
+}
+
+/**
+ * @param {HTMLElement | null} host
+ * @param {{ currentTime?: number, paused?: boolean, muted?: boolean }} state
+ * @returns {boolean}
+ */
+export function applyPreviewPlayback(host, state) {
+  if (!(host instanceof HTMLElement)) return false;
+  const video = host.querySelector("video");
+  if (!(video instanceof HTMLVideoElement)) return false;
+  if (Number.isFinite(state.currentTime) && state.currentTime >= 0) {
+    try {
+      video.currentTime = state.currentTime;
+    } catch {
+      /* not seekable yet */
+    }
+  }
+  if (typeof state.muted === "boolean") video.muted = state.muted;
+  if (state.paused === false) {
+    void video.play().catch(() => {});
+  } else if (state.paused === true) {
+    video.pause();
+  }
+  return true;
+}
+
+/**
  * @param {QueueItem | null} item
  * @param {HTMLElement | null} hintHost
  */
@@ -764,7 +809,7 @@ export function previewThumbUrl(normalized, kind) {
   return null;
 }
 
-function clearPreviewHint(hintHost) {
+export function clearPreviewHint(hintHost) {
   if (!hintHost) return;
   hintHost.innerHTML = "";
   hintHost.hidden = true;
@@ -1051,6 +1096,8 @@ export function kindLabel(kind) {
       return "HLS (.m3u8)";
     case "direct":
       return "Direct file";
+    case "local":
+      return "~/Downloads";
     case "page":
       return "Watch page";
     default:
@@ -1083,7 +1130,7 @@ export function readQueue() {
 
 /** Ephemeral fields — not persisted (server play cache is in-memory). */
 function queueForStorage(q) {
-  return q.map(({ playId, streamKind, streamUrl, resolveError, ...rest }) => rest);
+  return q.map(({ playId, filePlayId, blobUrl, streamKind, streamUrl, resolveError, ...rest }) => rest);
 }
 
 /** @param {QueueItem[]} q */
@@ -1298,15 +1345,19 @@ export function buildIngestChecklist(item, paths, apiOk = null) {
     },
   ];
 
+  const isLocalFile = Boolean(item.filePlayId) || String(item.url).startsWith("local://");
+
   /** @type {IngestCheckAction[]} */
   const actions = [
     {
       id: "play",
       label: "play",
-      enabled: embed || api || ytdlp,
-      title: embed
-        ? "Preview in header (embed)"
-        : "Preview — resolve via header or yt-dlp stream",
+      enabled: isLocalFile || embed || api || ytdlp,
+      title: isLocalFile
+        ? "Play downloaded file (seek + controls)"
+        : embed
+          ? "Preview in header (embed)"
+          : "Preview — resolve via header or yt-dlp stream",
     },
     {
       id: "download",
@@ -1399,6 +1450,14 @@ export function resolvedLinkRows(item) {
       : "http://127.0.0.1:5173";
   /** @type {{ id: string, label: string, url: string, hint?: string }[]} */
   const rows = [{ id: "page", label: "Page URL", url: norm }];
+  if (item.filePlayId) {
+    rows.push({
+      id: "file",
+      label: "Local file play",
+      url: `${origin}/api/ingest/file/${encodeURIComponent(item.filePlayId)}`,
+      hint: "Downloaded file from ~/Downloads with seek support.",
+    });
+  }
   if (item.playId) {
     rows.push({
       id: "play",
@@ -1539,17 +1598,26 @@ export async function requestIngestDownload(pageUrl) {
   return data;
 }
 
-/** @param {HTMLElement} host @param {string} playId @param {HTMLElement|null} hintHost */
-function mountPlaySession(host, playId, hintHost) {
+/**
+ * @param {HTMLElement} host
+ * @param {string} src
+ * @param {HTMLElement|null} hintHost
+ * @param {{ loadingMsg?: string, failMsg?: string, onFatal?: () => void }} [opts]
+ */
+function mountHlsPreview(host, src, hintHost, opts = {}) {
   const video = document.createElement("video");
   video.controls = true;
   video.playsInline = true;
   video.autoplay = true;
   video.muted = true;
   video.className = "direct-video";
-  const src = `/api/ingest/play/${playId}`;
   const shell = wrapEmbed(video, "embed-shell--direct");
-  clearPreviewHint(hintHost);
+  const loadingMsg =
+    opts.loadingMsg || "Preparing preview (ffmpeg transcode)… first segment may take a minute.";
+  const failMsg =
+    opts.failMsg ||
+    "Could not play local file — install ffmpeg on PATH or use ffplay in controls.";
+  setPreviewHint(hintHost, loadingMsg);
 
   let recoveryFired = false;
   /** @type {import("hls.js").default | null} */
@@ -1568,7 +1636,7 @@ function mountPlaySession(host, playId, hintHost) {
     video.removeAttribute("src");
     video.load();
     setPreviewHint(hintHost, msg);
-    previewStreamRecovery?.("playback-failed");
+    opts.onFatal?.();
   };
 
   const Hls = /** @type {typeof import("hls.js").default|undefined} */ (
@@ -1577,31 +1645,27 @@ function mountPlaySession(host, playId, hintHost) {
   if (Hls?.isSupported?.()) {
     hls = new Hls({
       enableWorker: true,
-      maxRecoverAttempts: 2,
-      fragLoadingMaxRetry: 2,
+      maxRecoverAttempts: 6,
+      fragLoadingMaxRetry: 4,
+      manifestLoadingMaxRetry: 12,
+      manifestLoadingRetryDelay: 1500,
     });
     hls.loadSource(src);
     hls.attachMedia(video);
     hls.on(Hls.Events.ERROR, (_e, data) => {
-      if (data?.fatal) {
-        failPlayback(
-          "Stream expired or blocked — click resolve once, or use controls → MuStream.",
-        );
+      if (data?.type === Hls.ErrorTypes.NETWORK_ERROR && data?.response?.code === 503) {
+        return;
       }
+      if (data?.fatal) failPlayback(failMsg);
     });
     video.addEventListener("playing", () => clearPreviewHint(hintHost));
   } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
     video.src = src;
     video.addEventListener("loadeddata", () => clearPreviewHint(hintHost));
-    video.addEventListener("error", () => {
-      failPlayback("Stream failed — click resolve or use controls → mustream.");
-    });
+    video.addEventListener("error", () => failPlayback(failMsg));
   } else {
     video.src = src;
-    setPreviewHint(hintHost, "Loading stream…");
-    video.addEventListener("error", () => {
-      failPlayback("Stream failed — click resolve or use controls → mustream.");
-    });
+    video.addEventListener("error", () => failPlayback(failMsg));
   }
 
   const onTime = () => scheduleAnalysisRefresh();
@@ -1611,17 +1675,141 @@ function mountPlaySession(host, playId, hintHost) {
   host.appendChild(shell);
   syncPreviewTelemetry(host);
   applyPreviewView(mountedPreviewItem, hintHost);
-  void video.play().catch(() => {
-    /* autoplay blocked until user taps play */
-  });
+  void video.play().catch(() => {});
   return shell;
+}
+
+/** @param {HTMLElement} host @param {string} filePlayId @param {HTMLElement|null} hintHost */
+function mountFilePlaySession(host, filePlayId, hintHost) {
+  const video = document.createElement("video");
+  video.controls = true;
+  video.playsInline = true;
+  video.preload = "auto";
+  video.className = "direct-video";
+  const src = `/api/ingest/file/${encodeURIComponent(filePlayId)}`;
+  const shell = wrapEmbed(video, "embed-shell--direct");
+  clearPreviewHint(hintHost);
+  setPreviewHint(hintHost, "Loading local file…");
+  video.src = src;
+  video.addEventListener("loadeddata", () => {
+    if (video.videoWidth > 0 || video.videoHeight > 0) clearPreviewHint(hintHost);
+  });
+  video.addEventListener("loadedmetadata", () => {
+    if (video.videoWidth === 0 && video.videoHeight === 0) {
+      setPreviewHint(
+        hintHost,
+        "Browser cannot decode this file (codec/container) — use Downloads list for MKV (auto-transcode) or ffplay.",
+      );
+    }
+  });
+  video.addEventListener("error", () => {
+    const code = video.error?.code;
+    const detail =
+      code === 4
+        ? "format not supported"
+        : code === 3
+          ? "decode failed"
+          : code
+            ? `media error ${code}`
+            : "playback failed";
+    setPreviewHint(hintHost, `Could not play local file (${detail}) — re-open from Downloads.`);
+  });
+  host.appendChild(shell);
+  syncPreviewTelemetry(host);
+  void video.play().catch(() => {});
+  return shell;
+}
+
+/** @param {HTMLElement} host @param {string} filePlayId @param {HTMLElement|null} hintHost */
+function mountFileHlsPlaySession(host, filePlayId, hintHost) {
+  const src = `/api/ingest/file/${encodeURIComponent(filePlayId)}/index.m3u8`;
+  return mountHlsPreview(host, src, hintHost, {
+    loadingMsg:
+      "MKV uses AV1/Opus — transcoding to H.264 for browser preview (ffmpeg). First picture may take ~30–90s.",
+    failMsg:
+      "Local transcode failed — ensure ffmpeg is on PATH, or copy ffplay command from controls.",
+  });
+}
+
+/** @param {HTMLElement} host @param {string} blobUrl @param {HTMLElement|null} hintHost */
+function mountBlobPreview(host, blobUrl, hintHost) {
+  const video = document.createElement("video");
+  video.controls = true;
+  video.playsInline = true;
+  video.preload = "auto";
+  video.className = "direct-video";
+  video.src = blobUrl;
+  const shell = wrapEmbed(video, "embed-shell--direct");
+  clearPreviewHint(hintHost);
+  video.addEventListener("loadeddata", () => clearPreviewHint(hintHost));
+  video.addEventListener("error", () => {
+    setPreviewHint(hintHost, "Browser cannot decode this file — try MP4/WebM or load via Downloads API.");
+  });
+  host.appendChild(shell);
+  syncPreviewTelemetry(host);
+  void video.play().catch(() => {});
+  return shell;
+}
+
+/** @param {string} name basename under ~/Downloads */
+export async function requestLocalFilePlay(name) {
+  const res = await fetch("/api/ingest/local", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name }),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok || !data.ok) throw new Error(data.error || `local play (${res.status})`);
+  return data;
+}
+
+/** @returns {Promise<{ dir: string, files: { name: string, size: number, mtime: number, ext: string }[] }>} */
+export async function fetchDownloadsList() {
+  const res = await fetch("/api/ingest/downloads", { cache: "no-store" });
+  const text = await res.text();
+  /** @type {Record<string, unknown>} */
+  let data = {};
+  if (text.trim()) {
+    try {
+      data = JSON.parse(text);
+    } catch {
+      throw new Error(
+        `downloads list: server returned non-JSON (${res.status}) — restart ./start.sh`,
+      );
+    }
+  } else if (res.ok) {
+    throw new Error(
+      "downloads list: empty response — restart ./start.sh so /api/ingest/downloads is wired",
+    );
+  }
+  if (!res.ok || !data.ok) {
+    throw new Error(
+      String(data.error || "") ||
+        `downloads list failed (${res.status}) — is ./start.sh running?`,
+    );
+  }
+  return /** @type {{ dir: string, files: { name: string, size: number, mtime: number, ext: string }[] }} */ (
+    data
+  );
+}
+
+/** @param {HTMLElement} host @param {string} playId @param {HTMLElement|null} hintHost */
+function mountPlaySession(host, playId, hintHost) {
+  clearPreviewHint(hintHost);
+  const src = `/api/ingest/play/${playId}`;
+  return mountHlsPreview(host, src, hintHost, {
+    loadingMsg: "Loading stream…",
+    failMsg:
+      "Stream expired or blocked — click resolve once, or use controls → MuStream.",
+    onFatal: () => previewStreamRecovery?.("playback-failed"),
+  });
 }
 
 /** @param {HTMLElement} host @param {QueueItem|null} item @param {HTMLElement|null} [hintHost] */
 export function mountPreview(host, item, hintHost = null) {
   mountedPreviewItem = item;
   const previewKey = item
-    ? `${item.id}|${item.playId || ""}|${item.resolveError || ""}`
+    ? `${item.id}|${item.playId || ""}|${item.filePlayId || ""}|${item.streamKind || ""}|${item.blobUrl || ""}|${item.resolveError || ""}`
     : "";
   if (previewKey && previewKey === mountedPreviewKey && host.childElementCount > 0) {
     syncPreviewTelemetry(host);
@@ -1640,6 +1828,33 @@ export function mountPreview(host, item, hintHost = null) {
     applyPreviewView(null, hintHost);
     return;
   }
+  if (item.blobUrl) {
+    host.hidden = false;
+    mountBlobPreview(host, item.blobUrl, hintHost);
+    applyPreviewView(item, hintHost);
+    return;
+  }
+  if (item.filePlayId) {
+    host.hidden = false;
+    const localName =
+      item.title ||
+      (String(item.url).startsWith("local://")
+        ? decodeURIComponent(String(item.url).replace(/^local:\/\//, ""))
+        : "");
+    const useHls =
+      item.streamKind === "hls" ||
+      (item.streamKind !== "direct" &&
+        item.streamKind !== "audio" &&
+        /\.mkv$|\.avi$/i.test(localName));
+    if (useHls) {
+      mountFileHlsPlaySession(host, item.filePlayId, hintHost);
+    } else {
+      mountFilePlaySession(host, item.filePlayId, hintHost);
+    }
+    applyPreviewView(item, hintHost);
+    return;
+  }
+
   const norm = normalizeUrl(item.url);
   const kind = classifyUrl(norm);
   if (!prefersNativeEmbed(kind) && item.resolveError) {

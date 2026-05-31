@@ -2,9 +2,13 @@
  * Main window ↔ TV cast window sync (BroadcastChannel).
  */
 import { TV_CAST_CHANNEL, REFRAME_PRESETS } from "./tv-reframe.js";
+import { applyPreviewPlayback, getPreviewPlaybackState } from "./video-ingest.js";
 
 /** @type {Window | null} */
 let castWin = null;
+
+/** Force TV window to remount video (e.g. right after pop-out opens). */
+let forceNextCastRemount = false;
 
 const ch =
   typeof BroadcastChannel !== "undefined"
@@ -68,6 +72,7 @@ export function initTvCast(deps) {
     const url = new URL("tv-cast.html", globalThis.location.href).href;
     if (castWin && !castWin.closed) {
       castWin.focus();
+      forceNextCastRemount = true;
       pushCastState(deps);
       return;
     }
@@ -82,6 +87,8 @@ export function initTvCast(deps) {
       );
       return;
     }
+    forceNextCastRemount = true;
+    castWin.addEventListener("load", () => pushCastState(deps), { once: true });
     pushCastState(deps);
   }
 
@@ -93,6 +100,15 @@ export function initTvCast(deps) {
       if (!msg || typeof msg !== "object") return;
       if (msg.type === "cast-ready" || msg.type === "pong") {
         pushCastState(deps);
+      }
+      if (msg.type === "playback-sync") {
+        const embed = document.getElementById("ffplay-embed");
+        if (embed instanceof HTMLElement) {
+          applyPreviewPlayback(embed, {
+            currentTime: msg.currentTime,
+            paused: msg.paused,
+          });
+        }
       }
       if (msg.type === "prefs") {
         if (msg.reframeId) {
@@ -169,6 +185,9 @@ function pushCastState(deps) {
     framing = String(sc.cinematography?.framing || "");
   }
 
+  const embed = document.getElementById("ffplay-embed");
+  const playback = getPreviewPlaybackState(embed);
+
   ch.postMessage({
     type: "cast-state",
     state: {
@@ -178,6 +197,7 @@ function pushCastState(deps) {
       isLive: Boolean(intel?.isLive),
       viewers: intel?.liveConcurrentViewers ?? null,
       playId: item?.playId,
+      filePlayId: item?.filePlayId,
       resolveError: item?.resolveError,
       durationLabel: intel?.durationLabel,
       uploader: intel?.uploader,
@@ -192,6 +212,11 @@ function pushCastState(deps) {
       captions: capLines,
       meta,
       metrics: deps.getRuntimeLine?.() || "",
+      currentTime: playback?.currentTime ?? 0,
+      paused: playback?.paused ?? true,
+      playbackKind: playback?.kind ?? "none",
+      forceRemount: forceNextCastRemount,
     },
   });
+  forceNextCastRemount = false;
 }

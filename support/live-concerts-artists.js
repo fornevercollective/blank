@@ -12,7 +12,7 @@ import { inferRegion, regionById, ARTIST_REGIONS } from "./live-concerts-regions
 
 export { ARTIST_REGIONS, regionById, formatLetterLabel };
 
-/** @type {{ name: string, letter: string, script?: string, region?: string }[] | null} */
+/** @type {{ name: string, letter: string, script?: string, region?: string, warped?: { totalYears: number, years: number[] } }[] | null} */
 let catalog = null;
 
 /** @type {string | null} */

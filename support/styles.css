@@ -4102,18 +4102,21 @@ body.drawer-open .drawer {
   word-break: break-word;
 }
 
-/* —— Live concerts discovery —— */
-.live-concerts-panel {
+/* —— Live concerts discovery + artist/album section —— */
+.live-concerts-panel,
+.live-music-panel {
   margin: 0;
   border-bottom: 1px solid var(--line);
   background: var(--bone-wash);
 }
 
-.live-concerts-panel summary::-webkit-details-marker {
+.live-concerts-panel summary::-webkit-details-marker,
+.live-music-panel summary::-webkit-details-marker {
   display: none;
 }
 
-.live-concerts-summary {
+.live-concerts-summary,
+.live-music-summary {
   list-style: none;
   display: flex;
   align-items: baseline;
@@ -4127,13 +4130,18 @@ body.drawer-open .drawer {
   color: var(--ink-mute);
 }
 
-.live-concerts-sub {
+.live-concerts-sub,
+.live-music-sub {
   margin-left: auto;
   font-size: 0.62rem;
   font-weight: 600;
   text-transform: none;
   letter-spacing: 0.02em;
   color: var(--ink-soft);
+}
+
+.live-music-title {
+  font-weight: 700;
 }
 
 .live-concerts-chevron {
@@ -4145,12 +4153,26 @@ body.drawer-open .drawer {
   transition: transform 0.18s ease;
 }
 
-.live-concerts-panel[open] .live-concerts-chevron {
+.live-concerts-panel[open] .live-concerts-chevron,
+.live-music-panel[open] .live-concerts-chevron {
   transform: rotate(45deg);
 }
 
-.live-concerts-inner {
+.live-concerts-inner,
+.live-music-inner {
   padding: 0 0.75rem 1rem;
+}
+
+.live-concerts-toolbar--live {
+  margin-bottom: 0.65rem;
+}
+
+.live-concerts-toolbar--live .live-concerts-actions {
+  flex-wrap: wrap;
+}
+
+.live-concerts-toolbar--music .live-concerts-albums {
+  margin-top: 0.35rem;
 }
 
 .live-concerts-alpha-row {
@@ -4349,10 +4371,13 @@ body.drawer-open .drawer {
 }
 
 .live-concerts-albums {
+  display: flex;
+  flex-direction: column;
   border: 1px solid var(--line-subtle);
   border-radius: 4px;
   background: var(--surface);
   padding: 0.45rem 0.5rem;
+  min-height: 0;
 }
 
 .live-concerts-albums[hidden] {
@@ -4385,22 +4410,141 @@ body.drawer-open .drawer {
   display: none;
 }
 
+.live-concerts-albums-body {
+  display: grid;
+  grid-template-columns: minmax(4.85rem, 5.35rem) minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+  gap: 0.5rem;
+  align-items: stretch;
+  flex: 0 0 auto;
+  height: min(56vh, 28rem);
+  max-height: min(56vh, 28rem);
+  min-height: min(28vh, 12rem);
+  overflow: hidden;
+}
+
+.live-concerts-albums-art-col {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) minmax(6.5rem, 42%);
+  min-width: 0;
+  min-height: 0;
+  max-height: 100%;
+  overflow: hidden;
+  padding-right: 0.35rem;
+  border-right: 1px solid var(--line-subtle);
+}
+
+.live-concerts-album-accred {
+  min-height: 0;
+  margin-top: 0;
+  padding-top: 0.35rem;
+  border-top: 1px solid var(--line-subtle);
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.live-concerts-album-accred[hidden] {
+  display: none;
+}
+
+.live-concerts-album-accred-block {
+  margin: 0;
+  font-size: 0.6rem;
+}
+
+.live-concerts-album-accred-block summary {
+  font-size: 0.62rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.live-concerts-album-accred .live-concerts-meta-section {
+  margin-top: 0.35rem;
+}
+
+.live-concerts-album-accred .live-concerts-meta-h4 {
+  font-size: 0.58rem;
+}
+
+.live-concerts-album-accred .live-concerts-meta-images {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.live-concerts-album-accred .live-concerts-meta-thumb {
+  width: 2.75rem;
+}
+
+.live-concerts-album-accred .live-concerts-meta-thumb img {
+  width: 2.75rem;
+  height: 2.75rem;
+}
+
+.live-concerts-albums-main-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  min-width: 0;
+  min-height: 0;
+  max-height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 .live-concerts-album-detail {
-  margin-bottom: 0.45rem;
+  margin-bottom: 0;
   padding: 0.45rem 0.5rem;
   border: 1px solid #93c5fd;
   border-radius: 4px;
   background: #f8fafc;
   max-height: min(42vh, 18rem);
   overflow: auto;
+  flex: 1 1 auto;
+  min-height: 0;
 }
 
 .live-concerts-album-detail[hidden] {
   display: none;
 }
 
+.live-concerts-album-detail-layout {
+  display: grid;
+  grid-template-columns: minmax(4.5rem, 5.25rem) minmax(0, 1fr);
+  gap: 0.55rem;
+  align-items: start;
+}
+
+.live-concerts-album-detail-art {
+  position: sticky;
+  top: 0;
+}
+
+.live-concerts-album-focus-cover {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 3px;
+  border: 1px solid var(--line);
+  background: var(--bone-wash);
+}
+
+.live-concerts-album-focus-cover--ph {
+  min-height: 4.5rem;
+  background: linear-gradient(135deg, var(--bone-deep), var(--bone-wash));
+}
+
+.live-concerts-album-detail-main {
+  min-width: 0;
+}
+
 .live-concerts-album-focus-head {
-  margin: 0 0 0.4rem;
+  margin: 0 0 0.5rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid var(--line-subtle);
 }
 
 .live-concerts-album-focus-title {
@@ -4421,6 +4565,97 @@ body.drawer-open .drawer {
   color: var(--ink-soft);
 }
 
+.live-concerts-focus-lede {
+  margin: 0.25rem 0 0;
+  font-size: 0.62rem;
+  color: var(--ink-mute);
+}
+
+.live-concerts-focus-panels {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+  gap: 0.45rem 0.65rem;
+  margin-top: 0.45rem;
+}
+
+.live-concerts-focus-panel {
+  min-width: 0;
+  padding: 0.35rem 0.4rem;
+  border: 1px solid var(--line-subtle);
+  border-radius: 3px;
+  background: var(--bone-wash);
+}
+
+.live-concerts-focus-panel--wide {
+  grid-column: 1 / -1;
+}
+
+.live-concerts-focus-h4 {
+  margin: 0 0 0.3rem;
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+
+.live-concerts-focus-musician-kind {
+  margin: 0.2rem 0 0.1rem;
+  font-size: 0.55rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.live-concerts-focus-musician-list,
+.live-concerts-focus-timeline,
+.live-concerts-focus-awards,
+.live-concerts-focus-assoc {
+  margin: 0;
+  padding-left: 1rem;
+  font-size: 0.6rem;
+  line-height: 1.35;
+  color: var(--ink-soft);
+}
+
+.live-concerts-focus-role {
+  font-weight: 500;
+  color: var(--ink-mute);
+}
+
+.live-concerts-focus-age,
+.live-concerts-focus-when,
+.live-concerts-focus-where,
+.live-concerts-focus-note {
+  color: var(--ink-mute);
+  font-size: 0.55rem;
+}
+
+.live-concerts-focus-tag {
+  display: inline-block;
+  margin: 0.05rem 0.12rem 0.05rem 0;
+  padding: 0.04rem 0.28rem;
+  border-radius: 2px;
+  background: #ede9fe;
+  color: #5b21b6;
+  font-size: 0.52rem;
+  font-weight: 700;
+  text-transform: lowercase;
+}
+
+.live-concerts-focus-tags {
+  margin: 0 0 0.25rem;
+  line-height: 1.5;
+}
+
+.live-concerts-focus-annotation {
+  margin: 0;
+  font-size: 0.6rem;
+  line-height: 1.4;
+  color: var(--ink-soft);
+  white-space: pre-wrap;
+}
+
 .live-concerts-album.is-selected .live-concerts-album-cover {
   border-color: #7c3aed;
   box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.35);
@@ -4432,7 +4667,8 @@ body.drawer-open .drawer {
 }
 
 .live-concerts-meta-wrap {
-  margin-top: 0.5rem;
+  flex: 0 0 auto;
+  margin-top: 0.45rem;
   border: 1px solid var(--line-subtle);
   border-radius: 4px;
   background: var(--bone-wash);
@@ -4451,8 +4687,114 @@ body.drawer-open .drawer {
   list-style: none;
 }
 
+.live-concerts-meta {
+  max-height: min(32vh, 14rem);
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 .live-concerts-meta-wrap[open] .live-concerts-meta {
-  padding: 0 0.5rem 0.45rem;
+  padding: 0.45rem 0.5rem 0.5rem;
+}
+
+.live-concerts-song-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.2rem;
+  margin-bottom: 0.12rem;
+}
+
+.live-concerts-song-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(9.5rem, 38%);
+  gap: 0.45rem;
+  align-items: start;
+}
+
+.live-concerts-song-info {
+  min-width: 0;
+}
+
+.live-concerts-song-lyrics {
+  min-width: 0;
+  min-height: 2.75rem;
+  padding: 0.3rem 0.35rem;
+  border: 1px solid var(--line-subtle);
+  border-radius: 3px;
+  background: var(--surface);
+  font-size: 0.6rem;
+  line-height: 1.35;
+  color: var(--ink-soft);
+}
+
+.live-concerts-song.is-lyric-active .live-concerts-song-lyrics {
+  border-color: #93c5fd;
+  background: #f8fafc;
+}
+
+.live-concerts-song-lyrics-body {
+  margin: 0;
+}
+
+.live-concerts-song-lyrics-phrase {
+  margin: 0;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.live-concerts-song-lyrics-hit {
+  margin: 0;
+  color: var(--ink);
+}
+
+.live-concerts-song-lyrics-src,
+.live-concerts-song-lyrics-meta {
+  display: block;
+  font-size: 0.55rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--ink-mute);
+  margin-bottom: 0.15rem;
+}
+
+.live-concerts-song-lyrics-empty {
+  margin: 0;
+  font-style: italic;
+}
+
+.live-concerts-song-lyrics-loading {
+  margin: 0;
+  font-style: italic;
+  color: var(--ink-mute);
+}
+
+.live-concerts-song-lyrics-text {
+  margin: 0.2rem 0 0;
+  padding: 0;
+  font-family: inherit;
+  font-size: 0.58rem;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: var(--ink);
+  max-height: 10rem;
+  overflow-y: auto;
+}
+
+.live-concerts-song-extra {
+  margin-top: 0.2rem;
+  font-size: 0.56rem;
+  line-height: 1.35;
+  color: var(--ink-mute);
+}
+
+.live-concerts-song-extra span {
+  font-weight: 700;
+  margin-right: 0.2rem;
+  color: var(--ink-soft);
 }
 
 .live-concerts-song-head {
@@ -4460,12 +4802,6 @@ body.drawer-open .drawer {
   flex-wrap: wrap;
   align-items: baseline;
   gap: 0.25rem 0.35rem;
-}
-
-.live-concerts-song-actions {
-  display: inline-flex;
-  gap: 0.2rem;
-  margin-left: auto;
 }
 
 .live-concerts-song-btn {
@@ -4511,12 +4847,16 @@ body.drawer-open .drawer {
 
 .live-concerts-albums-scroll {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   gap: 0.45rem;
-  overflow-x: auto;
-  overflow-y: hidden;
-  padding-bottom: 0.2rem;
-  scroll-snap-type: x proximity;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-bottom: 0.15rem;
+  padding-right: 0.1rem;
+  scroll-snap-type: y proximity;
+  -webkit-overflow-scrolling: touch;
 }
 
 .live-concerts-albums-loading,
@@ -4539,6 +4879,8 @@ body.drawer-open .drawer {
   cursor: pointer;
   scroll-snap-align: start;
   text-align: center;
+  width: 100%;
+  max-width: 5rem;
 }
 
 .live-concerts-album-cover {
@@ -4576,9 +4918,162 @@ body.drawer-open .drawer {
   border-color: var(--stamp);
 }
 
-.live-concerts-meta {
-  max-height: min(36vh, 16rem);
-  overflow: auto;
+.live-concerts-albums > .live-concerts-meta-wrap .live-concerts-meta {
+  max-height: min(32vh, 14rem);
+}
+
+.live-concerts-meta-grid {
+  display: grid;
+  grid-template-columns: minmax(11rem, 1.45fr) repeat(3, minmax(0, 1fr));
+  gap: 0.55rem 0.85rem;
+  align-items: start;
+}
+
+.live-concerts-meta-col {
+  min-width: 0;
+}
+
+.live-concerts-meta-col--profile {
+  padding-right: 0.35rem;
+}
+
+.live-concerts-band-hero {
+  margin-bottom: 0.5rem;
+}
+
+.live-concerts-band-name {
+  margin: 0 0 0.2rem;
+  font-size: 1.15rem;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.live-concerts-band-meta {
+  margin: 0 0 0.25rem;
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: var(--ink-mute);
+}
+
+.live-concerts-band-disam,
+.live-concerts-band-aliases {
+  margin: 0 0 0.3rem;
+  font-size: 0.68rem;
+  color: var(--ink-soft);
+  line-height: 1.35;
+}
+
+.live-concerts-band-mb {
+  display: inline-block;
+  margin-top: 0.25rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--stamp);
+}
+
+.live-concerts-band-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem;
+  margin: 0.35rem 0;
+}
+
+.live-concerts-band-tags span {
+  padding: 0.12rem 0.38rem;
+  border: 1px solid var(--line-subtle);
+  border-radius: 2px;
+  font-size: 0.62rem;
+  font-weight: 600;
+  background: var(--surface);
+  color: var(--ink-mute);
+}
+
+.live-concerts-meta-album-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.4rem;
+}
+
+.live-concerts-meta-album {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--line-subtle);
+  border-radius: 3px;
+  background: var(--surface);
+  cursor: pointer;
+  overflow: hidden;
+  text-align: left;
+  color: inherit;
+  font: inherit;
+}
+
+.live-concerts-meta-album:hover,
+.live-concerts-meta-album.is-selected {
+  border-color: var(--stamp);
+  box-shadow: 0 0 0 1px var(--stamp);
+}
+
+.live-concerts-meta-album img,
+.live-concerts-meta-album-ph {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  background: var(--bone-wash);
+}
+
+.live-concerts-meta-album-ph {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--ink-soft);
+}
+
+.live-concerts-meta-album-label {
+  display: block;
+  padding: 0.2rem 0.28rem 0;
+  font-size: 0.58rem;
+  font-weight: 700;
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.live-concerts-meta-album-year {
+  display: block;
+  padding: 0 0.28rem 0.22rem;
+  font-size: 0.55rem;
+  color: var(--ink-soft);
+}
+
+.live-concerts-meta-col-title {
+  margin: 0 0 0.35rem;
+  padding-bottom: 0.22rem;
+  border-bottom: 1px solid var(--line-subtle);
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+@media (max-width: 820px) {
+  .live-concerts-meta-grid {
+    grid-template-columns: 1fr;
+    gap: 0.65rem;
+  }
+
+  .live-concerts-meta-album-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
 }
 
 .live-concerts-meta-block {
@@ -4659,10 +5154,28 @@ body.drawer-open .drawer {
   border: 1px solid var(--line);
 }
 
+.live-concerts-song-list-cols {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(9.5rem, 38%);
+  gap: 0.45rem;
+  margin: 0.35rem 0 0.25rem;
+  padding-left: 0;
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+
+.live-concerts-song-list-col--lyrics {
+  text-align: left;
+}
+
 .live-concerts-song-list {
-  margin: 0.35rem 0 0;
+  margin: 0;
   padding-left: 1.2rem;
   font-size: 0.68rem;
+  list-style: decimal;
 }
 
 .live-concerts-song {
@@ -4784,6 +5297,18 @@ body.drawer-open .drawer {
   font-size: 0.62rem;
   font-weight: 600;
   cursor: pointer;
+}
+
+.live-concerts-pick-warped {
+  margin-left: 0.25rem;
+  padding: 0.05rem 0.2rem;
+  border-radius: 2px;
+  background: #1e3a5f;
+  color: #bfdbfe;
+  font-size: 0.52rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  vertical-align: middle;
 }
 
 .live-concerts-pick:hover {
@@ -4933,6 +5458,60 @@ body.drawer-open .drawer {
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
 }
 
+.live-concerts-feed-subregions {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 0.18rem;
+  padding: 0.28rem 0.4rem;
+  border-bottom: 1px solid var(--line-subtle);
+  background: var(--bone-wash);
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+.live-concerts-feed-subregions[hidden] {
+  display: none;
+}
+
+.live-concerts-feed-subregion {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  margin: 0;
+  padding: 0.2rem 0.42rem;
+  border: 1px solid var(--line-subtle);
+  border-radius: 3px;
+  background: var(--surface);
+  color: var(--ink-mute);
+  font-size: 0.58rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.live-concerts-feed-subregion-tz {
+  font-size: 0.52rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
+.live-concerts-feed-subregion:hover {
+  border-color: var(--stamp);
+  color: var(--ink);
+}
+
+.live-concerts-feed-subregion.is-active {
+  background: #171717;
+  border-color: #171717;
+  color: #fafafa;
+}
+
+.live-concerts-feed-subregion.is-active .live-concerts-feed-subregion-tz {
+  color: #d4d4d4;
+}
+
 .live-concerts-genres {
   display: flex;
   flex-wrap: nowrap;
@@ -4973,13 +5552,203 @@ body.drawer-open .drawer {
   color: #fafafa;
 }
 
+.live-concerts-feed-list-col {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  background: var(--surface);
+}
+
+.live-concerts-sort {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.2rem;
+  flex: 0 0 auto;
+  padding: 0.28rem 0.45rem;
+  border-bottom: 1px solid var(--line-subtle);
+  background: var(--bone-wash);
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+.live-concerts-sort::before {
+  content: "Sort";
+  flex: 0 0 auto;
+  margin-right: auto;
+  padding-right: 0.35rem;
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.live-concerts-sort-tab {
+  flex: 0 0 auto;
+  margin: 0;
+  padding: 0.2rem 0.45rem;
+  border: 1px solid var(--line-subtle);
+  border-radius: 3px;
+  background: var(--bone-wash);
+  color: var(--ink-mute);
+  font-size: 0.58rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.live-concerts-sort-tab:hover {
+  border-color: var(--stamp);
+  color: var(--ink);
+}
+
+.live-concerts-sort-tab.is-active {
+  background: #171717;
+  border-color: #171717;
+  color: #fafafa;
+}
+
+.live-concerts-feed-body {
+  display: grid;
+  grid-template-columns: minmax(14rem, 1.15fr) minmax(0, 1fr);
+  min-height: min(52vh, 28rem);
+  max-height: min(52vh, 28rem);
+}
+
+.live-concerts-feed-preview {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border-right: 1px solid var(--line-subtle);
+  background: #0c0c0c;
+  color: #f5f5f5;
+}
+
+.live-concerts-feed-preview-placeholder {
+  margin: auto;
+  padding: 1rem;
+  font-size: 0.72rem;
+  text-align: center;
+  color: #a3a3a3;
+}
+
+.live-concerts-feed-preview.has-feed .live-concerts-feed-preview-placeholder {
+  display: none;
+}
+
+.live-concerts-feed-preview-active {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.live-concerts-feed-preview-media {
+  flex: 1 1 auto;
+  min-height: 10rem;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  background: #000;
+  overflow: hidden;
+}
+
+.live-concerts-feed-preview-media .embed-shell {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  align-items: stretch;
+}
+
+.live-concerts-feed-preview-media .embed-shell iframe,
+.live-concerts-feed-preview-media .embed-shell video {
+  width: 100%;
+  height: 100%;
+  min-height: min(36vh, 16rem);
+  border: 0;
+}
+
+.live-concerts-preview-hero-img {
+  width: 100%;
+  max-height: min(36vh, 16rem);
+  object-fit: contain;
+  background: #111;
+}
+
+.live-concerts-preview-fallback-note {
+  margin: 0;
+  padding: 0.5rem 0.65rem;
+  font-size: 0.68rem;
+  color: #d4d4d4;
+  text-align: center;
+}
+
+.live-concerts-feed-preview-meta {
+  flex: 0 0 auto;
+  padding: 0.5rem 0.6rem 0.6rem;
+  border-top: 1px solid #262626;
+}
+
+.live-concerts-feed-preview-title {
+  margin: 0 0 0.2rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  line-height: 1.25;
+  color: #fafafa;
+}
+
+.live-concerts-feed-preview-sub {
+  margin: 0 0 0.45rem;
+  font-size: 0.68rem;
+  color: #a3a3a3;
+}
+
+.live-concerts-feed-preview-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 0.55rem;
+}
+
+.live-concerts-feed-preview-open {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #93c5fd;
+}
+
+.live-concerts-feed-preview .live-concerts-btn {
+  font-size: 0.68rem;
+  padding: 0.22rem 0.5rem;
+}
+
 .live-concerts-list {
   display: flex;
   flex-direction: column;
   gap: 0.65rem;
-  max-height: min(52vh, 28rem);
+  flex: 1 1 auto;
+  min-height: 0;
   overflow: auto;
   padding: 0.45rem 0.5rem 0.55rem;
+}
+
+.live-concerts-feed {
+  cursor: pointer;
+  border-radius: 3px;
+  transition: background 0.12s ease;
+}
+
+.live-concerts-feed:hover {
+  background: color-mix(in srgb, var(--stamp) 8%, var(--surface));
+}
+
+.live-concerts-feed.is-previewing {
+  background: color-mix(in srgb, var(--stamp) 14%, var(--surface));
+  box-shadow: inset 3px 0 0 var(--stamp);
 }
 
 .live-concerts-event {
@@ -5037,6 +5806,28 @@ body.drawer-open .drawer {
   display: flex;
   align-items: center;
   gap: 0.35rem;
+}
+
+@media (max-width: 720px) {
+  .live-concerts-feed-body {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+    max-height: none;
+  }
+
+  .live-concerts-feed-preview {
+    border-right: none;
+    border-bottom: 1px solid var(--line-subtle);
+    max-height: min(42vh, 20rem);
+  }
+
+  .live-concerts-feed-list-col {
+    max-height: min(40vh, 18rem);
+  }
+
+  .live-concerts-list {
+    max-height: none;
+  }
 }
 
 .live-concerts-feed-label {
@@ -5172,6 +5963,72 @@ body.drawer-open .drawer {
 
 .ingest-panel-inner {
   padding: 0.75rem 0.75rem 1.25rem;
+}
+
+.ingest-local-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.65rem;
+  margin-bottom: 0.65rem;
+}
+
+.ingest-downloads-dir {
+  flex: 1 1 100%;
+  font-size: 0.72rem;
+  color: var(--ink-soft);
+  word-break: break-all;
+}
+
+.ingest-downloads-list {
+  list-style: none;
+  margin: 0 0 0.75rem;
+  padding: 0;
+  max-height: 11rem;
+  overflow: auto;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--surface);
+}
+
+.ingest-downloads-list:not([hidden]) + .ingest-queue {
+  margin-top: 0.25rem;
+}
+
+.ingest-downloads-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.15rem;
+  width: 100%;
+  padding: 0.45rem 0.6rem;
+  border: none;
+  border-bottom: 1px solid var(--line);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.ingest-downloads-item:last-child {
+  border-bottom: none;
+}
+
+.ingest-downloads-item:hover,
+.ingest-downloads-item:focus-visible {
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+.ingest-downloads-name {
+  font-weight: 600;
+  font-size: 0.82rem;
+  word-break: break-all;
+}
+
+.ingest-downloads-meta {
+  font-size: 0.72rem;
+  color: var(--ink-soft);
 }
 
 .ingest-paths {

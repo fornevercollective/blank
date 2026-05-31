@@ -1379,6 +1379,8 @@ export async function handleIntelApi(req, res, urlPath) {
 
 function json(res, code, obj) {
   const buf = Buffer.from(JSON.stringify(obj), "utf8");
+  /** @type {import("node:http").ServerResponse & { __blankOutBytes?: number }} */ (res).__blankOutBytes =
+    buf.length;
   res.writeHead(code, {
     "Content-Type": "application/json; charset=utf-8",
     "Content-Length": buf.length,

@@ -335,6 +335,96 @@
     </header>
 
     <main class="app-main" id="main-scroll">
+      <details class="live-music-panel" id="live-music-panel" open>
+        <summary class="live-music-summary">
+          <span class="live-concerts-chevron" aria-hidden="true"></span>
+          <span class="live-music-title">Artist &amp; album</span>
+          <span class="live-music-sub">lyrics · credits · MusicBrainz</span>
+        </summary>
+        <div class="live-music-inner">
+          <div class="live-concerts-toolbar live-concerts-toolbar--music">
+            <div class="live-concerts-search-row">
+              <div class="live-concerts-search-wrap">
+                <label class="sr-only" for="live-concerts-search">Artist search</label>
+                <input
+                  type="search"
+                  id="live-concerts-search"
+                  class="live-concerts-search"
+                  placeholder="Artist name for albums, lyrics, credits…"
+                  autocomplete="off"
+                  spellcheck="false"
+                  list="live-concerts-artist-datalist"
+                  aria-controls="live-concerts-ac-list"
+                  aria-expanded="false"
+                  aria-autocomplete="list"
+                />
+                <datalist id="live-concerts-artist-datalist"></datalist>
+                <ul id="live-concerts-ac-list" class="live-concerts-ac" role="listbox" hidden></ul>
+              </div>
+              <nav
+                class="live-concerts-alpha-row"
+                id="live-concerts-alpha-inline"
+                role="toolbar"
+                aria-label="Filter artists by alphabet and script"
+              ></nav>
+              <button type="button" class="live-concerts-btn" id="live-concerts-search-btn">Search</button>
+            </div>
+            <div class="live-concerts-lyric-row">
+              <div class="live-concerts-lyric-wrap">
+                <label class="sr-only" for="live-concerts-lyric">Lyric phrase search</label>
+                <input
+                  type="search"
+                  id="live-concerts-lyric"
+                  class="live-concerts-lyric"
+                  placeholder="Lyric line or phrase…"
+                  autocomplete="off"
+                  spellcheck="false"
+                />
+              </div>
+              <button type="button" class="live-concerts-btn" id="live-concerts-lyric-search" title="Search loaded captions / transcript">Search lyrics</button>
+              <button type="button" class="live-concerts-btn" id="live-concerts-lyric-watch" title="Add to Listen for phrases (keyboard below)">Listen</button>
+              <button type="button" class="live-concerts-btn" id="live-concerts-lyric-sync" title="Sync lyric search with phrase keyboard">Sync ↓</button>
+            </div>
+            <div class="live-concerts-artist-picks" id="live-concerts-artist-picks" hidden></div>
+            <div class="live-concerts-albums" id="live-concerts-albums" hidden>
+              <div class="live-concerts-albums-head">
+                <p class="live-concerts-albums-hint" id="live-concerts-albums-hint">Album art · year order</p>
+                <progress
+                  class="live-concerts-albums-progress"
+                  id="live-concerts-albums-progress"
+                  max="100"
+                  value="0"
+                  hidden
+                  aria-label="Album cover load progress"
+                ></progress>
+              </div>
+              <div class="live-concerts-albums-body">
+                <aside class="live-concerts-albums-art-col" aria-label="Album covers">
+                  <div class="live-concerts-albums-scroll" id="live-concerts-albums-scroll" role="list"></div>
+                  <div
+                    class="live-concerts-album-accred"
+                    id="live-concerts-album-accred"
+                    hidden
+                    aria-live="polite"
+                  ></div>
+                </aside>
+                <div class="live-concerts-albums-main-col">
+                  <div
+                    class="live-concerts-album-detail"
+                    id="live-concerts-album-detail"
+                    hidden
+                    aria-live="polite"
+                  ></div>
+                </div>
+              </div>
+              <details class="live-concerts-meta-wrap" id="live-concerts-meta-wrap" hidden>
+                <summary class="live-concerts-meta-summary">Artist accreditation &amp; charts</summary>
+                <div class="live-concerts-meta" id="live-concerts-meta"></div>
+              </details>
+            </div>
+          </div>
+        </div>
+      </details>
       <details class="live-concerts-panel" id="live-concerts-panel" open>
         <summary class="live-concerts-summary">
           <span class="live-concerts-chevron" aria-hidden="true"></span>
@@ -342,86 +432,19 @@
           <span class="live-concerts-sub">multi-platform · multi-angle</span>
         </summary>
         <div class="live-concerts-inner">
-            <div class="live-concerts-toolbar">
+            <div class="live-concerts-toolbar live-concerts-toolbar--live">
                 <div class="live-concerts-windows" role="tablist" aria-label="Time window">
                   <button type="button" class="live-concerts-win is-active" data-live-window="now" aria-selected="true">Now</button>
                   <button type="button" class="live-concerts-win" data-live-window="hour" aria-selected="false">Next hour</button>
                   <button type="button" class="live-concerts-win" data-live-window="today" aria-selected="false">Today</button>
                   <button type="button" class="live-concerts-win" data-live-window="tomorrow" aria-selected="false">Tomorrow</button>
                 </div>
-                <div class="live-concerts-search-row">
-                  <div class="live-concerts-search-wrap">
-                    <label class="sr-only" for="live-concerts-search">Artist search</label>
-                    <input
-                      type="search"
-                      id="live-concerts-search"
-                      class="live-concerts-search"
-                      placeholder="Artist, festival, venue…"
-                      autocomplete="off"
-                      spellcheck="false"
-                      list="live-concerts-artist-datalist"
-                      aria-controls="live-concerts-ac-list"
-                      aria-expanded="false"
-                      aria-autocomplete="list"
-                    />
-                    <datalist id="live-concerts-artist-datalist"></datalist>
-                    <ul id="live-concerts-ac-list" class="live-concerts-ac" role="listbox" hidden></ul>
-                  </div>
-                  <nav
-                    class="live-concerts-alpha-row"
-                    id="live-concerts-alpha-inline"
-                    role="toolbar"
-                    aria-label="Filter artists by alphabet and script"
-                  ></nav>
-                  <button type="button" class="live-concerts-btn" id="live-concerts-search-btn">Search</button>
-                  <button type="button" class="live-concerts-btn" id="live-concerts-refresh" title="Refresh discovery">↻</button>
-                </div>
-                <div class="live-concerts-lyric-row">
-                  <div class="live-concerts-lyric-wrap">
-                    <label class="sr-only" for="live-concerts-lyric">Lyric phrase search</label>
-                    <input
-                      type="search"
-                      id="live-concerts-lyric"
-                      class="live-concerts-lyric"
-                      placeholder="Lyric line or phrase…"
-                      autocomplete="off"
-                      spellcheck="false"
-                    />
-                  </div>
-                  <button type="button" class="live-concerts-btn" id="live-concerts-lyric-search" title="Search loaded captions / transcript">Search lyrics</button>
-                  <button type="button" class="live-concerts-btn" id="live-concerts-lyric-watch" title="Add to Listen for phrases (keyboard below)">Listen</button>
-                  <button type="button" class="live-concerts-btn" id="live-concerts-lyric-sync" title="Sync lyric search with phrase keyboard">Sync ↓</button>
-                </div>
-                <div class="live-concerts-albums" id="live-concerts-albums" hidden>
-                  <div class="live-concerts-albums-head">
-                    <p class="live-concerts-albums-hint" id="live-concerts-albums-hint">Album art · year order</p>
-                    <progress
-                      class="live-concerts-albums-progress"
-                      id="live-concerts-albums-progress"
-                      max="100"
-                      value="0"
-                      hidden
-                      aria-label="Album cover load progress"
-                    ></progress>
-                  </div>
-                  <div
-                    class="live-concerts-album-detail"
-                    id="live-concerts-album-detail"
-                    hidden
-                    aria-live="polite"
-                  ></div>
-                  <div class="live-concerts-albums-scroll" id="live-concerts-albums-scroll" role="list"></div>
-                  <details class="live-concerts-meta-wrap" id="live-concerts-meta-wrap" hidden>
-                    <summary class="live-concerts-meta-summary">Artist accreditation & charts</summary>
-                    <div class="live-concerts-meta" id="live-concerts-meta"></div>
-                  </details>
-                </div>
                 <div class="live-concerts-actions">
                   <button type="button" class="live-concerts-btn live-concerts-btn--primary" id="live-concerts-multiview">Multi-angle sync</button>
                   <button type="button" class="live-concerts-btn" id="live-concerts-queue">Queue selected</button>
+                  <button type="button" class="live-concerts-btn" id="live-concerts-refresh" title="Refresh discovery">↻</button>
                 </div>
                 <p class="live-concerts-status" id="live-concerts-status" aria-live="polite">Starting discovery…</p>
-                <div class="live-concerts-artist-picks" id="live-concerts-artist-picks" hidden></div>
               </div>
               <div class="live-concerts-feed-wrap">
                 <div
@@ -431,12 +454,55 @@
                   aria-label="World region"
                 ></div>
                 <div
+                  class="live-concerts-feed-subregions"
+                  id="live-concerts-feed-subregions"
+                  role="tablist"
+                  aria-label="State or timezone drill-down"
+                  hidden
+                ></div>
+                <div
                   class="live-concerts-genres"
                   id="live-concerts-genres"
                   role="tablist"
                   aria-label="Genre section"
                 ></div>
-                <div class="live-concerts-list" id="live-concerts-list" role="list"></div>
+                <div class="live-concerts-feed-body">
+                  <aside
+                    class="live-concerts-feed-preview"
+                    id="live-concerts-feed-preview"
+                    aria-label="Feed preview"
+                  >
+                    <p class="live-concerts-feed-preview-placeholder" id="live-concerts-feed-preview-placeholder">
+                      Click a feed in the list to preview
+                    </p>
+                    <div class="live-concerts-feed-preview-active" id="live-concerts-feed-preview-active" hidden>
+                      <div class="live-concerts-feed-preview-media" id="live-concerts-feed-preview-media"></div>
+                      <div class="live-concerts-feed-preview-meta">
+                        <h4 class="live-concerts-feed-preview-title" id="live-concerts-feed-preview-title"></h4>
+                        <p class="live-concerts-feed-preview-sub" id="live-concerts-feed-preview-sub"></p>
+                        <div class="live-concerts-feed-preview-actions">
+                          <button type="button" class="live-concerts-btn" id="live-concerts-preview-queue">Queue</button>
+                          <a
+                            class="live-concerts-feed-preview-open"
+                            id="live-concerts-feed-preview-open"
+                            href="#"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >Open</a>
+                        </div>
+                      </div>
+                    </div>
+                  </aside>
+                  <div class="live-concerts-feed-list-col">
+                    <div
+                      class="live-concerts-sort"
+                      id="live-concerts-sort"
+                      role="tablist"
+                      aria-label="Sort feeds"
+                    ></div>
+                    <div class="live-concerts-list" id="live-concerts-list" role="list"></div>
+                  </div>
+                </div>
               </div>
         </div>
       </details>
@@ -447,6 +513,13 @@
           <span class="ingest-panel-count" id="ingest-panel-count" aria-live="polite"></span>
         </summary>
         <div class="ingest-panel-inner">
+          <div class="ingest-local-toolbar" role="toolbar" aria-label="Local playback">
+            <input type="file" id="ingest-file-open" class="sr-only" accept="video/*,audio/*,.mkv,.mp4,.webm,.mov,.m4v,.avi,.m4a,.mp3,.wav,.aac,.flac,.opus" />
+            <button type="button" class="ingest-btn" id="ingest-open-file">Open file…</button>
+            <button type="button" class="ingest-btn" id="ingest-refresh-downloads" title="List media in ~/Downloads">Refresh Downloads</button>
+            <span class="ingest-downloads-dir" id="ingest-downloads-dir" hidden></span>
+          </div>
+          <ul id="ingest-downloads-list" class="ingest-downloads-list" hidden aria-label="Files in Downloads"></ul>
           <div id="ingest-queue" class="ingest-queue" aria-live="polite"></div>
         </div>
       </details>

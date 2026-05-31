@@ -39,8 +39,11 @@ import {
   escapeHtml,
   mountPreview,
   getPreviewTimeSec,
+  fetchDownloadsList,
+  requestLocalFilePlay,
   initFfplayPreviewViews,
   setPreviewHint,
+  clearPreviewHint,
   onRailPlayback,
   onPreviewStreamRecovery,
   previewThumbUrl,
@@ -1818,8 +1821,43 @@ function initVideoIngest() {
     redraw(readQueue());
   });
 
-  function setPreview(item) {
-    mountPreview(embedHost, item, hintHost);
+  /** @type {Map<string, string>} */
+  const blobUrlsByItem = new Map();
+
+  async function ensureLocalPlayback(item) {
+    if (!item) return null;
+    if (item.filePlayId || item.blobUrl) return item;
+    if (!String(item.url).startsWith("local://")) return item;
+    const name = decodeURIComponent(String(item.url).replace(/^local:\/\//, ""));
+    try {
+      const data = await requestLocalFilePlay(name);
+      const q = patchQueueItem(item.id, {
+        filePlayId: data.filePlayId,
+        streamKind: data.streamKind,
+        title: data.title || item.title,
+        resolveError: undefined,
+      });
+      return resolveActiveItem(q) || item;
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      patchQueueItem(item.id, { resolveError: msg });
+      setPreviewHint(hintHost, msg);
+      return item;
+    }
+  }
+
+  function itemForPreview(item) {
+    if (!item) return null;
+    const blobUrl = blobUrlsByItem.get(item.id);
+    return blobUrl ? { ...item, blobUrl } : item;
+  }
+
+  async function setPreview(item) {
+    let row = item;
+    if (row?.url?.startsWith("local://") && !row.filePlayId && !row.blobUrl) {
+      row = await ensureLocalPlayback(row);
+    }
+    mountPreview(embedHost, itemForPreview(row), hintHost);
     setRailThumb(item);
     syncHeaderPromptsMetaFromQueue(item);
     syncRailUpcoming();
@@ -1852,9 +1890,12 @@ function initVideoIngest() {
     const active = resolveActiveItem(queue);
     if (active) writeActiveId(active.id);
     updateIngestPanelMeta(queue);
-    setPreview(active);
+    void setPreview(active);
     if (
       active &&
+      !active.filePlayId &&
+      !active.blobUrl &&
+      !String(active.url).startsWith("local://") &&
       shouldAutoResolve(classifyUrl(normalizeUrl(active.url))) &&
       !active.playId &&
       !active.resolveError &&
@@ -1875,7 +1916,9 @@ function initVideoIngest() {
 
     queue.forEach((item) => {
       const norm = normalizeUrl(item.url);
-      const kind = classifyUrl(norm);
+      const kind = String(item.url).startsWith("local://")
+        ? "local"
+        : classifyUrl(norm);
       const row = document.createElement("article");
       row.className = "ingest-row";
       if (active?.id === item.id) row.classList.add("is-active");
@@ -1884,7 +1927,13 @@ function initVideoIngest() {
         onPlay: () => {
           writeActiveId(item.id);
           redraw(readQueue());
-          if (shouldAutoResolve(kind) && !item.playId && !item.resolveError) {
+          if (
+            !item.filePlayId &&
+            !String(item.url).startsWith("local://") &&
+            shouldAutoResolve(kind) &&
+            !item.playId &&
+            !item.resolveError
+          ) {
             void autoResolveItem(item.id, { download: false });
           }
         },
@@ -1937,6 +1986,11 @@ function initVideoIngest() {
       rm.textContent = "×";
       rm.addEventListener("click", (e) => {
         e.stopPropagation();
+        const prev = blobUrlsByItem.get(item.id);
+        if (prev) {
+          URL.revokeObjectURL(prev);
+          blobUrlsByItem.delete(item.id);
+        }
         const next = readQueue().filter((x) => x.id !== item.id);
         writeQueue(next);
         redraw(next);
@@ -2038,6 +2092,114 @@ function initVideoIngest() {
     refreshPhraseSearch();
     syncRailUpcoming();
     updateRailLiveFromQueue();
+  }
+
+  function queueLocalDownload(name) {
+    const url = `local://${encodeURIComponent(name)}`;
+    const existing = readQueue().find((x) => x.url === url);
+    if (existing) {
+      writeActiveId(existing.id);
+      redraw(readQueue());
+      return;
+    }
+    const item = {
+      id: `local-${Date.now()}`,
+      url,
+      title: name,
+      addedAt: Date.now(),
+    };
+    const next = [item, ...readQueue()].slice(0, 24);
+    writeQueue(next);
+    writeActiveId(item.id);
+    redraw(next);
+    document.getElementById("ingest-queue")?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }
+
+  function queueBlobFile(file) {
+    const id = `blob-${Date.now()}`;
+    const blobUrl = URL.createObjectURL(file);
+    blobUrlsByItem.set(id, blobUrl);
+    const item = {
+      id,
+      url: `local://${encodeURIComponent(file.name)}`,
+      title: file.name,
+      addedAt: Date.now(),
+    };
+    const next = [item, ...readQueue()].slice(0, 24);
+    writeQueue(next);
+    writeActiveId(item.id);
+    redraw(next);
+    document.getElementById("ingest-queue")?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }
+
+  function formatDownloadBytes(n) {
+    if (!Number.isFinite(n) || n < 1) return "0 B";
+    const units = ["B", "KB", "MB", "GB"];
+    let v = n;
+    let i = 0;
+    while (v >= 1024 && i < units.length - 1) {
+      v /= 1024;
+      i += 1;
+    }
+    return `${v < 10 && i > 0 ? v.toFixed(1) : Math.round(v)} ${units[i]}`;
+  }
+
+  async function refreshDownloadsList() {
+    const listEl = document.getElementById("ingest-downloads-list");
+    const dirEl = document.getElementById("ingest-downloads-dir");
+    const refreshBtn = document.getElementById("ingest-refresh-downloads");
+    if (!(listEl instanceof HTMLElement)) return;
+    if (refreshBtn instanceof HTMLButtonElement) refreshBtn.disabled = true;
+    try {
+      const data = await fetchDownloadsList();
+      if (dirEl) {
+        dirEl.textContent = data.dir ? `~/Downloads → ${data.dir}` : "";
+        dirEl.hidden = !data.dir;
+      }
+      listEl.replaceChildren();
+      const files = data.files || [];
+      if (!files.length) {
+        listEl.hidden = true;
+        setPreviewHint(hintHost, "No media files in ~/Downloads — use download or Open file.");
+        return;
+      }
+      listEl.hidden = false;
+      for (const row of files) {
+        const li = document.createElement("li");
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "ingest-downloads-item";
+        const when = new Date(row.mtime).toLocaleString(undefined, {
+          month: "short",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+        btn.innerHTML = `<span class="ingest-downloads-name">${escapeHtml(row.name)}</span><span class="ingest-downloads-meta">${escapeHtml(formatDownloadBytes(row.size))} · ${escapeHtml(when)}</span>`;
+        btn.addEventListener("click", () => {
+          queueLocalDownload(row.name);
+          const isMkv = /\.mkv$/i.test(row.name);
+          setPreviewHint(
+            hintHost,
+            isMkv
+              ? `Loading ${row.name} — MKV will transcode (ffmpeg) for browser preview…`
+              : `Loading ${row.name}…`,
+          );
+        });
+        li.appendChild(btn);
+        listEl.appendChild(li);
+      }
+      clearPreviewHint(hintHost);
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      listEl.hidden = true;
+      setPreviewHint(
+        hintHost,
+        `Downloads list failed: ${msg} — run ./start.sh so /api/ingest is available.`,
+      );
+    } finally {
+      if (refreshBtn instanceof HTMLButtonElement) refreshBtn.disabled = false;
+    }
   }
 
   function queueUrl(raw, meta = {}) {
@@ -2199,6 +2361,22 @@ function initVideoIngest() {
 
   initFfplayPreviewViews();
 
+  const fileInput = document.getElementById("ingest-file-open");
+  document.getElementById("ingest-open-file")?.addEventListener("click", () => {
+    if (fileInput instanceof HTMLInputElement) fileInput.click();
+  });
+  fileInput?.addEventListener("change", () => {
+    if (!(fileInput instanceof HTMLInputElement)) return;
+    const file = fileInput.files?.[0];
+    fileInput.value = "";
+    if (!file) return;
+    queueBlobFile(file);
+    setPreviewHint(hintHost, `Playing ${file.name} (browser blob — seek + controls).`);
+  });
+  document.getElementById("ingest-refresh-downloads")?.addEventListener("click", () => {
+    void refreshDownloadsList();
+  });
+
   void mountPresets().then(async () => {
     let q = readQueue();
     if (isStaticPreviewHost()) {
@@ -2221,6 +2399,7 @@ function initVideoIngest() {
     writeQueue(q);
     redraw(q);
     void refreshIngestApiCheck().then(() => redraw(readQueue()));
+    void refreshDownloadsList();
   });
   return api;
 }

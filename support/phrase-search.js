@@ -570,6 +570,12 @@ export function initPhraseSearch(feedEl, hooks) {
   }
 
   globalThis.blankPhraseSearch = {
+    firstHit(query) {
+      const q = String(query || "").trim();
+      if (!q) return null;
+      const hits = searchPhraseIndex(getIndex(), q);
+      return hits[0] || null;
+    },
     updateIntel(intel, pageUrl) {
       cachedIntel = intel;
       cachedUrl = pageUrl || "";

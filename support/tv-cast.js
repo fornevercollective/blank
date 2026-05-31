@@ -12,6 +12,8 @@ import {
   mountPreview,
   classifyUrl,
   normalizeUrl,
+  applyPreviewPlayback,
+  getPreviewPlaybackState,
 } from "./video-ingest.js";
 
 /** @typedef {{
@@ -21,6 +23,7 @@ import {
  *   isLive?: boolean,
  *   viewers?: number|null,
  *   playId?: string,
+ *   filePlayId?: string,
  *   resolveError?: string,
  *   durationLabel?: string,
  *   uploader?: string,
@@ -35,6 +38,10 @@ import {
  *   captions?: { time?: string, text?: string }[],
  *   meta?: [string, string][],
  *   metrics?: string,
+ *   currentTime?: number,
+ *   paused?: boolean,
+ *   playbackKind?: string,
+ *   forceRemount?: boolean,
  * }} CastState */
 
 /** @type {CastState} */
@@ -64,6 +71,12 @@ const els = {
   sceneEst: document.getElementById("tv-scene-est"),
   custom: document.getElementById("tv-custom-note"),
   ticker: document.getElementById("tv-ticker"),
+  playback: document.getElementById("tv-playback"),
+  playToggle: document.getElementById("tv-play-toggle"),
+  seek: document.getElementById("tv-playback-seek"),
+  playTime: document.getElementById("tv-playback-time"),
+  muteToggle: document.getElementById("tv-mute-toggle"),
+  playbackHint: document.getElementById("tv-playback-hint"),
 };
 
 function fillSelect(sel, entries) {
@@ -177,10 +190,83 @@ function escapeHtml(s) {
     .replaceAll(">", "&gt;");
 }
 
+function formatClock(sec) {
+  const s = Math.max(0, Math.floor(sec));
+  const m = Math.floor(s / 60);
+  const r = s % 60;
+  return `${m}:${String(r).padStart(2, "0")}`;
+}
+
+function tvVideoEl() {
+  return els.media?.querySelector("video");
+}
+
+function syncPlaybackUi() {
+  const video = tvVideoEl();
+  const hasVideo = video instanceof HTMLVideoElement;
+  const isIframe = Boolean(els.media?.querySelector("iframe"));
+
+  if (els.playback instanceof HTMLElement) {
+    els.playback.hidden = !state.url?.startsWith("http");
+  }
+  if (els.playbackHint instanceof HTMLElement) {
+    els.playbackHint.hidden = hasVideo || !isIframe;
+  }
+  if (els.playToggle instanceof HTMLButtonElement) {
+    els.playToggle.disabled = !hasVideo;
+    els.playToggle.textContent = hasVideo && !video.paused ? "Pause" : "Play";
+  }
+  if (els.seek instanceof HTMLInputElement) {
+    els.seek.disabled = !hasVideo;
+    const dur = hasVideo && Number.isFinite(video.duration) ? video.duration : 0;
+    els.seek.max = String(Math.max(1, Math.floor(dur * 10) || 1000));
+    const t = hasVideo ? video.currentTime : 0;
+    els.seek.value = String(Math.floor(t * 10));
+  }
+  if (els.playTime instanceof HTMLElement) {
+    if (hasVideo) {
+      const dur = Number.isFinite(video.duration) ? video.duration : 0;
+      els.playTime.textContent = `${formatClock(video.currentTime)} / ${dur ? formatClock(dur) : "—"}`;
+    } else {
+      els.playTime.textContent = isIframe ? "Embed player" : "0:00";
+    }
+  }
+  if (els.muteToggle instanceof HTMLButtonElement) {
+    els.muteToggle.disabled = !hasVideo;
+    els.muteToggle.textContent = hasVideo && video.muted ? "Unmute" : "Mute";
+  }
+}
+
+function applyCastPlayback() {
+  const host = els.media?.querySelector(".tv-embed-host");
+  if (!(host instanceof HTMLElement)) return;
+  applyPreviewPlayback(host, {
+    currentTime: state.currentTime,
+    paused: state.paused === true,
+    muted: false,
+  });
+  const video = tvVideoEl();
+  if (video instanceof HTMLVideoElement) {
+    const resume = () => {
+      applyPreviewPlayback(host, {
+        currentTime: state.currentTime,
+        paused: state.paused === true,
+        muted: false,
+      });
+      syncPlaybackUi();
+    };
+    if (video.readyState >= 1) resume();
+    else video.addEventListener("loadedmetadata", resume, { once: true });
+  }
+  syncPlaybackUi();
+}
+
 function syncPreview() {
   if (!(els.media instanceof HTMLElement)) return;
   const url = state.url?.trim();
-  if (!url?.startsWith("http")) {
+  const isLocal =
+    Boolean(state.filePlayId) || String(url || "").startsWith("local://");
+  if (!url?.startsWith("http") && !isLocal) {
     queueItem = null;
     previewKey = "";
     els.media.innerHTML = "";
@@ -188,10 +274,47 @@ function syncPreview() {
       els.empty.hidden = false;
       els.empty.textContent = "Queue a live URL in the main blank window.";
     }
+    syncPlaybackUi();
+    return;
+  }
+  if (isLocal) {
+    const item = {
+      id: "tv-cast",
+      url: url || "local://",
+      title: state.title,
+      filePlayId: state.filePlayId,
+      resolveError: state.resolveError,
+    };
+    const key = `local|${item.filePlayId || ""}|${item.url}|${item.resolveError || ""}`;
+    const hasMedia = els.media.querySelector("video, iframe");
+    if (!state.forceRemount && key === previewKey && hasMedia) {
+      applyCastPlayback();
+      return;
+    }
+    previewKey = key;
+    queueItem = item;
+    if (els.empty) els.empty.hidden = true;
+    els.media.innerHTML = "";
+    const host = document.createElement("div");
+    host.id = "tv-embed-host";
+    host.className = "tv-embed-host";
+    els.media.appendChild(host);
+    mountPreview(host, item, null);
+    const video = host.querySelector("video");
+    if (video instanceof HTMLVideoElement) {
+      video.addEventListener("timeupdate", syncPlaybackUi);
+      video.addEventListener("play", syncPlaybackUi);
+      video.addEventListener("pause", syncPlaybackUi);
+      video.addEventListener("loadedmetadata", () => {
+        applyCastPlayback();
+      });
+    }
+    window.setTimeout(() => applyCastPlayback(), 80);
+    window.setTimeout(() => applyCastPlayback(), 450);
+    syncPlaybackUi();
     return;
   }
   const norm = normalizeUrl(url);
-  const kind = classifyUrl(norm);
   const item = {
     id: "tv-cast",
     url: norm,
@@ -200,7 +323,9 @@ function syncPreview() {
     resolveError: state.resolveError,
   };
   const key = `${norm}|${item.playId || ""}|${item.resolveError || ""}`;
-  if (key === previewKey && els.media.querySelector("video, iframe")) {
+  const hasMedia = els.media.querySelector("video, iframe");
+  if (!state.forceRemount && key === previewKey && hasMedia) {
+    applyCastPlayback();
     return;
   }
   previewKey = key;
@@ -212,6 +337,29 @@ function syncPreview() {
   host.className = "tv-embed-host";
   els.media.appendChild(host);
   mountPreview(host, item, null);
+  const video = host.querySelector("video");
+  if (video instanceof HTMLVideoElement) {
+    video.addEventListener("timeupdate", syncPlaybackUi);
+    video.addEventListener("play", syncPlaybackUi);
+    video.addEventListener("pause", syncPlaybackUi);
+    video.addEventListener("loadedmetadata", () => {
+      applyCastPlayback();
+    });
+  }
+  window.setTimeout(() => applyCastPlayback(), 80);
+  window.setTimeout(() => applyCastPlayback(), 450);
+  syncPlaybackUi();
+}
+
+function publishPlaybackToMain() {
+  const host = els.media?.querySelector(".tv-embed-host");
+  const playback = getPreviewPlaybackState(host);
+  if (playback?.kind !== "video") return;
+  ch?.postMessage({
+    type: "playback-sync",
+    currentTime: playback.currentTime,
+    paused: playback.paused,
+  });
 }
 
 function applyState(patch) {
@@ -231,6 +379,7 @@ function applyState(patch) {
   applyReframe();
   paintSide();
   syncPreview();
+  state.forceRemount = false;
 }
 
 function publishLocalPrefs() {
@@ -243,7 +392,35 @@ function publishLocalPrefs() {
   });
 }
 
+function initPlaybackControls() {
+  els.playToggle?.addEventListener("click", () => {
+    const video = tvVideoEl();
+    if (!(video instanceof HTMLVideoElement)) return;
+    if (video.paused) void video.play().catch(() => {});
+    else video.pause();
+    syncPlaybackUi();
+    publishPlaybackToMain();
+  });
+  els.muteToggle?.addEventListener("click", () => {
+    const video = tvVideoEl();
+    if (!(video instanceof HTMLVideoElement)) return;
+    video.muted = !video.muted;
+    syncPlaybackUi();
+  });
+  if (els.seek instanceof HTMLInputElement) {
+    els.seek.addEventListener("input", () => {
+      const video = tvVideoEl();
+      if (!(video instanceof HTMLVideoElement)) return;
+      const t = Number(els.seek.value) / 10;
+      if (Number.isFinite(t)) video.currentTime = t;
+      syncPlaybackUi();
+    });
+    els.seek.addEventListener("change", publishPlaybackToMain);
+  }
+}
+
 function initControls() {
+  initPlaybackControls();
   fillSelect(els.reframe, REFRAME_PRESETS);
   fillSelect(els.layout, TV_LAYOUTS);
   if (els.reframe instanceof HTMLSelectElement) {

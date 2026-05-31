@@ -23,14 +23,27 @@ import {
 import { addWatchPhrases, focusPhraseSearch } from "./phrase-search.js";
 import { paintArtistAlbums } from "./live-concerts-albums.js";
 import { LIVE_GENRE_TABS, LIVE_FEED_REGION_TABS } from "./live-concerts-genres.mjs";
+import { subregionsForRegion, feedSubregionById } from "./live-concerts-subregions.mjs";
+import { classifyUrl, normalizeUrl, renderEmbed } from "./video-ingest.js";
 
 const MULTIVIEW_KEY = "blank.live.multiview.v1";
 
-/** @type {{ window: string, genre: string, region: string, query: string, events: object[], loading: boolean }} */
+/** @type {{ id: string, label: string }[]} */
+const LIVE_SORT_TABS = [
+  { id: "live", label: "LIVE first" },
+  { id: "viewers", label: "Viewers" },
+  { id: "angles", label: "Angles" },
+  { id: "title", label: "A–Z" },
+  { id: "recent", label: "Recent" },
+];
+
+/** @type {{ window: string, genre: string, region: string, subregion: string, sort: string, query: string, events: object[], loading: boolean }} */
 let state = {
   window: "now",
   genre: "all",
   region: "all",
+  subregion: "all",
+  sort: "live",
   query: "",
   events: [],
   loading: false,
@@ -47,6 +60,9 @@ let discoverDebounce = 0;
 /** @type {string | null} */
 let lastDiscoverKey = null;
 
+/** @type {string | null} */
+let previewFeedUrl = null;
+
 /**
  * @param {() => void} [onQueue]
  */
@@ -62,7 +78,9 @@ export function initLiveConcerts(onQueue) {
   const queueBtn = document.getElementById("live-concerts-queue");
   const refreshBtn = document.getElementById("live-concerts-refresh");
   const regionsEl = document.getElementById("live-concerts-feed-regions");
+  const subregionsEl = document.getElementById("live-concerts-feed-subregions");
   const genresEl = document.getElementById("live-concerts-genres");
+  const sortEl = document.getElementById("live-concerts-sort");
   const albumsPanel = document.getElementById("live-concerts-albums");
   const albumsScroll = document.getElementById("live-concerts-albums-scroll");
   const albumsHint = document.getElementById("live-concerts-albums-hint");
@@ -112,6 +130,25 @@ export function initLiveConcerts(onQueue) {
           b.setAttribute("aria-selected", b === btn ? "true" : "false");
         });
         scheduleDiscover(true);
+      });
+    });
+  }
+
+  if (sortEl) {
+    sortEl.innerHTML = LIVE_SORT_TABS.map(
+      (s) =>
+        `<button type="button" class="live-concerts-sort-tab${state.sort === s.id ? " is-active" : ""}" data-live-sort="${s.id}" role="tab" aria-selected="${state.sort === s.id ? "true" : "false"}">${escapeHtml(s.label)}</button>`,
+    ).join("");
+    sortEl.querySelectorAll("[data-live-sort]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const id = btn.getAttribute("data-live-sort");
+        if (!id) return;
+        state.sort = id;
+        sortEl.querySelectorAll("[data-live-sort]").forEach((b) => {
+          b.classList.toggle("is-active", b === btn);
+          b.setAttribute("aria-selected", b === btn ? "true" : "false");
+        });
+        paintList(listEl);
       });
     });
   }
@@ -351,9 +388,22 @@ function initArtistAlpha(panel, searchInput, statusEl, onArtistChosen, scheduleD
   }
 
   /** @param {{ name: string, region?: string }} a */
+  /** @param {{ name: string, region?: string, warped?: { totalYears: number, years: number[] } }} a */
+  function artistPickTitle(a) {
+    const parts = [regionById(a.region || "us").label];
+    if (a.warped?.years?.length) {
+      parts.push(`Warped Tour · ${a.warped.totalYears} yr (${a.warped.years.join(", ")})`);
+    }
+    return parts.join(" · ");
+  }
+
+  /** @param {{ name: string, region?: string, warped?: { totalYears: number, years: number[] } }} a */
   function artistPickHtml(a) {
     const r = regionById(a.region || "us");
-    return `<button type="button" class="live-concerts-pick" data-artist="${escapeHtml(a.name)}" data-region="${escapeHtml(a.region || "us")}" style="--pick-bg:${r.pick.bg};--pick-border:${r.pick.border};--pick-ink:${r.pick.ink}" title="${escapeHtml(r.label)}">${escapeHtml(a.name)}</button>`;
+    const warpedBadge = a.warped?.years?.length
+      ? `<span class="live-concerts-pick-warped" title="Vans Warped Tour">WT</span>`
+      : "";
+    return `<button type="button" class="live-concerts-pick" data-artist="${escapeHtml(a.name)}" data-region="${escapeHtml(a.region || "us")}" style="--pick-bg:${r.pick.bg};--pick-border:${r.pick.border};--pick-ink:${r.pick.ink}" title="${escapeHtml(artistPickTitle(a))}">${escapeHtml(a.name)}${warpedBadge}</button>`;
   }
 
   /** @param {HTMLDataListElement | null} list */
@@ -465,7 +515,7 @@ function initLyricBridge(panel) {
  * @param {boolean} [force]
  */
 async function discover(statusEl, listEl, force = false) {
-  const key = `${state.window}|${state.genre}|${state.region}|${state.query}`;
+  const key = `${state.window}|${state.genre}|${state.region}|${state.subregion}|${state.query}`;
   if (!force && state.loading && key === lastDiscoverKey) return;
   lastDiscoverKey = key;
 
@@ -495,6 +545,7 @@ async function discover(statusEl, listEl, force = false) {
         window: state.window,
         genre: state.genre,
         region: state.region,
+        subregion: state.subregion,
         query: state.query,
       }),
       signal,
@@ -510,7 +561,12 @@ async function discover(statusEl, listEl, force = false) {
         LIVE_GENRE_TABS.find((g) => g.id === state.genre)?.label || state.genre;
       const regionLabel =
         LIVE_FEED_REGION_TABS.find((r) => r.id === state.region)?.label || state.region;
-      statusEl.textContent = `${data.feedCount || 0} feeds · ${state.events.length} events · ${regionLabel} · ${genreLabel} · ${windowLabel(state.window)}${errNote}`;
+      const subLabel =
+        state.subregion && state.subregion !== "all"
+          ? feedSubregionById(state.region, state.subregion).label
+          : "";
+      const placeLabel = subLabel ? `${regionLabel} · ${subLabel}` : regionLabel;
+      statusEl.textContent = `${data.feedCount || 0} feeds · ${state.events.length} events · ${placeLabel} · ${genreLabel} · ${windowLabel(state.window)}${errNote}`;
     }
     paintList(listEl);
   } catch (e) {
@@ -534,17 +590,172 @@ function windowLabel(w) {
   return "live now";
 }
 
+/** @param {string} url */
+function findFeedByUrl(url) {
+  for (const ev of state.events) {
+    for (const f of ev.feeds || []) {
+      if (f.url === url) return f;
+    }
+  }
+  return null;
+}
+
+/** @param {object} feed */
+function mountFeedPreview(feed) {
+  const wrap = document.getElementById("live-concerts-feed-preview");
+  const placeholder = document.getElementById("live-concerts-feed-preview-placeholder");
+  const active = document.getElementById("live-concerts-feed-preview-active");
+  const media = document.getElementById("live-concerts-feed-preview-media");
+  const titleEl = document.getElementById("live-concerts-feed-preview-title");
+  const subEl = document.getElementById("live-concerts-feed-preview-sub");
+  const openEl = document.getElementById("live-concerts-feed-preview-open");
+  const queueBtn = document.getElementById("live-concerts-preview-queue");
+  if (!(wrap instanceof HTMLElement) || !(media instanceof HTMLElement)) return;
+
+  previewFeedUrl = feed.url;
+  wrap.classList.add("has-feed");
+  if (placeholder instanceof HTMLElement) placeholder.hidden = true;
+  if (active instanceof HTMLElement) active.hidden = false;
+
+  media.innerHTML = "";
+  const norm = normalizeUrl(feed.url);
+  const kind = classifyUrl(norm);
+  const emb = renderEmbed(kind, norm);
+  if (emb) {
+    media.appendChild(emb);
+  } else if (feed.thumb) {
+    const img = document.createElement("img");
+    img.className = "live-concerts-preview-hero-img";
+    img.src = feed.thumb;
+    img.alt = feed.title || "";
+    img.loading = "eager";
+    img.decoding = "async";
+    const note = document.createElement("p");
+    note.className = "live-concerts-preview-fallback-note";
+    note.textContent = "Inline player unavailable for this source — use Open or Queue.";
+    media.append(img, note);
+  } else {
+    media.innerHTML =
+      '<p class="live-concerts-preview-fallback-note">Preview unavailable — use Open or Queue.</p>';
+  }
+
+  if (titleEl) titleEl.textContent = feed.title || "Live feed";
+  if (subEl) {
+    const live = feed.isLive ? " · LIVE" : "";
+    subEl.textContent = `${feed.platform || ""}${feed.angleLabel ? ` · ${feed.angleLabel}` : ""}${live}`;
+  }
+  if (openEl instanceof HTMLAnchorElement) {
+    openEl.href = feed.url;
+  }
+  if (queueBtn instanceof HTMLButtonElement) {
+    queueBtn.onclick = () => {
+      if (globalThis.blankQueueVideoUrl) globalThis.blankQueueVideoUrl(feed.url);
+    };
+  }
+}
+
+function clearFeedPreview() {
+  previewFeedUrl = null;
+  const wrap = document.getElementById("live-concerts-feed-preview");
+  const placeholder = document.getElementById("live-concerts-feed-preview-placeholder");
+  const active = document.getElementById("live-concerts-feed-preview-active");
+  const media = document.getElementById("live-concerts-feed-preview-media");
+  if (wrap instanceof HTMLElement) wrap.classList.remove("has-feed");
+  if (placeholder instanceof HTMLElement) placeholder.hidden = false;
+  if (active instanceof HTMLElement) active.hidden = true;
+  if (media instanceof HTMLElement) media.innerHTML = "";
+}
+
+/**
+ * @param {object} feed
+ * @param {HTMLElement | null} rowEl
+ */
+function selectFeedPreview(feed, rowEl) {
+  const listEl = document.getElementById("live-concerts-list");
+  listEl?.querySelectorAll(".live-concerts-feed").forEach((row) => {
+    row.classList.toggle("is-previewing", row === rowEl);
+  });
+  mountFeedPreview(feed);
+}
+
+/** @param {object} ev */
+function eventIsLive(ev) {
+  return (ev.feeds || []).some((f) => f.isLive);
+}
+
+/** @param {object} ev */
+function maxEventViews(ev) {
+  return Math.max(0, ...(ev.feeds || []).map((f) => Number(f.viewCount) || 0));
+}
+
+/** @param {object} ev */
+function maxEventStart(ev) {
+  return Math.max(0, ...(ev.feeds || []).map((f) => Number(f.startAt) || 0));
+}
+
+/** @param {object[]} feeds @param {string} sortId */
+function sortFeeds(feeds, sortId) {
+  const list = [...feeds];
+  if (sortId === "viewers") {
+    return list.sort((a, b) => (Number(b.viewCount) || 0) - (Number(a.viewCount) || 0));
+  }
+  if (sortId === "title") {
+    return list.sort((a, b) =>
+      String(a.title || "").localeCompare(String(b.title || ""), undefined, {
+        sensitivity: "base",
+      }),
+    );
+  }
+  if (sortId === "recent") {
+    return list.sort((a, b) => (Number(b.startAt) || 0) - (Number(a.startAt) || 0));
+  }
+  return list.sort((a, b) => {
+    if (a.isLive !== b.isLive) return a.isLive ? -1 : 1;
+    return (Number(b.viewCount) || 0) - (Number(a.viewCount) || 0);
+  });
+}
+
+/** @param {object[]} events @param {string} sortId */
+function sortEvents(events, sortId) {
+  const list = events.map((ev) => ({
+    ...ev,
+    feeds: sortFeeds(ev.feeds || [], sortId),
+  }));
+  if (sortId === "viewers") {
+    return list.sort((a, b) => maxEventViews(b) - maxEventViews(a));
+  }
+  if (sortId === "angles") {
+    return list.sort((a, b) => (b.feeds?.length || 0) - (a.feeds?.length || 0));
+  }
+  if (sortId === "title") {
+    return list.sort((a, b) =>
+      String(a.name || "").localeCompare(String(b.name || ""), undefined, {
+        sensitivity: "base",
+      }),
+    );
+  }
+  if (sortId === "recent") {
+    return list.sort((a, b) => maxEventStart(b) - maxEventStart(a));
+  }
+  return list.sort((a, b) => {
+    const liveA = eventIsLive(a) ? 1 : 0;
+    const liveB = eventIsLive(b) ? 1 : 0;
+    if (liveB !== liveA) return liveB - liveA;
+    return (b.feeds?.length || 0) - (a.feeds?.length || 0);
+  });
+}
+
 /** @param {HTMLElement | null} listEl */
 function paintList(listEl) {
   if (!listEl) return;
   if (!state.events.length) {
     listEl.innerHTML =
       '<p class="live-concerts-empty">No matching live concerts — try another genre, window, or search term.</p>';
+    clearFeedPreview();
     return;
   }
-  listEl.innerHTML = state.events
-    .map((ev) => eventCardHtml(ev))
-    .join("");
+  const sorted = sortEvents(state.events, state.sort);
+  listEl.innerHTML = sorted.map((ev) => eventCardHtml(ev)).join("");
   listEl.querySelectorAll("[data-feed-url]").forEach((input) => {
     if (!(input instanceof HTMLInputElement)) return;
     input.addEventListener("change", () => {
@@ -554,8 +765,21 @@ function paintList(listEl) {
       else selectedFeedUrls.delete(url);
     });
   });
+  listEl.querySelectorAll(".live-concerts-feed").forEach((row) => {
+    row.addEventListener("click", (e) => {
+      if (e.target instanceof HTMLInputElement) return;
+      if (e.target instanceof HTMLButtonElement && e.target.hasAttribute("data-queue-one")) {
+        e.stopPropagation();
+        return;
+      }
+      const url = row.getAttribute("data-feed-row-url") || "";
+      const feed = findFeedByUrl(url);
+      if (feed) selectFeedPreview(feed, row);
+    });
+  });
   listEl.querySelectorAll("[data-queue-one]").forEach((btn) => {
-    btn.addEventListener("click", () => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
       const url = btn.getAttribute("data-queue-one");
       if (url && globalThis.blankQueueVideoUrl) {
         globalThis.blankQueueVideoUrl(url);
@@ -569,6 +793,28 @@ function paintList(listEl) {
       if (ev) openMultiview(ev);
     });
   });
+
+  if (previewFeedUrl) {
+    const feed = findFeedByUrl(previewFeedUrl);
+    const row = listEl.querySelector(
+      `.live-concerts-feed[data-feed-row-url="${CSS.escape(previewFeedUrl)}"]`,
+    );
+    if (feed && row instanceof HTMLElement) {
+      selectFeedPreview(feed, row);
+    } else {
+      const first = sorted[0]?.feeds?.[0];
+      if (first) {
+        const firstRow = listEl.querySelector(".live-concerts-feed");
+        if (firstRow instanceof HTMLElement) selectFeedPreview(first, firstRow);
+      }
+    }
+  } else {
+    const first = sorted[0]?.feeds?.[0];
+    if (first) {
+      const firstRow = listEl.querySelector(".live-concerts-feed");
+      if (firstRow instanceof HTMLElement) selectFeedPreview(first, firstRow);
+    }
+  }
 }
 
 /** @param {object} ev */
@@ -583,7 +829,7 @@ function eventCardHtml(ev) {
       const thumb = f.thumb
         ? `<img src="${escapeHtml(f.thumb)}" alt="" width="64" height="36" loading="lazy" decoding="async" />`
         : '<span class="live-concerts-thumb-ph"></span>';
-      return `<li class="live-concerts-feed">
+      return `<li class="live-concerts-feed" data-feed-row-url="${escapeHtml(f.url)}">
         <label class="live-concerts-feed-label">
           <input type="checkbox" data-feed-url="${escapeHtml(f.url)}"${checked} />
           ${thumb}

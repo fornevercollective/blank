@@ -27,6 +27,7 @@ import {
 import { handleVersionApi } from "./version-hub.mjs";
 import { handleStagingApi } from "./staging-hub.mjs";
 import { handleLiveConcertsApi } from "./live-concerts.mjs";
+import { handleArtistRepoApi } from "./artist-repo-api.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = __dirname;
@@ -180,6 +181,22 @@ const server = http.createServer((req, res) => {
       stats.bytesOut += outBytes;
     }
     logLine(status, outBytes);
+  };
+
+  /** @param {import("node:http").ServerResponse} res */
+  const responseBodyBytes = (res) => {
+    const marked = /** @type {{ __blankOutBytes?: number }} */ (res).__blankOutBytes;
+    if (typeof marked === "number" && marked >= 0) return marked;
+    const n = Number(res.getHeader("Content-Length"));
+    return Number.isFinite(n) && n >= 0 ? n : 0;
+  };
+
+  /** @param {import("node:http").ServerResponse} res */
+  const finalizeHandledApi = (res) => {
+    if (finalized) return;
+    const done = () => finalize(res.statusCode || 200, responseBodyBytes(res));
+    if (res.writableFinished) done();
+    else res.once("finish", done);
   };
 
   let urlPath;
@@ -376,6 +393,50 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  if (urlPath.startsWith("/api/repo/")) {
+    if (method === "OPTIONS") {
+      res.writeHead(204, {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type",
+        Connection: "close",
+      });
+      res.end();
+      finalize(204, 0);
+      return;
+    }
+    const repoTimeout = intEnv("BLANK_REPO_TIMEOUT_MS", 600_000);
+    req.setTimeout(repoTimeout);
+    res.setTimeout(repoTimeout);
+    handleArtistRepoApi(req, res, urlPath)
+      .then((handled) => {
+        if (handled) {
+          if (!finalized) finalize(res.statusCode || 200, 0);
+          return;
+        }
+        const body = Buffer.from("Repo API not found\n", "utf8");
+        res.writeHead(404, { "Content-Length": body.length, Connection: "close" });
+        res.end(body);
+        finalize(404, body.length);
+      })
+      .catch((err) => {
+        const msg = Buffer.from(
+          JSON.stringify({ ok: false, error: err instanceof Error ? err.message : String(err) }),
+          "utf8",
+        );
+        if (!res.headersSent) {
+          res.writeHead(500, {
+            "Content-Type": "application/json; charset=utf-8",
+            "Content-Length": msg.length,
+            Connection: "close",
+          });
+          res.end(msg);
+        }
+        finalize(500, msg.length);
+      });
+    return;
+  }
+
   if (urlPath === "/live-multiview" || urlPath === "/live-multiview/") {
     const mvFile = path.join(ROOT, "live-multiview.html");
     fs.stat(mvFile, (err, st) => {
@@ -437,12 +498,12 @@ const server = http.createServer((req, res) => {
       .then((handled) => {
         if (handled) {
           addRuntimeTokensForIngest(urlPath, method);
-          if (!finalized) finalize(res.statusCode || 200, 0);
+          finalizeHandledApi(res);
           return;
         }
         const allow = "GET, HEAD, POST, OPTIONS";
         const body = Buffer.from(
-          `${req.method} ${urlPath} — ingest: POST /api/ingest/resolve, GET /api/ingest/play/:id, scene-thumb, scene-audio, pose-thumb, scene-analysis-thumb, POST /api/ingest/intel, POST /api/ingest/gsplat/build, GET gsplat/pointcloud.ply transforms.json\n`,
+          `${req.method} ${urlPath} — ingest: POST /api/ingest/resolve, GET /api/ingest/play/:id, GET /api/ingest/downloads, POST /api/ingest/local, GET /api/ingest/file/:id, scene-thumb, scene-audio, pose-thumb, scene-analysis-thumb, POST /api/ingest/intel, POST /api/ingest/gsplat/build, GET gsplat/pointcloud.ply transforms.json\n`,
           "utf8",
         );
         res.writeHead(405, {
@@ -564,7 +625,7 @@ server.maxConnections = MAX_CONNECTIONS;
 server.keepAliveTimeout = KEEP_ALIVE_MS;
 server.headersTimeout = HEADERS_TIMEOUT_MS;
 try {
-  server.requestTimeout = REQUEST_TIMEOUT_MS;
+  server.requestTimeout = Math.max(REQUEST_TIMEOUT_MS, INGEST_REQUEST_TIMEOUT_MS);
 } catch {
   /* older Node without requestTimeout */
 }

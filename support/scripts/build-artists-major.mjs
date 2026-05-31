@@ -9,6 +9,18 @@ import { letterForName } from "../live-concerts-alphabets.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const outPath = path.join(__dirname, "..", "artists-major.json");
+const warpedPath = path.join(__dirname, "..", "warped-tour-lineups.json");
+
+/** @returns {Map<string, { name: string, totalYears: number, years: number[] }>} */
+function loadWarpedBands() {
+  if (!fs.existsSync(warpedPath)) return new Map();
+  const data = JSON.parse(fs.readFileSync(warpedPath, "utf8"));
+  const map = new Map();
+  for (const b of data.bands || []) {
+    if (b?.name) map.set(String(b.name).toLowerCase(), b);
+  }
+  return map;
+}
 
 /** @type {string[]} */
 const NAMES = [
@@ -146,15 +158,34 @@ const NAMES = [
   "ไมค์ ภิรมพร", "Carabao", "Bird Thongchai",
 ];
 
-const uniq = [...new Set(NAMES.map((n) => n.trim()).filter(Boolean))].sort((a, b) =>
-  a.localeCompare(b, "en", { sensitivity: "base" }),
-);
+const warpedByName = loadWarpedBands();
+const nameSet = new Set(NAMES.map((n) => n.trim()).filter(Boolean));
+for (const b of warpedByName.values()) {
+  if (b.name) nameSet.add(b.name);
+}
+
+const uniq = [...nameSet].sort((a, b) => a.localeCompare(b, "en", { sensitivity: "base" }));
 
 const artists = uniq.map((name) => {
   const { letter, script } = letterForName(name);
-  return { name, letter, script, region: inferRegion(name) };
+  const warped = warpedByName.get(name.toLowerCase());
+  const row = { name, letter, script, region: inferRegion(name) };
+  if (warped) {
+    row.warped = {
+      totalYears: warped.totalYears,
+      years: warped.years,
+    };
+  }
+  return row;
 });
 
-const payload = { version: 4, count: artists.length, artists };
+const payload = {
+  version: 5,
+  count: artists.length,
+  warpedSource: warpedByName.size
+    ? "https://en.wikipedia.org/wiki/List_of_Warped_Tour_lineups_by_year"
+    : undefined,
+  artists,
+};
 fs.writeFileSync(outPath, `${JSON.stringify(payload, null, 2)}\n`);
 console.log(`Wrote ${artists.length} artists to ${outPath}`);

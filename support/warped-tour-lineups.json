@@ -1,0 +1,11367 @@
+{
+  "version": 1,
+  "source": "https://en.wikipedia.org/wiki/List_of_Warped_Tour_lineups_by_year",
+  "fetchedAt": "2026-05-31T03:07:34.138Z",
+  "description": "Vans Warped Tour bands with years performed (from Wikipedia comprehensive lineup table).",
+  "tourYears": [
+    1995,
+    1996,
+    1997,
+    1998,
+    1999,
+    2000,
+    2001,
+    2002,
+    2003,
+    2004,
+    2005,
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2025,
+    2026
+  ],
+  "count": 1453,
+  "bands": [
+    {
+      "name": "1 Last Chance",
+      "totalYears": 1,
+      "years": [
+        2018
+      ]
+    },
+    {
+      "name": "1000 Mona Lisas",
+      "totalYears": 1,
+      "years": [
+        1996
+      ]
+    },
+    {
+      "name": "22 Jacks",
+      "totalYears": 3,
+      "years": [
+        1996,
+        1997,
+        1998
+      ]
+    },
+    {
+      "name": "311",
+      "totalYears": 5,
+      "years": [
+        1996,
+        1998,
+        2001,
+        2019,
+        2025
+      ]
+    },
+    {
+      "name": "36 Crazyfists",
+      "totalYears": 3,
+      "years": [
+        2015,
+        2018,
+        2019
+      ]
+    },
+    {
+      "name": "3OH!3",
+      "totalYears": 7,
+      "years": [
+        2008,
+        2009,
+        2011,
+        2013,
+        2016,
+        2018,
+        2025
+      ]
+    },
+    {
+      "name": "3rd Strike",
+      "totalYears": 2,
+      "years": [
+        2001,
+        2002
+      ]
+    },
+    {
+      "name": "5606",
+      "totalYears": 1,
+      "years": [
+        2010
+      ]
+    },
+    {
+      "name": "6Arelyhuman",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "7 Seconds",
+      "totalYears": 1,
+      "years": [
+        1999
+      ]
+    },
+    {
+      "name": "7th House",
+      "totalYears": 1,
+      "years": [
+        2001
+      ]
+    },
+    {
+      "name": "7th Standard",
+      "totalYears": 1,
+      "years": [
+        2003
+      ]
+    },
+    {
+      "name": "8 Graves",
+      "totalYears": 1,
+      "years": [
+        2018
+      ]
+    },
+    {
+      "name": "98 Mute",
+      "totalYears": 1,
+      "years": [
+        1998
+      ]
+    },
+    {
+      "name": "A Day to Remember",
+      "totalYears": 7,
+      "years": [
+        2005,
+        2008,
+        2009,
+        2011,
+        2014,
+        2019,
+        2025
+      ]
+    },
+    {
+      "name": "A Loss for Words",
+      "totalYears": 5,
+      "years": [
+        2007,
+        2008,
+        2012,
+        2015,
+        2025
+      ]
+    },
+    {
+      "name": "A Lot Like Birds",
+      "totalYears": 1,
+      "years": [
+        2014
+      ]
+    },
+    {
+      "name": "A Skylit Drive",
+      "totalYears": 2,
+      "years": [
+        2011,
+        2014
+      ]
+    },
+    {
+      "name": "A Static Lullaby",
+      "totalYears": 2,
+      "years": [
+        2006,
+        2007
+      ]
+    },
+    {
+      "name": "A Thorn for Every Heart",
+      "totalYears": 1,
+      "years": [
+        2005
+      ]
+    },
+    {
+      "name": "A Wilhelm Scream",
+      "totalYears": 2,
+      "years": [
+        2004,
+        2005
+      ]
+    },
+    {
+      "name": "A.N.I.M.A.L.",
+      "totalYears": 1,
+      "years": [
+        2000
+      ]
+    },
+    {
+      "name": "A+ Dropouts",
+      "totalYears": 1,
+      "years": [
+        2015
+      ]
+    },
+    {
+      "name": "Aaron West and the Roaring Twenties",
+      "totalYears": 2,
+      "years": [
+        2014,
+        2015
+      ]
+    },
+    {
+      "name": "Abandon All Ships",
+      "totalYears": 1,
+      "years": [
+        2011
+      ]
+    },
+    {
+      "name": "Abriel",
+      "totalYears": 1,
+      "years": [
+        2009
+      ]
+    },
+    {
+      "name": "Acceptance",
+      "totalYears": 5,
+      "years": [
+        2003,
+        2004,
+        2005,
+        2006,
+        2008
+      ]
+    },
+    {
+      "name": "ACIDIC",
+      "totalYears": 1,
+      "years": [
+        2014
+      ]
+    },
+    {
+      "name": "Action Item",
+      "totalYears": 1,
+      "years": [
+        2013
+      ]
+    },
+    {
+      "name": "Adolescents",
+      "totalYears": 3,
+      "years": [
+        2007,
+        2010,
+        2017
+      ]
+    },
+    {
+      "name": "AFI",
+      "totalYears": 4,
+      "years": [
+        2000,
+        2001,
+        2003,
+        2006
+      ]
+    },
+    {
+      "name": "After Midnight Project",
+      "totalYears": 2,
+      "years": [
+        2009,
+        2010
+      ]
+    },
+    {
+      "name": "After the Burial",
+      "totalYears": 2,
+      "years": [
+        2012,
+        2017
+      ]
+    },
+    {
+      "name": "Against Me!",
+      "totalYears": 3,
+      "years": [
+        2006,
+        2008,
+        2011
+      ]
+    },
+    {
+      "name": "Against the Current",
+      "totalYears": 1,
+      "years": [
+        2016
+      ]
+    },
+    {
+      "name": "Agent Orange",
+      "totalYears": 2,
+      "years": [
+        2007,
+        2010
+      ]
+    },
+    {
+      "name": "Agnostic Front",
+      "totalYears": 1,
+      "years": [
+        1999
+      ]
+    },
+    {
+      "name": "Aiden",
+      "totalYears": 2,
+      "years": [
+        2006,
+        2009
+      ]
+    },
+    {
+      "name": "Air Dubai",
+      "totalYears": 1,
+      "years": [
+        2014
+      ]
+    },
+    {
+      "name": "Alamance",
+      "totalYears": 1,
+      "years": [
+        2010
+      ]
+    },
+    {
+      "name": "Alcoa",
+      "totalYears": 1,
+      "years": [
+        2013
+      ]
+    },
+    {
+      "name": "Alesana",
+      "totalYears": 3,
+      "years": [
+        2007,
+        2008,
+        2010
+      ]
+    },
+    {
+      "name": "Alestorm",
+      "totalYears": 1,
+      "years": [
+        2017
+      ]
+    },
+    {
+      "name": "Alexisonfire",
+      "totalYears": 1,
+      "years": [
+        2006
+      ]
+    },
+    {
+      "name": "Alien Ant Farm",
+      "totalYears": 1,
+      "years": [
+        2001
+      ]
+    },
+    {
+      "name": "Alive Like Me",
+      "totalYears": 2,
+      "years": [
+        2014,
+        2015
+      ]
+    },
+    {
+      "name": "Alkaline Trio",
+      "totalYears": 4,
+      "years": [
+        2002,
+        2004,
+        2007,
+        2010
+      ]
+    },
+    {
+      "name": "All",
+      "totalYears": 1,
+      "years": [
+        1998
+      ]
+    },
+    {
+      "name": "All Systems Go!",
+      "totalYears": 1,
+      "years": [
+        1999
+      ]
+    },
+    {
+      "name": "All That Remains",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "All Time Low",
+      "totalYears": 6,
+      "years": [
+        2007,
+        2008,
+        2009,
+        2012,
+        2018,
+        2025
+      ]
+    },
+    {
+      "name": "Alligator Gun",
+      "totalYears": 1,
+      "years": [
+        1996
+      ]
+    },
+    {
+      "name": "Allison Weiss",
+      "totalYears": 2,
+      "years": [
+        2013,
+        2014
+      ]
+    },
+    {
+      "name": "Allister",
+      "totalYears": 3,
+      "years": [
+        2002,
+        2004,
+        2005
+      ]
+    },
+    {
+      "name": "Allstar Weekend",
+      "totalYears": 1,
+      "years": [
+        2013
+      ]
+    },
+    {
+      "name": "Alvarez Kings",
+      "totalYears": 3,
+      "years": [
+        2013,
+        2015,
+        2017
+      ]
+    },
+    {
+      "name": "AM Taxi",
+      "totalYears": 2,
+      "years": [
+        2010,
+        2011
+      ]
+    },
+    {
+      "name": "Amazing Royal Crowns",
+      "totalYears": 2,
+      "years": [
+        1998,
+        1999
+      ]
+    },
+    {
+      "name": "Amber Pacific",
+      "totalYears": 4,
+      "years": [
+        2004,
+        2005,
+        2006,
+        2007
+      ]
+    },
+    {
+      "name": "Amely",
+      "totalYears": 1,
+      "years": [
+        2009
+      ]
+    },
+    {
+      "name": "Amen",
+      "totalYears": 1,
+      "years": [
+        2001
+      ]
+    },
+    {
+      "name": "American Authors",
+      "totalYears": 2,
+      "years": [
+        2016,
+        2017
+      ]
+    },
+    {
+      "name": "American Opera",
+      "totalYears": 2,
+      "years": [
+        2013,
+        2015
+      ]
+    },
+    {
+      "name": "American Pinup",
+      "totalYears": 1,
+      "years": [
+        2014
+      ]
+    },
+    {
+      "name": "American Sixgun",
+      "totalYears": 1,
+      "years": [
+        2010
+      ]
+    },
+    {
+      "name": "Amigo The Devil",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Amory",
+      "totalYears": 1,
+      "years": [
+        2006
+      ]
+    },
+    {
+      "name": "Amplify This",
+      "totalYears": 1,
+      "years": [
+        2009
+      ]
+    },
+    {
+      "name": "Amyst",
+      "totalYears": 1,
+      "years": [
+        2012
+      ]
+    },
+    {
+      "name": "Anarbor",
+      "totalYears": 4,
+      "years": [
+        2008,
+        2009,
+        2010,
+        2013
+      ]
+    },
+    {
+      "name": "Anberlin",
+      "totalYears": 3,
+      "years": [
+        2007,
+        2008,
+        2014
+      ]
+    },
+    {
+      "name": "And I've Landed",
+      "totalYears": 1,
+      "years": [
+        2009
+      ]
+    },
+    {
+      "name": "Andrew W.K.",
+      "totalYears": 4,
+      "years": [
+        2002,
+        2003,
+        2010,
+        2019
+      ]
+    },
+    {
+      "name": "Andy Black",
+      "totalYears": 2,
+      "years": [
+        2017,
+        2019
+      ]
+    },
+    {
+      "name": "Angel Du$T",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Angels & Airwaves",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Angry Samoans",
+      "totalYears": 1,
+      "years": [
+        2010
+      ]
+    },
+    {
+      "name": "Animo",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Anthony Raneri of Bayside",
+      "totalYears": 2,
+      "years": [
+        2012,
+        2014
+      ]
+    },
+    {
+      "name": "Anthrophobia",
+      "totalYears": 1,
+      "years": [
+        1999
+      ]
+    },
+    {
+      "name": "Anti-Flag",
+      "totalYears": 11,
+      "years": [
+        1999,
+        2000,
+        2002,
+        2004,
+        2006,
+        2009,
+        2010,
+        2011,
+        2012,
+        2017,
+        2019
+      ]
+    },
+    {
+      "name": "Antiserum",
+      "totalYears": 1,
+      "years": [
+        2014
+      ]
+    },
+    {
+      "name": "Anxiety",
+      "totalYears": 1,
+      "years": [
+        1999
+      ]
+    },
+    {
+      "name": "April Chase",
+      "totalYears": 1,
+      "years": [
+        2010
+      ]
+    },
+    {
+      "name": "Architects",
+      "totalYears": 2,
+      "years": [
+        2008,
+        2013
+      ]
+    },
+    {
+      "name": "Area-7",
+      "totalYears": 1,
+      "years": [
+        1999
+      ]
+    },
+    {
+      "name": "Ariana and the Rose",
+      "totalYears": 1,
+      "years": [
+        2019
+      ]
+    },
+    {
+      "name": "Arkham",
+      "totalYears": 1,
+      "years": [
+        2003
+      ]
+    },
+    {
+      "name": "Armor for Sleep",
+      "totalYears": 2,
+      "years": [
+        2005,
+        2006
+      ]
+    },
+    {
+      "name": "Arrows In Action",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Art of Shock",
+      "totalYears": 1,
+      "years": [
+        2013
+      ]
+    },
+    {
+      "name": "Artist vs. Poet",
+      "totalYears": 1,
+      "years": [
+        2010
+      ]
+    },
+    {
+      "name": "As Cities Burn",
+      "totalYears": 2,
+      "years": [
+        2006,
+        2007
+      ]
+    },
+    {
+      "name": "As I Lay Dying",
+      "totalYears": 2,
+      "years": [
+        2007,
+        2008
+      ]
+    },
+    {
+      "name": "As It Is",
+      "totalYears": 3,
+      "years": [
+        2015,
+        2018,
+        2025
+      ]
+    },
+    {
+      "name": "As Tall as Lions",
+      "totalYears": 1,
+      "years": [
+        2005
+      ]
+    },
+    {
+      "name": "Ascot Royals",
+      "totalYears": 1,
+      "years": [
+        2015
+      ]
+    },
+    {
+      "name": "Asking Alexandria",
+      "totalYears": 4,
+      "years": [
+        2011,
+        2015,
+        2018,
+        2025
+      ]
+    },
+    {
+      "name": "Assorted Jelly Beans",
+      "totalYears": 1,
+      "years": [
+        2010
+      ]
+    },
+    {
+      "name": "Assuming We Survive",
+      "totalYears": 3,
+      "years": [
+        2016,
+        2017,
+        2018
+      ]
+    },
+    {
+      "name": "Atmosphere",
+      "totalYears": 5,
+      "years": [
+        2003,
+        2004,
+        2005,
+        2019,
+        2025
+      ]
+    },
+    {
+      "name": "Atomic Fireballs",
+      "totalYears": 1,
+      "years": [
+        1998
+      ]
+    },
+    {
+      "name": "Atreyu",
+      "totalYears": 3,
+      "years": [
+        2005,
+        2016,
+        2019
+      ]
+    },
+    {
+      "name": "Attack Attack!",
+      "totalYears": 3,
+      "years": [
+        2009,
+        2010,
+        2011
+      ]
+    },
+    {
+      "name": "Attila",
+      "totalYears": 5,
+      "years": [
+        2013,
+        2014,
+        2015,
+        2017,
+        2025
+      ]
+    },
+    {
+      "name": "August Burns Red",
+      "totalYears": 7,
+      "years": [
+        2008,
+        2011,
+        2012,
+        2013,
+        2015,
+        2018,
+        2019
+      ]
+    },
+    {
+      "name": "Austin Lucas",
+      "totalYears": 1,
+      "years": [
+        2013
+      ]
+    },
+    {
+      "name": "Authority Zero",
+      "totalYears": 2,
+      "years": [
+        2008,
+        2018
+      ]
+    },
+    {
+      "name": "Automatic Love Letter",
+      "totalYears": 2,
+      "years": [
+        2008,
+        2010
+      ]
+    },
+    {
+      "name": "Autopilot Off",
+      "totalYears": 2,
+      "years": [
+        2002,
+        2004
+      ]
+    },
+    {
+      "name": "Ava Maybee",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Avail",
+      "totalYears": 2,
+      "years": [
+        1999,
+        2000
+      ]
+    },
+    {
+      "name": "Avenged Sevenfold",
+      "totalYears": 5,
+      "years": [
+        2002,
+        2003,
+        2004,
+        2005,
+        2007
+      ]
+    },
+    {
+      "name": "Avion Roe",
+      "totalYears": 1,
+      "years": [
+        2016
+      ]
+    },
+    {
+      "name": "Aviva",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Avoid One Thing",
+      "totalYears": 1,
+      "years": [
+        2003
+      ]
+    },
+    {
+      "name": "Avril Lavigne",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Baby Baby",
+      "totalYears": 1,
+      "years": [
+        2015
+      ]
+    },
+    {
+      "name": "Bad Case of Big Mouth",
+      "totalYears": 1,
+      "years": [
+        2013
+      ]
+    },
+    {
+      "name": "Bad Cop / Bad Cop",
+      "totalYears": 3,
+      "years": [
+        2015,
+        2017,
+        2019
+      ]
+    },
+    {
+      "name": "Bad Omens",
+      "totalYears": 1,
+      "years": [
+        2017
+      ]
+    },
+    {
+      "name": "Bad Rabbits",
+      "totalYears": 3,
+      "years": [
+        2011,
+        2014,
+        2025
+      ]
+    },
+    {
+      "name": "Bad Religion",
+      "totalYears": 7,
+      "years": [
+        1997,
+        1998,
+        2002,
+        2004,
+        2007,
+        2009,
+        2019
+      ]
+    },
+    {
+      "name": "Bad Seed Rising",
+      "totalYears": 2,
+      "years": [
+        2016,
+        2017
+      ]
+    },
+    {
+      "name": "Ballyhoo!",
+      "totalYears": 2,
+      "years": [
+        2012,
+        2016
+      ]
+    },
+    {
+      "name": "Bangups",
+      "totalYears": 2,
+      "years": [
+        2012,
+        2013
+      ]
+    },
+    {
+      "name": "Barb Wire Dolls",
+      "totalYears": 1,
+      "years": [
+        2017
+      ]
+    },
+    {
+      "name": "Bayside",
+      "totalYears": 5,
+      "years": [
+        2006,
+        2007,
+        2009,
+        2012,
+        2014
+      ]
+    },
+    {
+      "name": "Be Your Own Pet",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Beacher's Madhouse",
+      "totalYears": 1,
+      "years": [
+        2010
+      ]
+    },
+    {
+      "name": "Beartooth",
+      "totalYears": 5,
+      "years": [
+        2013,
+        2014,
+        2015,
+        2017,
+        2018
+      ]
+    },
+    {
+      "name": "Beat Union",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Beatsteaks",
+      "totalYears": 2,
+      "years": [
+        1999,
+        2000
+      ]
+    },
+    {
+      "name": "Beautiful Bodies",
+      "totalYears": 2,
+      "years": [
+        2013,
+        2015
+      ]
+    },
+    {
+      "name": "Beauty School Dropout",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Beaverloop",
+      "totalYears": 1,
+      "years": [
+        1999
+      ]
+    },
+    {
+      "name": "Bebe Rexha",
+      "totalYears": 1,
+      "years": [
+        2015
+      ]
+    },
+    {
+      "name": "Beck",
+      "totalYears": 1,
+      "years": [
+        1996
+      ]
+    },
+    {
+      "name": "Bedouin Soundclash",
+      "totalYears": 2,
+      "years": [
+        2005,
+        2008
+      ]
+    },
+    {
+      "name": "Beebs and Her Money Makers",
+      "totalYears": 3,
+      "years": [
+        2013,
+        2014,
+        2018
+      ]
+    },
+    {
+      "name": "Being as an Ocean",
+      "totalYears": 2,
+      "years": [
+        2015,
+        2017
+      ]
+    },
+    {
+      "name": "Better Lovers",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Better Off",
+      "totalYears": 1,
+      "years": [
+        2014
+      ]
+    },
+    {
+      "name": "Between the Trees",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Beware of Darkness",
+      "totalYears": 1,
+      "years": [
+        2013
+      ]
+    },
+    {
+      "name": "Bi-Level",
+      "totalYears": 1,
+      "years": [
+        2003
+      ]
+    },
+    {
+      "name": "Bif Naked",
+      "totalYears": 2,
+      "years": [
+        1996,
+        2000
+      ]
+    },
+    {
+      "name": "Biffy Clyro",
+      "totalYears": 1,
+      "years": [
+        2007
+      ]
+    },
+    {
+      "name": "Big Ass Truck",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Big B",
+      "totalYears": 1,
+      "years": [
+        2011
+      ]
+    },
+    {
+      "name": "Big Chocolate",
+      "totalYears": 2,
+      "years": [
+        2011,
+        2013
+      ]
+    },
+    {
+      "name": "Big D and the Kids Table",
+      "totalYears": 8,
+      "years": [
+        2005,
+        2007,
+        2009,
+        2010,
+        2011,
+        2013,
+        2017,
+        2019
+      ]
+    },
+    {
+      "name": "Big Drill Car",
+      "totalYears": 2,
+      "years": [
+        2008,
+        2009
+      ]
+    },
+    {
+      "name": "Bigwig",
+      "totalYears": 1,
+      "years": [
+        2001
+      ]
+    },
+    {
+      "name": "Billy Idol",
+      "totalYears": 1,
+      "years": [
+        2005
+      ]
+    },
+    {
+      "name": "Billy Talent",
+      "totalYears": 4,
+      "years": [
+        2004,
+        2005,
+        2006,
+        2013
+      ]
+    },
+    {
+      "name": "Billy the Kid",
+      "totalYears": 1,
+      "years": [
+        2013
+      ]
+    },
+    {
+      "name": "Black Boots",
+      "totalYears": 1,
+      "years": [
+        2015
+      ]
+    },
+    {
+      "name": "Black Box",
+      "totalYears": 1,
+      "years": [
+        2009
+      ]
+    },
+    {
+      "name": "Black President",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Black Square",
+      "totalYears": 1,
+      "years": [
+        2011
+      ]
+    },
+    {
+      "name": "Black Tide",
+      "totalYears": 1,
+      "years": [
+        2009
+      ]
+    },
+    {
+      "name": "Black Veil Brides",
+      "totalYears": 5,
+      "years": [
+        2011,
+        2013,
+        2015,
+        2018,
+        2025
+      ]
+    },
+    {
+      "name": "Blackbear",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Blackbird",
+      "totalYears": 1,
+      "years": [
+        2014
+      ]
+    },
+    {
+      "name": "Blackfire",
+      "totalYears": 1,
+      "years": [
+        2003
+      ]
+    },
+    {
+      "name": "Blacklist Royals",
+      "totalYears": 4,
+      "years": [
+        2006,
+        2007,
+        2011,
+        2014
+      ]
+    },
+    {
+      "name": "Blameshift",
+      "totalYears": 1,
+      "years": [
+        2014
+      ]
+    },
+    {
+      "name": "Blasé Debris",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Bleed the Dream",
+      "totalYears": 4,
+      "years": [
+        2003,
+        2004,
+        2005,
+        2007
+      ]
+    },
+    {
+      "name": "Bleeding Orange",
+      "totalYears": 1,
+      "years": [
+        2006
+      ]
+    },
+    {
+      "name": "Bleeding Through",
+      "totalYears": 1,
+      "years": [
+        2005
+      ]
+    },
+    {
+      "name": "Blessthefall",
+      "totalYears": 6,
+      "years": [
+        2007,
+        2012,
+        2013,
+        2015,
+        2017,
+        2025
+      ]
+    },
+    {
+      "name": "Blink-182",
+      "totalYears": 6,
+      "years": [
+        1996,
+        1997,
+        1998,
+        1999,
+        2001,
+        2019
+      ]
+    },
+    {
+      "name": "Blood on the Dance Floor",
+      "totalYears": 2,
+      "years": [
+        2011,
+        2012
+      ]
+    },
+    {
+      "name": "Blue Meanies",
+      "totalYears": 1,
+      "years": [
+        1996
+      ]
+    },
+    {
+      "name": "Body Count",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Bodyjar",
+      "totalYears": 1,
+      "years": [
+        2001
+      ]
+    },
+    {
+      "name": "Bombay Cowtippers",
+      "totalYears": 1,
+      "years": [
+        1999
+      ]
+    },
+    {
+      "name": "Borialis",
+      "totalYears": 1,
+      "years": [
+        2002
+      ]
+    },
+    {
+      "name": "Born Cages",
+      "totalYears": 1,
+      "years": [
+        2015
+      ]
+    },
+    {
+      "name": "Born of Osiris",
+      "totalYears": 2,
+      "years": [
+        2012,
+        2014
+      ]
+    },
+    {
+      "name": "Boston Manor",
+      "totalYears": 1,
+      "years": [
+        2017
+      ]
+    },
+    {
+      "name": "Boundaries",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Bowling for Soup",
+      "totalYears": 10,
+      "years": [
+        2003,
+        2004,
+        2005,
+        2011,
+        2013,
+        2014,
+        2017,
+        2018,
+        2019,
+        2025
+      ]
+    },
+    {
+      "name": "Box Car Racer",
+      "totalYears": 1,
+      "years": [
+        2002
+      ]
+    },
+    {
+      "name": "BoyMeetsWorld",
+      "totalYears": 1,
+      "years": [
+        2015
+      ]
+    },
+    {
+      "name": "Boys Like Girls",
+      "totalYears": 2,
+      "years": [
+        2007,
+        2025
+      ]
+    },
+    {
+      "name": "Boys Night Out",
+      "totalYears": 1,
+      "years": [
+        2005
+      ]
+    },
+    {
+      "name": "Boysetsfire",
+      "totalYears": 2,
+      "years": [
+        2002,
+        2006
+      ]
+    },
+    {
+      "name": "BR549",
+      "totalYears": 1,
+      "years": [
+        1999
+      ]
+    },
+    {
+      "name": "Brand New",
+      "totalYears": 1,
+      "years": [
+        2003
+      ]
+    },
+    {
+      "name": "Brass Tackz",
+      "totalYears": 1,
+      "years": [
+        2010
+      ]
+    },
+    {
+      "name": "Breathe Carolina",
+      "totalYears": 4,
+      "years": [
+        2009,
+        2010,
+        2012,
+        2014
+      ]
+    },
+    {
+      "name": "Breathe Electric",
+      "totalYears": 2,
+      "years": [
+        2009,
+        2010
+      ]
+    },
+    {
+      "name": "Brian Marquis",
+      "totalYears": 4,
+      "years": [
+        2012,
+        2013,
+        2014,
+        2015
+      ]
+    },
+    {
+      "name": "Bring Me the Horizon",
+      "totalYears": 3,
+      "years": [
+        2008,
+        2010,
+        2013
+      ]
+    },
+    {
+      "name": "Britt Black",
+      "totalYears": 1,
+      "years": [
+        2006
+      ]
+    },
+    {
+      "name": "Broadside",
+      "totalYears": 2,
+      "years": [
+        2016,
+        2018
+      ]
+    },
+    {
+      "name": "Broadway Calls",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "BrokeNCYDE",
+      "totalYears": 1,
+      "years": [
+        2009
+      ]
+    },
+    {
+      "name": "Brothers Of Brazil",
+      "totalYears": 1,
+      "years": [
+        2011
+      ]
+    },
+    {
+      "name": "Brubeck",
+      "totalYears": 1,
+      "years": [
+        1998
+      ]
+    },
+    {
+      "name": "Bryce Vine",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Buck-O-Nine",
+      "totalYears": 3,
+      "years": [
+        1997,
+        1999,
+        2007
+      ]
+    },
+    {
+      "name": "Buffalo Casket",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Bullet for My Valentine",
+      "totalYears": 2,
+      "years": [
+        2006,
+        2016
+      ]
+    },
+    {
+      "name": "Burning Empires",
+      "totalYears": 1,
+      "years": [
+        2010
+      ]
+    },
+    {
+      "name": "Buttons",
+      "totalYears": 2,
+      "years": [
+        2014,
+        2015
+      ]
+    },
+    {
+      "name": "Buzzcocks",
+      "totalYears": 1,
+      "years": [
+        2006
+      ]
+    },
+    {
+      "name": "Call the Cops",
+      "totalYears": 1,
+      "years": [
+        2010
+      ]
+    },
+    {
+      "name": "Callback California",
+      "totalYears": 1,
+      "years": [
+        2010
+      ]
+    },
+    {
+      "name": "Campaigning For Zeros",
+      "totalYears": 1,
+      "years": [
+        2011
+      ]
+    },
+    {
+      "name": "Can't Swim",
+      "totalYears": 1,
+      "years": [
+        2019
+      ]
+    },
+    {
+      "name": "Candiria",
+      "totalYears": 1,
+      "years": [
+        2017
+      ]
+    },
+    {
+      "name": "Candy Hearts",
+      "totalYears": 2,
+      "years": [
+        2014,
+        2015
+      ]
+    },
+    {
+      "name": "Cane Hill",
+      "totalYears": 1,
+      "years": [
+        2016
+      ]
+    },
+    {
+      "name": "Capsize",
+      "totalYears": 1,
+      "years": [
+        2016
+      ]
+    },
+    {
+      "name": "Capstan",
+      "totalYears": 1,
+      "years": [
+        2018
+      ]
+    },
+    {
+      "name": "Captain Capa",
+      "totalYears": 2,
+      "years": [
+        2012,
+        2014
+      ]
+    },
+    {
+      "name": "Carnifex",
+      "totalYears": 1,
+      "years": [
+        2017
+      ]
+    },
+    {
+      "name": "Carolesdaughter",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Carousel Kings",
+      "totalYears": 3,
+      "years": [
+        2015,
+        2017,
+        2018
+      ]
+    },
+    {
+      "name": "Carpool",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Cartel",
+      "totalYears": 3,
+      "years": [
+        2005,
+        2006,
+        2025
+      ]
+    },
+    {
+      "name": "Casket Architects",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Cassadee Pope",
+      "totalYears": 1,
+      "years": [
+        2018
+      ]
+    },
+    {
+      "name": "Catch 22",
+      "totalYears": 1,
+      "years": [
+        2001
+      ]
+    },
+    {
+      "name": "CatchingYourClouds",
+      "totalYears": 1,
+      "years": [
+        2012
+      ]
+    },
+    {
+      "name": "Chained Saint",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Chali 2na & Cut Chemist",
+      "totalYears": 1,
+      "years": [
+        2019
+      ]
+    },
+    {
+      "name": "Champagne Champagne",
+      "totalYears": 1,
+      "years": [
+        2012
+      ]
+    },
+    {
+      "name": "Chandler Leighton",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Charged GBH",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Charlie Simpson",
+      "totalYears": 1,
+      "years": [
+        2013
+      ]
+    },
+    {
+      "name": "Charlotte Sands",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Charlotte Sometimes",
+      "totalYears": 2,
+      "years": [
+        2008,
+        2013
+      ]
+    },
+    {
+      "name": "Chase Atlantic",
+      "totalYears": 1,
+      "years": [
+        2018
+      ]
+    },
+    {
+      "name": "Chase Long Beach",
+      "totalYears": 1,
+      "years": [
+        2010
+      ]
+    },
+    {
+      "name": "Chase Walker Band",
+      "totalYears": 2,
+      "years": [
+        2013,
+        2014
+      ]
+    },
+    {
+      "name": "Chelsea Grin",
+      "totalYears": 4,
+      "years": [
+        2012,
+        2014,
+        2016,
+        2018
+      ]
+    },
+    {
+      "name": "Cherri Bomb",
+      "totalYears": 1,
+      "years": [
+        2012
+      ]
+    },
+    {
+      "name": "Cherry Poppin' Daddies",
+      "totalYears": 1,
+      "years": [
+        1998
+      ]
+    },
+    {
+      "name": "Chiodos",
+      "totalYears": 7,
+      "years": [
+        2006,
+        2007,
+        2008,
+        2009,
+        2012,
+        2013,
+        2025
+      ]
+    },
+    {
+      "name": "ChrisB",
+      "totalYears": 1,
+      "years": [
+        2015
+      ]
+    },
+    {
+      "name": "Chronic Future",
+      "totalYears": 1,
+      "years": [
+        2004
+      ]
+    },
+    {
+      "name": "Chuck Ragan of Hot Water Music",
+      "totalYears": 1,
+      "years": [
+        2012
+      ]
+    },
+    {
+      "name": "Chunk! No, Captain Chunk",
+      "totalYears": 3,
+      "years": [
+        2012,
+        2014,
+        2016
+      ]
+    },
+    {
+      "name": "Cigar",
+      "totalYears": 1,
+      "years": [
+        1998
+      ]
+    },
+    {
+      "name": "Cinder Road",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Cinematic Sunrise",
+      "totalYears": 2,
+      "years": [
+        2007,
+        2008
+      ]
+    },
+    {
+      "name": "Circa Survive",
+      "totalYears": 3,
+      "years": [
+        2005,
+        2007,
+        2019
+      ]
+    },
+    {
+      "name": "Circle Jerks",
+      "totalYears": 1,
+      "years": [
+        2007
+      ]
+    },
+    {
+      "name": "Citizen",
+      "totalYears": 3,
+      "years": [
+        2006,
+        2013,
+        2015
+      ]
+    },
+    {
+      "name": "City of Ghosts",
+      "totalYears": 1,
+      "years": [
+        2013
+      ]
+    },
+    {
+      "name": "CIV",
+      "totalYears": 3,
+      "years": [
+        1995,
+        1996,
+        1998
+      ]
+    },
+    {
+      "name": "CKY",
+      "totalYears": 5,
+      "years": [
+        1999,
+        2000,
+        2017,
+        2019,
+        2025
+      ]
+    },
+    {
+      "name": "Cliffdiver",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Close Your Eyes",
+      "totalYears": 1,
+      "years": [
+        2014
+      ]
+    },
+    {
+      "name": "Closure in Moscow",
+      "totalYears": 1,
+      "years": [
+        2010
+      ]
+    },
+    {
+      "name": "Cobra Starship",
+      "totalYears": 2,
+      "years": [
+        2008,
+        2025
+      ]
+    },
+    {
+      "name": "Coheed and Cambria",
+      "totalYears": 3,
+      "years": [
+        2003,
+        2004,
+        2007
+      ]
+    },
+    {
+      "name": "Cold Forty Three",
+      "totalYears": 2,
+      "years": [
+        2011,
+        2012
+      ]
+    },
+    {
+      "name": "Cold Fusion",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Coldrain",
+      "totalYears": 1,
+      "years": [
+        2016
+      ]
+    },
+    {
+      "name": "Columbyne",
+      "totalYears": 2,
+      "years": [
+        2010,
+        2011
+      ]
+    },
+    {
+      "name": "Comeback Kid",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Common Sage",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Common Sense",
+      "totalYears": 1,
+      "years": [
+        1999
+      ]
+    },
+    {
+      "name": "Confide",
+      "totalYears": 3,
+      "years": [
+        2008,
+        2010,
+        2019
+      ]
+    },
+    {
+      "name": "Continental",
+      "totalYears": 1,
+      "years": [
+        2011
+      ]
+    },
+    {
+      "name": "Corrin Campbell",
+      "totalYears": 2,
+      "years": [
+        2014,
+        2015
+      ]
+    },
+    {
+      "name": "Count the Stars",
+      "totalYears": 1,
+      "years": [
+        2003
+      ]
+    },
+    {
+      "name": "Counterparts",
+      "totalYears": 1,
+      "years": [
+        2017
+      ]
+    },
+    {
+      "name": "Courage My Love",
+      "totalYears": 3,
+      "years": [
+        2013,
+        2014,
+        2017
+      ]
+    },
+    {
+      "name": "Craig Owens",
+      "totalYears": 1,
+      "years": [
+        2013
+      ]
+    },
+    {
+      "name": "Crashcarburn",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Creeper",
+      "totalYears": 1,
+      "years": [
+        2017
+      ]
+    },
+    {
+      "name": "Crime in Stereo",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Crizzly",
+      "totalYears": 2,
+      "years": [
+        2013,
+        2014
+      ]
+    },
+    {
+      "name": "Crossfaith",
+      "totalYears": 2,
+      "years": [
+        2013,
+        2015
+      ]
+    },
+    {
+      "name": "Crown the Empire",
+      "totalYears": 5,
+      "years": [
+        2013,
+        2014,
+        2016,
+        2018,
+        2025
+      ]
+    },
+    {
+      "name": "Crowned King",
+      "totalYears": 1,
+      "years": [
+        2007
+      ]
+    },
+    {
+      "name": "Cruel Hand",
+      "totalYears": 1,
+      "years": [
+        2016
+      ]
+    },
+    {
+      "name": "Crumb",
+      "totalYears": 1,
+      "years": [
+        1998
+      ]
+    },
+    {
+      "name": "Culture Shock Camp",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Cursed Sails",
+      "totalYears": 1,
+      "years": [
+        2014
+      ]
+    },
+    {
+      "name": "Cute Is What We Aim For",
+      "totalYears": 2,
+      "years": [
+        2007,
+        2014
+      ]
+    },
+    {
+      "name": "Cypress Hill",
+      "totalYears": 1,
+      "years": [
+        1999
+      ]
+    },
+    {
+      "name": "D.I.",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "D.R.U.G.S.",
+      "totalYears": 1,
+      "years": [
+        2011
+      ]
+    },
+    {
+      "name": "D12",
+      "totalYears": 1,
+      "years": [
+        2001
+      ]
+    },
+    {
+      "name": "Dakoda Motor Co.",
+      "totalYears": 1,
+      "years": [
+        1996
+      ]
+    },
+    {
+      "name": "Damone",
+      "totalYears": 1,
+      "years": [
+        2003
+      ]
+    },
+    {
+      "name": "Dance Gavin Dance",
+      "totalYears": 4,
+      "years": [
+        2009,
+        2011,
+        2017,
+        2019
+      ]
+    },
+    {
+      "name": "Dance Hall Crashers",
+      "totalYears": 2,
+      "years": [
+        1996,
+        2025
+      ]
+    },
+    {
+      "name": "Danger Radio",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Dangerkids",
+      "totalYears": 1,
+      "years": [
+        2014
+      ]
+    },
+    {
+      "name": "Danielle Barbe",
+      "totalYears": 1,
+      "years": [
+        2012
+      ]
+    },
+    {
+      "name": "Dante",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Darkest Hour",
+      "totalYears": 1,
+      "years": [
+        2005
+      ]
+    },
+    {
+      "name": "Dash | Ten",
+      "totalYears": 1,
+      "years": [
+        2016
+      ]
+    },
+    {
+      "name": "Dayseeker",
+      "totalYears": 1,
+      "years": [
+        2018
+      ]
+    },
+    {
+      "name": "DC Fallout",
+      "totalYears": 1,
+      "years": [
+        2011
+      ]
+    },
+    {
+      "name": "Dead by Wednesday",
+      "totalYears": 1,
+      "years": [
+        2018
+      ]
+    },
+    {
+      "name": "Dead Cat Lounge",
+      "totalYears": 1,
+      "years": [
+        2011
+      ]
+    },
+    {
+      "name": "Dead Girls Academy",
+      "totalYears": 2,
+      "years": [
+        2017,
+        2018
+      ]
+    },
+    {
+      "name": "Dead Legend",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Dead Sara",
+      "totalYears": 1,
+      "years": [
+        2012
+      ]
+    },
+    {
+      "name": "Deadly Apples",
+      "totalYears": 2,
+      "years": [
+        2018,
+        2019
+      ]
+    },
+    {
+      "name": "Dear and the Headlights",
+      "totalYears": 1,
+      "years": [
+        2009
+      ]
+    },
+    {
+      "name": "Death Before Dishonor",
+      "totalYears": 1,
+      "years": [
+        2006
+      ]
+    },
+    {
+      "name": "Deathbyromy",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Deez Nuts",
+      "totalYears": 1,
+      "years": [
+        2018
+      ]
+    },
+    {
+      "name": "Def Con Dos",
+      "totalYears": 1,
+      "years": [
+        1998
+      ]
+    },
+    {
+      "name": "Defeater",
+      "totalYears": 1,
+      "years": [
+        2013
+      ]
+    },
+    {
+      "name": "Deftones",
+      "totalYears": 3,
+      "years": [
+        1995,
+        1996,
+        1998
+      ]
+    },
+    {
+      "name": "Dem Atlas",
+      "totalYears": 1,
+      "years": [
+        2019
+      ]
+    },
+    {
+      "name": "Demerit",
+      "totalYears": 1,
+      "years": [
+        2011
+      ]
+    },
+    {
+      "name": "DeRoot",
+      "totalYears": 1,
+      "years": [
+        2001
+      ]
+    },
+    {
+      "name": "Descendents",
+      "totalYears": 1,
+      "years": [
+        1997
+      ]
+    },
+    {
+      "name": "Desperation Squad",
+      "totalYears": 1,
+      "years": [
+        2007
+      ]
+    },
+    {
+      "name": "Destroy Boys",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Destruction Made Simple",
+      "totalYears": 1,
+      "years": [
+        2003
+      ]
+    },
+    {
+      "name": "Deviates",
+      "totalYears": 4,
+      "years": [
+        1999,
+        2000,
+        2001,
+        2002
+      ]
+    },
+    {
+      "name": "Dewayne",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Dexter And The Moonrocks",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Dick Dale",
+      "totalYears": 1,
+      "years": [
+        1996
+      ]
+    },
+    {
+      "name": "Die Toten Hosen",
+      "totalYears": 1,
+      "years": [
+        1998
+      ]
+    },
+    {
+      "name": "Die' Hunns",
+      "totalYears": 1,
+      "years": [
+        2006
+      ]
+    },
+    {
+      "name": "Dimestore Hoods",
+      "totalYears": 2,
+      "years": [
+        1995,
+        1996
+      ]
+    },
+    {
+      "name": "Dirty Heads",
+      "totalYears": 1,
+      "years": [
+        2019
+      ]
+    },
+    {
+      "name": "Discipline",
+      "totalYears": 1,
+      "years": [
+        1999
+      ]
+    },
+    {
+      "name": "Disco Ensemble",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "District 7",
+      "totalYears": 1,
+      "years": [
+        2002
+      ]
+    },
+    {
+      "name": "Divided by Friday",
+      "totalYears": 1,
+      "years": [
+        2012
+      ]
+    },
+    {
+      "name": "Divided Heaven",
+      "totalYears": 1,
+      "years": [
+        2014
+      ]
+    },
+    {
+      "name": "DJ Nicola Bear",
+      "totalYears": 1,
+      "years": [
+        2014
+      ]
+    },
+    {
+      "name": "DJ Scout",
+      "totalYears": 1,
+      "years": [
+        2014
+      ]
+    },
+    {
+      "name": "Dodger",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Does It Offend You, Yeah?",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Dog Eat Dog",
+      "totalYears": 1,
+      "years": [
+        1996
+      ]
+    },
+    {
+      "name": "Doll Skin",
+      "totalYears": 2,
+      "years": [
+        2017,
+        2018
+      ]
+    },
+    {
+      "name": "Don Broco",
+      "totalYears": 1,
+      "years": [
+        2018
+      ]
+    },
+    {
+      "name": "Doozer",
+      "totalYears": 1,
+      "years": [
+        2003
+      ]
+    },
+    {
+      "name": "Dose of Adolescence",
+      "totalYears": 1,
+      "years": [
+        2013
+      ]
+    },
+    {
+      "name": "Double XL",
+      "totalYears": 1,
+      "years": [
+        2007
+      ]
+    },
+    {
+      "name": "Down by Law",
+      "totalYears": 1,
+      "years": [
+        1996
+      ]
+    },
+    {
+      "name": "Dr. Madd Vibe",
+      "totalYears": 1,
+      "years": [
+        2006
+      ]
+    },
+    {
+      "name": "Dr. Manhattan",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Drain",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Drama Club",
+      "totalYears": 1,
+      "years": [
+        2015
+      ]
+    },
+    {
+      "name": "Drive A",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Driver Friendly",
+      "totalYears": 1,
+      "years": [
+        2013
+      ]
+    },
+    {
+      "name": "Drop Dead, Gorgeous",
+      "totalYears": 1,
+      "years": [
+        2007
+      ]
+    },
+    {
+      "name": "Dropkick Murphys",
+      "totalYears": 7,
+      "years": [
+        1998,
+        1999,
+        2001,
+        2003,
+        2005,
+        2010,
+        2025
+      ]
+    },
+    {
+      "name": "Drug Church",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Dub Pistols",
+      "totalYears": 1,
+      "years": [
+        2001
+      ]
+    },
+    {
+      "name": "Dustin Jones and the Rising Tide",
+      "totalYears": 1,
+      "years": [
+        2012
+      ]
+    },
+    {
+      "name": "Dye",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Echo Movement",
+      "totalYears": 1,
+      "years": [
+        2012
+      ]
+    },
+    {
+      "name": "Echosmith",
+      "totalYears": 3,
+      "years": [
+        2013,
+        2014,
+        2018
+      ]
+    },
+    {
+      "name": "Eden Row",
+      "totalYears": 1,
+      "years": [
+        2004
+      ]
+    },
+    {
+      "name": "Edreys",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Eidola",
+      "totalYears": 1,
+      "years": [
+        2018
+      ]
+    },
+    {
+      "name": "Eighteen Visions",
+      "totalYears": 2,
+      "years": [
+        2004,
+        2006
+      ]
+    },
+    {
+      "name": "Eightyonedays",
+      "totalYears": 1,
+      "years": [
+        2004
+      ]
+    },
+    {
+      "name": "Ekoh",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "El Centro",
+      "totalYears": 2,
+      "years": [
+        2001,
+        2025
+      ]
+    },
+    {
+      "name": "Elder Brother",
+      "totalYears": 2,
+      "years": [
+        2014,
+        2019
+      ]
+    },
+    {
+      "name": "Electric Touch",
+      "totalYears": 1,
+      "years": [
+        2011
+      ]
+    },
+    {
+      "name": "Eli Olsberg",
+      "totalYears": 1,
+      "years": [
+        2015
+      ]
+    },
+    {
+      "name": "Emarosa",
+      "totalYears": 3,
+      "years": [
+        2010,
+        2015,
+        2016
+      ]
+    },
+    {
+      "name": "Emery",
+      "totalYears": 3,
+      "years": [
+        2005,
+        2006,
+        2019
+      ]
+    },
+    {
+      "name": "Emilie Autumn",
+      "totalYears": 1,
+      "years": [
+        2014
+      ]
+    },
+    {
+      "name": "Emily's Army",
+      "totalYears": 2,
+      "years": [
+        2012,
+        2013
+      ]
+    },
+    {
+      "name": "Eminem",
+      "totalYears": 1,
+      "years": [
+        1999
+      ]
+    },
+    {
+      "name": "Emmure",
+      "totalYears": 3,
+      "years": [
+        2009,
+        2010,
+        2017
+      ]
+    },
+    {
+      "name": "Energy",
+      "totalYears": 1,
+      "years": [
+        2006
+      ]
+    },
+    {
+      "name": "Enough Already",
+      "totalYears": 1,
+      "years": [
+        2016
+      ]
+    },
+    {
+      "name": "Enter Shikari",
+      "totalYears": 4,
+      "years": [
+        2010,
+        2011,
+        2014,
+        2025
+      ]
+    },
+    {
+      "name": "Entice",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Envy on the Coast",
+      "totalYears": 1,
+      "years": [
+        2007
+      ]
+    },
+    {
+      "name": "Escape the Fate",
+      "totalYears": 5,
+      "years": [
+        2006,
+        2007,
+        2009,
+        2015,
+        2025
+      ]
+    },
+    {
+      "name": "Esham",
+      "totalYears": 1,
+      "years": [
+        2001
+      ]
+    },
+    {
+      "name": "Eternal Boy",
+      "totalYears": 1,
+      "years": [
+        2017
+      ]
+    },
+    {
+      "name": "Evaline",
+      "totalYears": 1,
+      "years": [
+        2007
+      ]
+    },
+    {
+      "name": "Evelynn",
+      "totalYears": 1,
+      "years": [
+        2011
+      ]
+    },
+    {
+      "name": "Evergreen Terrace",
+      "totalYears": 1,
+      "years": [
+        2007
+      ]
+    },
+    {
+      "name": "Every Avenue",
+      "totalYears": 3,
+      "years": [
+        2008,
+        2009,
+        2011
+      ]
+    },
+    {
+      "name": "Every Time I Die",
+      "totalYears": 8,
+      "years": [
+        2002,
+        2006,
+        2008,
+        2010,
+        2012,
+        2014,
+        2016,
+        2018
+      ]
+    },
+    {
+      "name": "Eyes Set to Kill",
+      "totalYears": 3,
+      "years": [
+        2010,
+        2011,
+        2019
+      ]
+    },
+    {
+      "name": "Face the King",
+      "totalYears": 1,
+      "years": [
+        2014
+      ]
+    },
+    {
+      "name": "Face to Face",
+      "totalYears": 6,
+      "years": [
+        1995,
+        1996,
+        1997,
+        2003,
+        2010,
+        2019
+      ]
+    },
+    {
+      "name": "Fall from Grace",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Fall Out Boy",
+      "totalYears": 2,
+      "years": [
+        2004,
+        2005
+      ]
+    },
+    {
+      "name": "Falling in Reverse",
+      "totalYears": 7,
+      "years": [
+        2011,
+        2012,
+        2014,
+        2016,
+        2017,
+        2018,
+        2025
+      ]
+    },
+    {
+      "name": "Falling Through April",
+      "totalYears": 2,
+      "years": [
+        2014,
+        2015
+      ]
+    },
+    {
+      "name": "False Puppet",
+      "totalYears": 1,
+      "years": [
+        2015
+      ]
+    },
+    {
+      "name": "Fame On Fire",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Family Force 5",
+      "totalYears": 4,
+      "years": [
+        2007,
+        2008,
+        2011,
+        2015
+      ]
+    },
+    {
+      "name": "Far",
+      "totalYears": 1,
+      "years": [
+        1996
+      ]
+    },
+    {
+      "name": "Farewell",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Farewell Winters",
+      "totalYears": 2,
+      "years": [
+        2017,
+        2018
+      ]
+    },
+    {
+      "name": "Farmer Boys",
+      "totalYears": 1,
+      "years": [
+        1998
+      ]
+    },
+    {
+      "name": "Fat",
+      "totalYears": 1,
+      "years": [
+        1997
+      ]
+    },
+    {
+      "name": "Fea",
+      "totalYears": 1,
+      "years": [
+        2019
+      ]
+    },
+    {
+      "name": "Fear",
+      "totalYears": 3,
+      "years": [
+        2001,
+        2007,
+        2008
+      ]
+    },
+    {
+      "name": "Fear Before the March of Flames",
+      "totalYears": 1,
+      "years": [
+        2004
+      ]
+    },
+    {
+      "name": "Fear Nuttin' Band",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Feeki",
+      "totalYears": 1,
+      "years": [
+        2017
+      ]
+    },
+    {
+      "name": "Fenix TX",
+      "totalYears": 4,
+      "years": [
+        1999,
+        2000,
+        2001,
+        2018
+      ]
+    },
+    {
+      "name": "Fever 333",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Fight Fair",
+      "totalYears": 1,
+      "years": [
+        2010
+      ]
+    },
+    {
+      "name": "Fight Fight Fight",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Final Summation",
+      "totalYears": 1,
+      "years": [
+        2005
+      ]
+    },
+    {
+      "name": "Finch",
+      "totalYears": 2,
+      "years": [
+        2002,
+        2014
+      ]
+    },
+    {
+      "name": "Fire from the Gods",
+      "totalYears": 1,
+      "years": [
+        2017
+      ]
+    },
+    {
+      "name": "Fireworks",
+      "totalYears": 1,
+      "years": [
+        2012
+      ]
+    },
+    {
+      "name": "First to Eleven",
+      "totalYears": 1,
+      "years": [
+        2016
+      ]
+    },
+    {
+      "name": "Fishbone",
+      "totalYears": 4,
+      "years": [
+        1996,
+        2007,
+        2019,
+        2025
+      ]
+    },
+    {
+      "name": "Fit for a King",
+      "totalYears": 3,
+      "years": [
+        2014,
+        2015,
+        2017
+      ]
+    },
+    {
+      "name": "Five Iron Frenzy",
+      "totalYears": 1,
+      "years": [
+        2002
+      ]
+    },
+    {
+      "name": "Five Knives",
+      "totalYears": 1,
+      "years": [
+        2013
+      ]
+    },
+    {
+      "name": "Flashlight Brown",
+      "totalYears": 6,
+      "years": [
+        1997,
+        1998,
+        2000,
+        2001,
+        2002,
+        2003
+      ]
+    },
+    {
+      "name": "Flogging Molly",
+      "totalYears": 7,
+      "years": [
+        2000,
+        2001,
+        2002,
+        2003,
+        2004,
+        2007,
+        2009
+      ]
+    },
+    {
+      "name": "Florence",
+      "totalYears": 1,
+      "years": [
+        2006
+      ]
+    },
+    {
+      "name": "Fluf",
+      "totalYears": 2,
+      "years": [
+        1995,
+        1996
+      ]
+    },
+    {
+      "name": "Flycatcher",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "For All Those Sleeping",
+      "totalYears": 1,
+      "years": [
+        2014
+      ]
+    },
+    {
+      "name": "For the Foxes",
+      "totalYears": 1,
+      "years": [
+        2013
+      ]
+    },
+    {
+      "name": "For Today",
+      "totalYears": 2,
+      "years": [
+        2012,
+        2014
+      ]
+    },
+    {
+      "name": "Forever Came Calling",
+      "totalYears": 2,
+      "years": [
+        2010,
+        2013
+      ]
+    },
+    {
+      "name": "Forever the Sickest Kids",
+      "totalYears": 4,
+      "years": [
+        2007,
+        2008,
+        2010,
+        2013
+      ]
+    },
+    {
+      "name": "Forget Me in Vegas",
+      "totalYears": 1,
+      "years": [
+        2011
+      ]
+    },
+    {
+      "name": "Four",
+      "totalYears": 1,
+      "years": [
+        1998
+      ]
+    },
+    {
+      "name": "Four Year Strong",
+      "totalYears": 8,
+      "years": [
+        2008,
+        2012,
+        2014,
+        2015,
+        2016,
+        2018,
+        2019,
+        2025
+      ]
+    },
+    {
+      "name": "Foxy Shazam",
+      "totalYears": 1,
+      "years": [
+        2011
+      ]
+    },
+    {
+      "name": "Frank Iero & the Future Violents",
+      "totalYears": 1,
+      "years": [
+        2019
+      ]
+    },
+    {
+      "name": "Frank Turner",
+      "totalYears": 1,
+      "years": [
+        2018
+      ]
+    },
+    {
+      "name": "Frenzal Rhomb",
+      "totalYears": 2,
+      "years": [
+        1998,
+        1999
+      ]
+    },
+    {
+      "name": "Freshman 15",
+      "totalYears": 1,
+      "years": [
+        2011
+      ]
+    },
+    {
+      "name": "From Ashes to New",
+      "totalYears": 2,
+      "years": [
+        2016,
+        2025
+      ]
+    },
+    {
+      "name": "From Autumn to Ashes",
+      "totalYears": 4,
+      "years": [
+        2002,
+        2003,
+        2004,
+        2006
+      ]
+    },
+    {
+      "name": "From First to Last",
+      "totalYears": 4,
+      "years": [
+        2004,
+        2005,
+        2006,
+        2008
+      ]
+    },
+    {
+      "name": "Front Porch Step",
+      "totalYears": 1,
+      "years": [
+        2014
+      ]
+    },
+    {
+      "name": "Fu Manchu",
+      "totalYears": 1,
+      "years": [
+        1998
+      ]
+    },
+    {
+      "name": "Full on the Mouth",
+      "totalYears": 1,
+      "years": [
+        1998
+      ]
+    },
+    {
+      "name": "Funeral for a Friend",
+      "totalYears": 2,
+      "years": [
+        2005,
+        2007
+      ]
+    },
+    {
+      "name": "Funeral Party",
+      "totalYears": 1,
+      "years": [
+        2012
+      ]
+    },
+    {
+      "name": "Futuristic",
+      "totalYears": 1,
+      "years": [
+        2017
+      ]
+    },
+    {
+      "name": "G-Eazy",
+      "totalYears": 1,
+      "years": [
+        2012
+      ]
+    },
+    {
+      "name": "Gabe Kubanda",
+      "totalYears": 1,
+      "years": [
+        2013
+      ]
+    },
+    {
+      "name": "Gallows",
+      "totalYears": 2,
+      "years": [
+        2007,
+        2009
+      ]
+    },
+    {
+      "name": "Games We Play",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Garzi",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Gaslight Anthem",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Gatsby's American Dream",
+      "totalYears": 3,
+      "years": [
+        2005,
+        2006,
+        2011
+      ]
+    },
+    {
+      "name": "GBH",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Germs",
+      "totalYears": 2,
+      "years": [
+        2006,
+        2008
+      ]
+    },
+    {
+      "name": "Get Scared",
+      "totalYears": 1,
+      "years": [
+        2014
+      ]
+    },
+    {
+      "name": "Ghost Town",
+      "totalYears": 2,
+      "years": [
+        2014,
+        2016
+      ]
+    },
+    {
+      "name": "Gideon",
+      "totalYears": 2,
+      "years": [
+        2016,
+        2025
+      ]
+    },
+    {
+      "name": "Gil Mantera's Party Dream",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Gin Wigmore",
+      "totalYears": 2,
+      "years": [
+        2013,
+        2025
+      ]
+    },
+    {
+      "name": "Girlfriends",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Glassjaw",
+      "totalYears": 3,
+      "years": [
+        2002,
+        2003,
+        2019
+      ]
+    },
+    {
+      "name": "Go Betty Go",
+      "totalYears": 2,
+      "years": [
+        2005,
+        2019
+      ]
+    },
+    {
+      "name": "Go Crash Audio",
+      "totalYears": 1,
+      "years": [
+        2007
+      ]
+    },
+    {
+      "name": "Go Jimmy Go",
+      "totalYears": 1,
+      "years": [
+        2004
+      ]
+    },
+    {
+      "name": "Go Radio",
+      "totalYears": 2,
+      "years": [
+        2011,
+        2013
+      ]
+    },
+    {
+      "name": "Gob",
+      "totalYears": 4,
+      "years": [
+        1998,
+        1999,
+        2000,
+        2002
+      ]
+    },
+    {
+      "name": "Godsmack",
+      "totalYears": 1,
+      "years": [
+        1998
+      ]
+    },
+    {
+      "name": "Gogol Bordello",
+      "totalYears": 2,
+      "years": [
+        2004,
+        2025
+      ]
+    },
+    {
+      "name": "Going Second",
+      "totalYears": 2,
+      "years": [
+        2004,
+        2005
+      ]
+    },
+    {
+      "name": "Goldfinger",
+      "totalYears": 5,
+      "years": [
+        1996,
+        2002,
+        2013,
+        2017,
+        2025
+      ]
+    },
+    {
+      "name": "Goldhouse",
+      "totalYears": 1,
+      "years": [
+        2013
+      ]
+    },
+    {
+      "name": "Good Charlotte",
+      "totalYears": 8,
+      "years": [
+        2001,
+        2002,
+        2004,
+        2005,
+        2016,
+        2017,
+        2018,
+        2019
+      ]
+    },
+    {
+      "name": "Good Guys in Black",
+      "totalYears": 1,
+      "years": [
+        2011
+      ]
+    },
+    {
+      "name": "Good Riddance",
+      "totalYears": 4,
+      "years": [
+        1995,
+        1999,
+        2000,
+        2025
+      ]
+    },
+    {
+      "name": "Grade",
+      "totalYears": 1,
+      "years": [
+        2001
+      ]
+    },
+    {
+      "name": "Grand Theft Audio",
+      "totalYears": 1,
+      "years": [
+        2001
+      ]
+    },
+    {
+      "name": "Gratitude",
+      "totalYears": 1,
+      "years": [
+        2005
+      ]
+    },
+    {
+      "name": "Gravas",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Grave Secrets",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Grayscale",
+      "totalYears": 1,
+      "years": [
+        2018
+      ]
+    },
+    {
+      "name": "Greek Fire",
+      "totalYears": 2,
+      "years": [
+        2012,
+        2013
+      ]
+    },
+    {
+      "name": "Greeley Estates",
+      "totalYears": 3,
+      "years": [
+        2005,
+        2006,
+        2008
+      ]
+    },
+    {
+      "name": "Green Day",
+      "totalYears": 1,
+      "years": [
+        2000
+      ]
+    },
+    {
+      "name": "Green Jellÿ",
+      "totalYears": 1,
+      "years": [
+        2010
+      ]
+    },
+    {
+      "name": "Greg Wood",
+      "totalYears": 1,
+      "years": [
+        2003
+      ]
+    },
+    {
+      "name": "Grey Gordon",
+      "totalYears": 1,
+      "years": [
+        2015
+      ]
+    },
+    {
+      "name": "Grieves with Budo",
+      "totalYears": 1,
+      "years": [
+        2011
+      ]
+    },
+    {
+      "name": "Grinspoon",
+      "totalYears": 1,
+      "years": [
+        1999
+      ]
+    },
+    {
+      "name": "Gus Thè Savagè",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Guttermouth",
+      "totalYears": 7,
+      "years": [
+        1995,
+        1996,
+        1998,
+        2001,
+        2002,
+        2004,
+        2009
+      ]
+    },
+    {
+      "name": "Gwar",
+      "totalYears": 1,
+      "years": [
+        2017
+      ]
+    },
+    {
+      "name": "Gwyllions",
+      "totalYears": 1,
+      "years": [
+        1999
+      ]
+    },
+    {
+      "name": "Gym Class Heroes",
+      "totalYears": 5,
+      "years": [
+        2005,
+        2006,
+        2008,
+        2011,
+        2025
+      ]
+    },
+    {
+      "name": "H Is Orange",
+      "totalYears": 1,
+      "years": [
+        2004
+      ]
+    },
+    {
+      "name": "H-Blockx",
+      "totalYears": 1,
+      "years": [
+        1999
+      ]
+    },
+    {
+      "name": "H2O",
+      "totalYears": 5,
+      "years": [
+        1997,
+        1998,
+        1999,
+        2001,
+        2019
+      ]
+    },
+    {
+      "name": "Haarper",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Hail the Sun",
+      "totalYears": 3,
+      "years": [
+        2016,
+        2018,
+        2025
+      ]
+    },
+    {
+      "name": "Halifax",
+      "totalYears": 1,
+      "years": [
+        2005
+      ]
+    },
+    {
+      "name": "Hanabie.",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Handguns",
+      "totalYears": 2,
+      "years": [
+        2013,
+        2015
+      ]
+    },
+    {
+      "name": "Hands Like Houses",
+      "totalYears": 3,
+      "years": [
+        2013,
+        2015,
+        2017
+      ]
+    },
+    {
+      "name": "Hank3 and Assjack",
+      "totalYears": 1,
+      "years": [
+        2001
+      ]
+    },
+    {
+      "name": "Harm's Way",
+      "totalYears": 1,
+      "years": [
+        2018
+      ]
+    },
+    {
+      "name": "Haste the Day",
+      "totalYears": 1,
+      "years": [
+        2007
+      ]
+    },
+    {
+      "name": "Hatebreed",
+      "totalYears": 3,
+      "years": [
+        1998,
+        2017,
+        2018
+      ]
+    },
+    {
+      "name": "Have Mercy",
+      "totalYears": 1,
+      "years": [
+        2015
+      ]
+    },
+    {
+      "name": "Hawthorne Heights",
+      "totalYears": 6,
+      "years": [
+        2005,
+        2007,
+        2013,
+        2017,
+        2019,
+        2025
+      ]
+    },
+    {
+      "name": "He Is Legend",
+      "totalYears": 1,
+      "years": [
+        2005
+      ]
+    },
+    {
+      "name": "Head Automatica",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Heart Attack Man",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Heart to Heart",
+      "totalYears": 1,
+      "years": [
+        2014
+      ]
+    },
+    {
+      "name": "Hed PE",
+      "totalYears": 1,
+      "years": [
+        1997
+      ]
+    },
+    {
+      "name": "Hello Atlantic",
+      "totalYears": 1,
+      "years": [
+        2017
+      ]
+    },
+    {
+      "name": "Hello Beautiful",
+      "totalYears": 1,
+      "years": [
+        2009
+      ]
+    },
+    {
+      "name": "Hellogoodbye",
+      "totalYears": 2,
+      "years": [
+        2006,
+        2011
+      ]
+    },
+    {
+      "name": "Helmet",
+      "totalYears": 1,
+      "years": [
+        2006
+      ]
+    },
+    {
+      "name": "Hepcat",
+      "totalYears": 3,
+      "years": [
+        1997,
+        1998,
+        2000
+      ]
+    },
+    {
+      "name": "Her Leather Jacket",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Here Comes the Kraken",
+      "totalYears": 1,
+      "years": [
+        2026
+      ]
+    },
+    {
+      "name": "Heritage",
+      "totalYears": 1,
+      "years": [
+        2013
+      ]
+    },
+    {
+      "name": "Hesher",
+      "totalYears": 1,
+      "years": [
+        2001
+      ]
+    },
+    {
+      "name": "Hey Monday",
+      "totalYears": 1,
+      "years": [
+        2010
+      ]
+    },
+    {
+      "name": "Hi-Standard",
+      "totalYears": 1,
+      "years": [
+        1998
+      ]
+    },
+    {
+      "name": "Hidden in Plain View",
+      "totalYears": 3,
+      "years": [
+        2005,
+        2019,
+        2025
+      ]
+    },
+    {
+      "name": "HiFi Handgrenades",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "High School Football Heroes",
+      "totalYears": 4,
+      "years": [
+        2003,
+        2004,
+        2005,
+        2006
+      ]
+    },
+    {
+      "name": "His Dream of Lions",
+      "totalYears": 1,
+      "years": [
+        2017
+      ]
+    },
+    {
+      "name": "Hit the Lights",
+      "totalYears": 3,
+      "years": [
+        2005,
+        2006,
+        2009
+      ]
+    },
+    {
+      "name": "Ho9909",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Holding Absence",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Holywatr",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Home Grown",
+      "totalYears": 2,
+      "years": [
+        1998,
+        2002
+      ]
+    },
+    {
+      "name": "Home Town Hero",
+      "totalYears": 1,
+      "years": [
+        2001
+      ]
+    },
+    {
+      "name": "Honey Revenge",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Honor Bright",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Hoobastank",
+      "totalYears": 1,
+      "years": [
+        2026
+      ]
+    },
+    {
+      "name": "Hope",
+      "totalYears": 1,
+      "years": [
+        2002
+      ]
+    },
+    {
+      "name": "Hopesfall",
+      "totalYears": 1,
+      "years": [
+        2005
+      ]
+    },
+    {
+      "name": "Horrorpops",
+      "totalYears": 2,
+      "years": [
+        2005,
+        2008
+      ]
+    },
+    {
+      "name": "Hostage Calm",
+      "totalYears": 1,
+      "years": [
+        2012
+      ]
+    },
+    {
+      "name": "Hot Chelle Rae",
+      "totalYears": 1,
+      "years": [
+        2026
+      ]
+    },
+    {
+      "name": "Hot Milk",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Hot Rod Circuit",
+      "totalYears": 2,
+      "years": [
+        2005,
+        2007
+      ]
+    },
+    {
+      "name": "Hot Water Music",
+      "totalYears": 2,
+      "years": [
+        2000,
+        2002
+      ]
+    },
+    {
+      "name": "Huddy",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Hundredth",
+      "totalYears": 2,
+      "years": [
+        2015,
+        2017
+      ]
+    },
+    {
+      "name": "Hunter Revenge",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Hunter Valentine",
+      "totalYears": 1,
+      "years": [
+        2014
+      ]
+    },
+    {
+      "name": "Hyro the Hero",
+      "totalYears": 2,
+      "years": [
+        2012,
+        2019
+      ]
+    },
+    {
+      "name": "I Against I",
+      "totalYears": 1,
+      "years": [
+        1999
+      ]
+    },
+    {
+      "name": "I Am Ghost",
+      "totalYears": 1,
+      "years": [
+        2007
+      ]
+    },
+    {
+      "name": "I Am the Avalanche",
+      "totalYears": 3,
+      "years": [
+        2006,
+        2012,
+        2025
+      ]
+    },
+    {
+      "name": "I Call Fives",
+      "totalYears": 1,
+      "years": [
+        2012
+      ]
+    },
+    {
+      "name": "I Can Make a Mess",
+      "totalYears": 1,
+      "years": [
+        2013
+      ]
+    },
+    {
+      "name": "I Fight Dragons",
+      "totalYears": 2,
+      "years": [
+        2012,
+        2014
+      ]
+    },
+    {
+      "name": "I in Team",
+      "totalYears": 1,
+      "years": [
+        2003
+      ]
+    },
+    {
+      "name": "I Killed the Prom Queen",
+      "totalYears": 1,
+      "years": [
+        2015
+      ]
+    },
+    {
+      "name": "I Prevail",
+      "totalYears": 1,
+      "years": [
+        2017
+      ]
+    },
+    {
+      "name": "I See Stars",
+      "totalYears": 4,
+      "years": [
+        2010,
+        2013,
+        2016,
+        2025
+      ]
+    },
+    {
+      "name": "I Set My Friends on Fire",
+      "totalYears": 2,
+      "years": [
+        2009,
+        2011
+      ]
+    },
+    {
+      "name": "I the Mighty",
+      "totalYears": 2,
+      "years": [
+        2014,
+        2019
+      ]
+    },
+    {
+      "name": "I, the Breather",
+      "totalYears": 1,
+      "years": [
+        2014
+      ]
+    },
+    {
+      "name": "Iann Dior",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Ice Nine Kills",
+      "totalYears": 5,
+      "years": [
+        2013,
+        2014,
+        2016,
+        2018,
+        2025
+      ]
+    },
+    {
+      "name": "Ice-T",
+      "totalYears": 2,
+      "years": [
+        1999,
+        2025
+      ]
+    },
+    {
+      "name": "Icon for Hire",
+      "totalYears": 2,
+      "years": [
+        2014,
+        2015
+      ]
+    },
+    {
+      "name": "Idkhow",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "illScarlett",
+      "totalYears": 2,
+      "years": [
+        2007,
+        2011
+      ]
+    },
+    {
+      "name": "Ima Robot",
+      "totalYears": 1,
+      "years": [
+        2004
+      ]
+    },
+    {
+      "name": "Immortal Technique",
+      "totalYears": 1,
+      "years": [
+        2005
+      ]
+    },
+    {
+      "name": "Impending Doom",
+      "totalYears": 1,
+      "years": [
+        2012
+      ]
+    },
+    {
+      "name": "In Hearts Wake",
+      "totalYears": 2,
+      "years": [
+        2016,
+        2018
+      ]
+    },
+    {
+      "name": "In This Moment",
+      "totalYears": 1,
+      "years": [
+        2009
+      ]
+    },
+    {
+      "name": "Incubus",
+      "totalYears": 2,
+      "years": [
+        1998,
+        2017
+      ]
+    },
+    {
+      "name": "Indigo Forever",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Indofin",
+      "totalYears": 1,
+      "years": [
+        1998
+      ]
+    },
+    {
+      "name": "InnerPartySystem",
+      "totalYears": 1,
+      "years": [
+        2009
+      ]
+    },
+    {
+      "name": "Insane Clown Posse",
+      "totalYears": 6,
+      "years": [
+        1996,
+        1997,
+        1998,
+        1999,
+        2000,
+        2004
+      ]
+    },
+    {
+      "name": "Insomniac",
+      "totalYears": 1,
+      "years": [
+        2015
+      ]
+    },
+    {
+      "name": "Inspection 12",
+      "totalYears": 1,
+      "years": [
+        2001
+      ]
+    },
+    {
+      "name": "Into Another",
+      "totalYears": 1,
+      "years": [
+        1995
+      ]
+    },
+    {
+      "name": "Into It. Over It.",
+      "totalYears": 1,
+      "years": [
+        2012
+      ]
+    },
+    {
+      "name": "Ionia",
+      "totalYears": 2,
+      "years": [
+        2011,
+        2012
+      ]
+    },
+    {
+      "name": "Isles",
+      "totalYears": 1,
+      "years": [
+        2015
+      ]
+    },
+    {
+      "name": "Issues",
+      "totalYears": 4,
+      "years": [
+        2013,
+        2014,
+        2016,
+        2018
+      ]
+    },
+    {
+      "name": "It Boys!",
+      "totalYears": 2,
+      "years": [
+        2011,
+        2012
+      ]
+    },
+    {
+      "name": "It Dies Today",
+      "totalYears": 1,
+      "years": [
+        2007
+      ]
+    },
+    {
+      "name": "It's Pouring on Our Heads",
+      "totalYears": 5,
+      "years": [
+        2002,
+        2003,
+        2004,
+        2005,
+        2006
+      ]
+    },
+    {
+      "name": "Itch",
+      "totalYears": 1,
+      "years": [
+        2013
+      ]
+    },
+    {
+      "name": "Ivens",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Ivoryline",
+      "totalYears": 2,
+      "years": [
+        2006,
+        2009
+      ]
+    },
+    {
+      "name": "Ivy League",
+      "totalYears": 2,
+      "years": [
+        2010,
+        2011
+      ]
+    },
+    {
+      "name": "Iwrestledabearonce",
+      "totalYears": 2,
+      "years": [
+        2010,
+        2012
+      ]
+    },
+    {
+      "name": "Jack Kays",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Jack's Mannequin",
+      "totalYears": 2,
+      "years": [
+        2008,
+        2011
+      ]
+    },
+    {
+      "name": "Jacky Jasper",
+      "totalYears": 2,
+      "years": [
+        1999,
+        2001
+      ]
+    },
+    {
+      "name": "Jager Henry",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Jakobs Castle",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Jalopy",
+      "totalYears": 1,
+      "years": [
+        1996
+      ]
+    },
+    {
+      "name": "James Morris",
+      "totalYears": 1,
+      "years": [
+        2015
+      ]
+    },
+    {
+      "name": "Jawbreaker",
+      "totalYears": 1,
+      "years": [
+        2019
+      ]
+    },
+    {
+      "name": "Jay Tea",
+      "totalYears": 1,
+      "years": [
+        2006
+      ]
+    },
+    {
+      "name": "Jaya the Cat",
+      "totalYears": 1,
+      "years": [
+        2001
+      ]
+    },
+    {
+      "name": "Jdn",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Jeffree Star",
+      "totalYears": 2,
+      "years": [
+        2008,
+        2009
+      ]
+    },
+    {
+      "name": "Jeremy Romance & The Zero Friends Club",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Jersey",
+      "totalYears": 1,
+      "years": [
+        2001
+      ]
+    },
+    {
+      "name": "Jet Lag Gemini",
+      "totalYears": 2,
+      "years": [
+        2008,
+        2009
+      ]
+    },
+    {
+      "name": "Jimmy 2 Times",
+      "totalYears": 1,
+      "years": [
+        1997
+      ]
+    },
+    {
+      "name": "Jimmy Eat World",
+      "totalYears": 3,
+      "years": [
+        1999,
+        2001,
+        2002
+      ]
+    },
+    {
+      "name": "Joan Jett and the Blackhearts",
+      "totalYears": 2,
+      "years": [
+        2006,
+        2018
+      ]
+    },
+    {
+      "name": "Joey Briggs",
+      "totalYears": 1,
+      "years": [
+        2013
+      ]
+    },
+    {
+      "name": "Johnnie Guilbert",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Jule Vera",
+      "totalYears": 2,
+      "years": [
+        2015,
+        2017
+      ]
+    },
+    {
+      "name": "Julia Wolf",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Juliette and the Licks",
+      "totalYears": 1,
+      "years": [
+        2005
+      ]
+    },
+    {
+      "name": "Jumping Monks",
+      "totalYears": 2,
+      "years": [
+        2003,
+        2004
+      ]
+    },
+    {
+      "name": "June",
+      "totalYears": 1,
+      "years": [
+        2006
+      ]
+    },
+    {
+      "name": "June Divided",
+      "totalYears": 1,
+      "years": [
+        2012
+      ]
+    },
+    {
+      "name": "Jurassic 5",
+      "totalYears": 2,
+      "years": [
+        2000,
+        2001
+      ]
+    },
+    {
+      "name": "Just Surrender",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Justina Valentine",
+      "totalYears": 2,
+      "years": [
+        2012,
+        2014
+      ]
+    },
+    {
+      "name": "Jutes",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "K-os",
+      "totalYears": 1,
+      "years": [
+        2007
+      ]
+    },
+    {
+      "name": "K.Flay",
+      "totalYears": 1,
+      "years": [
+        2014
+      ]
+    },
+    {
+      "name": "Kaddisfly",
+      "totalYears": 1,
+      "years": [
+        2007
+      ]
+    },
+    {
+      "name": "Kairo Kingdom",
+      "totalYears": 1,
+      "years": [
+        2013
+      ]
+    },
+    {
+      "name": "Kaiser Solzie",
+      "totalYears": 1,
+      "years": [
+        2018
+      ]
+    },
+    {
+      "name": "Kaleido",
+      "totalYears": 2,
+      "years": [
+        2018,
+        2019
+      ]
+    },
+    {
+      "name": "Kami Kehoe",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Karate High School",
+      "totalYears": 2,
+      "years": [
+        2006,
+        2007
+      ]
+    },
+    {
+      "name": "Katy Perry",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Kaya Stewart",
+      "totalYears": 1,
+      "years": [
+        2015
+      ]
+    },
+    {
+      "name": "Keep Flying",
+      "totalYears": 1,
+      "years": [
+        2019
+      ]
+    },
+    {
+      "name": "Kennyhoopla",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Kevin Seconds",
+      "totalYears": 1,
+      "years": [
+        2013
+      ]
+    },
+    {
+      "name": "Kid Rock",
+      "totalYears": 1,
+      "years": [
+        1998
+      ]
+    },
+    {
+      "name": "Killswitch Engage",
+      "totalYears": 2,
+      "years": [
+        2007,
+        2025
+      ]
+    },
+    {
+      "name": "Kiros",
+      "totalYears": 1,
+      "years": [
+        2005
+      ]
+    },
+    {
+      "name": "Kitsch",
+      "totalYears": 1,
+      "years": [
+        1998
+      ]
+    },
+    {
+      "name": "Knocked Loose",
+      "totalYears": 2,
+      "years": [
+        2017,
+        2018
+      ]
+    },
+    {
+      "name": "Knuckle Puck",
+      "totalYears": 4,
+      "years": [
+        2015,
+        2016,
+        2018,
+        2025
+      ]
+    },
+    {
+      "name": "Koji",
+      "totalYears": 2,
+      "years": [
+        2012,
+        2015
+      ]
+    },
+    {
+      "name": "Koo Koo Kanga Roo",
+      "totalYears": 1,
+      "years": [
+        2015
+      ]
+    },
+    {
+      "name": "Kool Keith",
+      "totalYears": 1,
+      "years": [
+        2001
+      ]
+    },
+    {
+      "name": "Korn",
+      "totalYears": 1,
+      "years": [
+        2018
+      ]
+    },
+    {
+      "name": "Kosha Dillz",
+      "totalYears": 1,
+      "years": [
+        2015
+      ]
+    },
+    {
+      "name": "Kottonmouth Kings",
+      "totalYears": 1,
+      "years": [
+        2000
+      ]
+    },
+    {
+      "name": "Koyo",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Kristopher Roe",
+      "totalYears": 1,
+      "years": [
+        2012
+      ]
+    },
+    {
+      "name": "Kublai Khan",
+      "totalYears": 1,
+      "years": [
+        2018
+      ]
+    },
+    {
+      "name": "L.E.S. Stitches",
+      "totalYears": 1,
+      "years": [
+        1998
+      ]
+    },
+    {
+      "name": "L.I.F.T",
+      "totalYears": 1,
+      "years": [
+        2018
+      ]
+    },
+    {
+      "name": "L7",
+      "totalYears": 1,
+      "years": [
+        1995
+      ]
+    },
+    {
+      "name": "Lacey Sturm",
+      "totalYears": 0,
+      "years": []
+    },
+    {
+      "name": "Lagwagon",
+      "totalYears": 3,
+      "years": [
+        1995,
+        1997,
+        2002
+      ]
+    },
+    {
+      "name": "Lakeshore",
+      "totalYears": 1,
+      "years": [
+        2017
+      ]
+    },
+    {
+      "name": "Landon Barker",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Large Marge",
+      "totalYears": 1,
+      "years": [
+        2004
+      ]
+    },
+    {
+      "name": "Larry And His Flask",
+      "totalYears": 1,
+      "years": [
+        2011
+      ]
+    },
+    {
+      "name": "Lars Frederiksen and the Bastards",
+      "totalYears": 1,
+      "years": [
+        2004
+      ]
+    },
+    {
+      "name": "Last Great Assault",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Latex Generation",
+      "totalYears": 2,
+      "years": [
+        1997,
+        1998
+      ]
+    },
+    {
+      "name": "Le Castle Vania",
+      "totalYears": 1,
+      "years": [
+        2015
+      ]
+    },
+    {
+      "name": "Leatherface",
+      "totalYears": 1,
+      "years": [
+        1999
+      ]
+    },
+    {
+      "name": "Lee Corey Oswald",
+      "totalYears": 1,
+      "years": [
+        2015
+      ]
+    },
+    {
+      "name": "Left To Suffer",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Less Than Jake",
+      "totalYears": 17,
+      "years": [
+        1997,
+        1998,
+        1999,
+        2000,
+        2001,
+        2003,
+        2004,
+        2006,
+        2009,
+        2011,
+        2012,
+        2014,
+        2016,
+        2018,
+        2019,
+        2025,
+        2026
+      ]
+    },
+    {
+      "name": "letlive.",
+      "totalYears": 2,
+      "years": [
+        2013,
+        2025
+      ]
+    },
+    {
+      "name": "Letter Kills",
+      "totalYears": 2,
+      "years": [
+        2003,
+        2004
+      ]
+    },
+    {
+      "name": "Liars Inc.",
+      "totalYears": 1,
+      "years": [
+        2001
+      ]
+    },
+    {
+      "name": "Life on the Sideline",
+      "totalYears": 1,
+      "years": [
+        2014
+      ]
+    },
+    {
+      "name": "Light Years",
+      "totalYears": 1,
+      "years": [
+        2014
+      ]
+    },
+    {
+      "name": "Lighterburns",
+      "totalYears": 1,
+      "years": [
+        2018
+      ]
+    },
+    {
+      "name": "LIGHTS",
+      "totalYears": 1,
+      "years": [
+        2010
+      ]
+    },
+    {
+      "name": "Like Moths to Flames",
+      "totalYears": 1,
+      "years": [
+        2013
+      ]
+    },
+    {
+      "name": "Like Pacific",
+      "totalYears": 1,
+      "years": [
+        2016
+      ]
+    },
+    {
+      "name": "Lil Lotus",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Lil Toe (Ammo)",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Lillix",
+      "totalYears": 1,
+      "years": [
+        2002
+      ]
+    },
+    {
+      "name": "Lillotus",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Limp Bizkit",
+      "totalYears": 3,
+      "years": [
+        1996,
+        1997,
+        2018
+      ]
+    },
+    {
+      "name": "Linkin Park",
+      "totalYears": 1,
+      "years": [
+        2014
+      ]
+    },
+    {
+      "name": "Lionize",
+      "totalYears": 2,
+      "years": [
+        2011,
+        2014
+      ]
+    },
+    {
+      "name": "Lionz of Zion",
+      "totalYears": 1,
+      "years": [
+        2013
+      ]
+    },
+    {
+      "name": "Lit",
+      "totalYears": 1,
+      "years": [
+        1999
+      ]
+    },
+    {
+      "name": "Little-T and One Track Mike",
+      "totalYears": 1,
+      "years": [
+        2001
+      ]
+    },
+    {
+      "name": "LiveonRelease",
+      "totalYears": 1,
+      "years": [
+        2003
+      ]
+    },
+    {
+      "name": "Living With Lions",
+      "totalYears": 1,
+      "years": [
+        2012
+      ]
+    },
+    {
+      "name": "Lo Presher",
+      "totalYears": 2,
+      "years": [
+        1996,
+        1997
+      ]
+    },
+    {
+      "name": "Lo-Ball",
+      "totalYears": 1,
+      "years": [
+        2001
+      ]
+    },
+    {
+      "name": "Lolo",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Long Beach Dub Allstars",
+      "totalYears": 2,
+      "years": [
+        2000,
+        2001
+      ]
+    },
+    {
+      "name": "Longway",
+      "totalYears": 1,
+      "years": [
+        2009
+      ]
+    },
+    {
+      "name": "Look What I Did",
+      "totalYears": 1,
+      "years": [
+        2007
+      ]
+    },
+    {
+      "name": "Looking Up",
+      "totalYears": 1,
+      "years": [
+        1999
+      ]
+    },
+    {
+      "name": "Lordz of Brooklyn (The Lordz)",
+      "totalYears": 8,
+      "years": [
+        1995,
+        1998,
+        2000,
+        2008,
+        2009,
+        2012,
+        2015,
+        2018
+      ]
+    },
+    {
+      "name": "Loser's Luck",
+      "totalYears": 2,
+      "years": [
+        2004,
+        2005
+      ]
+    },
+    {
+      "name": "Lost City Angels",
+      "totalYears": 1,
+      "years": [
+        2001
+      ]
+    },
+    {
+      "name": "Lost In Atlantis",
+      "totalYears": 1,
+      "years": [
+        2013
+      ]
+    },
+    {
+      "name": "Lost In Society",
+      "totalYears": 2,
+      "years": [
+        2012,
+        2014
+      ]
+    },
+    {
+      "name": "Lost Point",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Lostprophets",
+      "totalYears": 1,
+      "years": [
+        2012
+      ]
+    },
+    {
+      "name": "Love Equals Death",
+      "totalYears": 3,
+      "years": [
+        2005,
+        2006,
+        2008
+      ]
+    },
+    {
+      "name": "Lucero",
+      "totalYears": 1,
+      "years": [
+        2011
+      ]
+    },
+    {
+      "name": "Luckie Strike",
+      "totalYears": 3,
+      "years": [
+        2000,
+        2001,
+        2002
+      ]
+    },
+    {
+      "name": "Ludo",
+      "totalYears": 3,
+      "years": [
+        2006,
+        2007,
+        2008
+      ]
+    },
+    {
+      "name": "Lunachicks",
+      "totalYears": 1,
+      "years": [
+        2000
+      ]
+    },
+    {
+      "name": "M.I.A.",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "M4Sonic",
+      "totalYears": 1,
+      "years": [
+        2015
+      ]
+    },
+    {
+      "name": "Mac Lethal",
+      "totalYears": 1,
+      "years": [
+        2013
+      ]
+    },
+    {
+      "name": "Machine Gun Kelly",
+      "totalYears": 2,
+      "years": [
+        2012,
+        2025
+      ]
+    },
+    {
+      "name": "Machree",
+      "totalYears": 1,
+      "years": [
+        2011
+      ]
+    },
+    {
+      "name": "Macy Kate",
+      "totalYears": 1,
+      "years": [
+        2015
+      ]
+    },
+    {
+      "name": "Mad Caddies",
+      "totalYears": 3,
+      "years": [
+        1998,
+        2000,
+        2003
+      ]
+    },
+    {
+      "name": "Madcap",
+      "totalYears": 1,
+      "years": [
+        2001
+      ]
+    },
+    {
+      "name": "Madchild",
+      "totalYears": 1,
+      "years": [
+        2013
+      ]
+    },
+    {
+      "name": "Madina Lake",
+      "totalYears": 3,
+      "years": [
+        2008,
+        2009,
+        2011
+      ]
+    },
+    {
+      "name": "Mae",
+      "totalYears": 2,
+      "years": [
+        2004,
+        2005
+      ]
+    },
+    {
+      "name": "Maggie Schneider",
+      "totalYears": 1,
+      "years": [
+        2018
+      ]
+    },
+    {
+      "name": "Magnolia Park",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Major League",
+      "totalYears": 1,
+      "years": [
+        2015
+      ]
+    },
+    {
+      "name": "Make Do and Mend",
+      "totalYears": 1,
+      "years": [
+        2012
+      ]
+    },
+    {
+      "name": "Makeout",
+      "totalYears": 3,
+      "years": [
+        2014,
+        2015,
+        2018
+      ]
+    },
+    {
+      "name": "Mallory Knox",
+      "totalYears": 1,
+      "years": [
+        2015
+      ]
+    },
+    {
+      "name": "Man Overboard",
+      "totalYears": 4,
+      "years": [
+        2012,
+        2013,
+        2015,
+        2019
+      ]
+    },
+    {
+      "name": "Mandolyn Mae",
+      "totalYears": 1,
+      "years": [
+        2013
+      ]
+    },
+    {
+      "name": "Manic Hispanic",
+      "totalYears": 2,
+      "years": [
+        2002,
+        2007
+      ]
+    },
+    {
+      "name": "Manic Sewing Circle",
+      "totalYears": 2,
+      "years": [
+        2006,
+        2007
+      ]
+    },
+    {
+      "name": "Mariachi El Bronx",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Marina City",
+      "totalYears": 1,
+      "years": [
+        2016
+      ]
+    },
+    {
+      "name": "Marissa Mishelle",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Marmozets",
+      "totalYears": 1,
+      "years": [
+        2014
+      ]
+    },
+    {
+      "name": "Maryjo",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Masked Intruder",
+      "totalYears": 1,
+      "years": [
+        2016
+      ]
+    },
+    {
+      "name": "Massive Monkees",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Matchbook Romance",
+      "totalYears": 4,
+      "years": [
+        2003,
+        2004,
+        2005,
+        2015
+      ]
+    },
+    {
+      "name": "Matisyahu",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Matt Butler",
+      "totalYears": 1,
+      "years": [
+        2019
+      ]
+    },
+    {
+      "name": "Matt Embree",
+      "totalYears": 1,
+      "years": [
+        2013
+      ]
+    },
+    {
+      "name": "Matt Toka",
+      "totalYears": 1,
+      "years": [
+        2012
+      ]
+    },
+    {
+      "name": "Maxeen",
+      "totalYears": 1,
+      "years": [
+        2003
+      ]
+    },
+    {
+      "name": "Mayday Parade",
+      "totalYears": 7,
+      "years": [
+        2007,
+        2008,
+        2010,
+        2012,
+        2014,
+        2016,
+        2018
+      ]
+    },
+    {
+      "name": "Maylene & The Sons Of Disaster",
+      "totalYears": 2,
+      "years": [
+        2007,
+        2008
+      ]
+    },
+    {
+      "name": "MC Chris",
+      "totalYears": 3,
+      "years": [
+        2007,
+        2008,
+        2014
+      ]
+    },
+    {
+      "name": "MC Lars",
+      "totalYears": 3,
+      "years": [
+        2013,
+        2015,
+        2019
+      ]
+    },
+    {
+      "name": "MC Lars with Weerd Science",
+      "totalYears": 2,
+      "years": [
+        2011,
+        2012
+      ]
+    },
+    {
+      "name": "McDougall",
+      "totalYears": 1,
+      "years": [
+        2013
+      ]
+    },
+    {
+      "name": "Me First and the Gimme Gimmes",
+      "totalYears": 2,
+      "years": [
+        2001,
+        2003
+      ]
+    },
+    {
+      "name": "Me Like Bees",
+      "totalYears": 1,
+      "years": [
+        2014
+      ]
+    },
+    {
+      "name": "Medium Troy",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Meg & Dia",
+      "totalYears": 3,
+      "years": [
+        2007,
+        2009,
+        2019
+      ]
+    },
+    {
+      "name": "Megg",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Meghann Wright",
+      "totalYears": 1,
+      "years": [
+        2015
+      ]
+    },
+    {
+      "name": "Mel",
+      "totalYears": 1,
+      "years": [
+        1998
+      ]
+    },
+    {
+      "name": "Memphis May Fire",
+      "totalYears": 6,
+      "years": [
+        2012,
+        2013,
+        2015,
+        2017,
+        2019,
+        2025
+      ]
+    },
+    {
+      "name": "Messer",
+      "totalYears": 1,
+      "years": [
+        2018
+      ]
+    },
+    {
+      "name": "Mest",
+      "totalYears": 4,
+      "years": [
+        2003,
+        2005,
+        2013,
+        2018
+      ]
+    },
+    {
+      "name": "Metro Station",
+      "totalYears": 1,
+      "years": [
+        2015
+      ]
+    },
+    {
+      "name": "MewithoutYou",
+      "totalYears": 1,
+      "years": [
+        2006
+      ]
+    },
+    {
+      "name": "Mgna Crrrta",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "MI6",
+      "totalYears": 1,
+      "years": [
+        2002
+      ]
+    },
+    {
+      "name": "Microwave",
+      "totalYears": 2,
+      "years": [
+        2017,
+        2025
+      ]
+    },
+    {
+      "name": "Middle Class Rut",
+      "totalYears": 1,
+      "years": [
+        2011
+      ]
+    },
+    {
+      "name": "Middle Finger Salute",
+      "totalYears": 3,
+      "years": [
+        2008,
+        2009,
+        2013
+      ]
+    },
+    {
+      "name": "Middleground",
+      "totalYears": 1,
+      "years": [
+        2002
+      ]
+    },
+    {
+      "name": "Midnight To Twelve",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Midtown",
+      "totalYears": 3,
+      "years": [
+        2001,
+        2002,
+        2003
+      ]
+    },
+    {
+      "name": "Mighty Mongo",
+      "totalYears": 2,
+      "years": [
+        2012,
+        2013
+      ]
+    },
+    {
+      "name": "Mike Herrera",
+      "totalYears": 1,
+      "years": [
+        2014
+      ]
+    },
+    {
+      "name": "Mike Posner",
+      "totalYears": 1,
+      "years": [
+        2010
+      ]
+    },
+    {
+      "name": "Mike Watt + The Missingmen",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Millencolin",
+      "totalYears": 3,
+      "years": [
+        1997,
+        2000,
+        2005
+      ]
+    },
+    {
+      "name": "Millionaires",
+      "totalYears": 2,
+      "years": [
+        2009,
+        2025
+      ]
+    },
+    {
+      "name": "Miracle Dolls",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Miss May I",
+      "totalYears": 4,
+      "years": [
+        2011,
+        2012,
+        2015,
+        2025
+      ]
+    },
+    {
+      "name": "Mixtapes",
+      "totalYears": 2,
+      "years": [
+        2013,
+        2014
+      ]
+    },
+    {
+      "name": "Mo Bigsley",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Mod Sun",
+      "totalYears": 4,
+      "years": [
+        2012,
+        2014,
+        2015,
+        2025
+      ]
+    },
+    {
+      "name": "Moe Pope",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Mog Stunt Team",
+      "totalYears": 1,
+      "years": [
+        1997
+      ]
+    },
+    {
+      "name": "Mojo Morgan",
+      "totalYears": 1,
+      "years": [
+        2011
+      ]
+    },
+    {
+      "name": "Molotov",
+      "totalYears": 1,
+      "years": [
+        1999
+      ]
+    },
+    {
+      "name": "Mom Jeans",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Moments in Grace",
+      "totalYears": 1,
+      "years": [
+        2004
+      ]
+    },
+    {
+      "name": "Moneen",
+      "totalYears": 1,
+      "years": [
+        2006
+      ]
+    },
+    {
+      "name": "Montage",
+      "totalYears": 1,
+      "years": [
+        2017
+      ]
+    },
+    {
+      "name": "Monte Pittman",
+      "totalYears": 1,
+      "years": [
+        2013
+      ]
+    },
+    {
+      "name": "Monty Are I",
+      "totalYears": 2,
+      "years": [
+        2007,
+        2009
+      ]
+    },
+    {
+      "name": "Moose Blood",
+      "totalYears": 1,
+      "years": [
+        2015
+      ]
+    },
+    {
+      "name": "More to Monroe",
+      "totalYears": 1,
+      "years": [
+        2016
+      ]
+    },
+    {
+      "name": "Morgan Heritage",
+      "totalYears": 2,
+      "years": [
+        2000,
+        2001
+      ]
+    },
+    {
+      "name": "Morning After",
+      "totalYears": 2,
+      "years": [
+        2000,
+        2001
+      ]
+    },
+    {
+      "name": "Most Precious Blood",
+      "totalYears": 4,
+      "years": [
+        2003,
+        2004,
+        2005,
+        2006
+      ]
+    },
+    {
+      "name": "Mother Feather",
+      "totalYears": 1,
+      "years": [
+        2016
+      ]
+    },
+    {
+      "name": "Motion City Soundtrack",
+      "totalYears": 11,
+      "years": [
+        2002,
+        2003,
+        2004,
+        2005,
+        2006,
+        2008,
+        2009,
+        2010,
+        2013,
+        2015,
+        2025
+      ]
+    },
+    {
+      "name": "Motionless in White",
+      "totalYears": 9,
+      "years": [
+        2005,
+        2007,
+        2008,
+        2010,
+        2011,
+        2012,
+        2014,
+        2016,
+        2018
+      ]
+    },
+    {
+      "name": "Mouth Culture",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Movements",
+      "totalYears": 3,
+      "years": [
+        2017,
+        2018,
+        2025
+      ]
+    },
+    {
+      "name": "Moving Mountains",
+      "totalYears": 1,
+      "years": [
+        2011
+      ]
+    },
+    {
+      "name": "Mr. Mirainga",
+      "totalYears": 1,
+      "years": [
+        1996
+      ]
+    },
+    {
+      "name": "Muckhole",
+      "totalYears": 1,
+      "years": [
+        1998
+      ]
+    },
+    {
+      "name": "Municipal Waste",
+      "totalYears": 1,
+      "years": [
+        2017
+      ]
+    },
+    {
+      "name": "Murder City Devils",
+      "totalYears": 1,
+      "years": [
+        1997
+      ]
+    },
+    {
+      "name": "Mushroomhead",
+      "totalYears": 1,
+      "years": [
+        1996
+      ]
+    },
+    {
+      "name": "Mutemath",
+      "totalYears": 1,
+      "years": [
+        2006
+      ]
+    },
+    {
+      "name": "MxPx",
+      "totalYears": 5,
+      "years": [
+        1998,
+        2000,
+        2002,
+        2005,
+        2007
+      ]
+    },
+    {
+      "name": "My American Heart",
+      "totalYears": 2,
+      "years": [
+        2005,
+        2007
+      ]
+    },
+    {
+      "name": "My Arcadia",
+      "totalYears": 1,
+      "years": [
+        2011
+      ]
+    },
+    {
+      "name": "My Chemical Romance",
+      "totalYears": 2,
+      "years": [
+        2004,
+        2005
+      ]
+    },
+    {
+      "name": "My Head",
+      "totalYears": 1,
+      "years": [
+        1996
+      ]
+    },
+    {
+      "name": "My Heart Might Explode",
+      "totalYears": 1,
+      "years": [
+        2017
+      ]
+    },
+    {
+      "name": "MyChildren MyBride",
+      "totalYears": 1,
+      "years": [
+        2018
+      ]
+    },
+    {
+      "name": "N.E.R.D",
+      "totalYears": 1,
+      "years": [
+        2002
+      ]
+    },
+    {
+      "name": "Naked Walrus",
+      "totalYears": 2,
+      "years": [
+        2014,
+        2017
+      ]
+    },
+    {
+      "name": "Napoleon Blown Apart",
+      "totalYears": 1,
+      "years": [
+        1998
+      ]
+    },
+    {
+      "name": "Narrow Head",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Near Miss",
+      "totalYears": 1,
+      "years": [
+        2005
+      ]
+    },
+    {
+      "name": "Neck Deep",
+      "totalYears": 5,
+      "years": [
+        2014,
+        2015,
+        2016,
+        2017,
+        2019
+      ]
+    },
+    {
+      "name": "Nekrogoblikon",
+      "totalYears": 1,
+      "years": [
+        2018
+      ]
+    },
+    {
+      "name": "Neo Geo",
+      "totalYears": 2,
+      "years": [
+        2011,
+        2012
+      ]
+    },
+    {
+      "name": "Never Shout Never",
+      "totalYears": 4,
+      "years": [
+        2010,
+        2013,
+        2015,
+        2017
+      ]
+    },
+    {
+      "name": "New Atlantic",
+      "totalYears": 2,
+      "years": [
+        2013,
+        2015
+      ]
+    },
+    {
+      "name": "New Beat Fund",
+      "totalYears": 2,
+      "years": [
+        2013,
+        2015
+      ]
+    },
+    {
+      "name": "New Empire",
+      "totalYears": 2,
+      "years": [
+        2012,
+        2013
+      ]
+    },
+    {
+      "name": "New Found Glory",
+      "totalYears": 8,
+      "years": [
+        2000,
+        2001,
+        2002,
+        2004,
+        2007,
+        2012,
+        2016,
+        2018
+      ]
+    },
+    {
+      "name": "New Years Day",
+      "totalYears": 7,
+      "years": [
+        2007,
+        2010,
+        2011,
+        2013,
+        2015,
+        2017,
+        2025
+      ]
+    },
+    {
+      "name": "Nick Santino",
+      "totalYears": 1,
+      "years": [
+        2014
+      ]
+    },
+    {
+      "name": "Night Argent",
+      "totalYears": 2,
+      "years": [
+        2015,
+        2016
+      ]
+    },
+    {
+      "name": "Night Riots",
+      "totalYears": 1,
+      "years": [
+        2015
+      ]
+    },
+    {
+      "name": "NiT GriT",
+      "totalYears": 1,
+      "years": [
+        2014
+      ]
+    },
+    {
+      "name": "No Bragging Rights",
+      "totalYears": 1,
+      "years": [
+        2013
+      ]
+    },
+    {
+      "name": "No Doubt",
+      "totalYears": 2,
+      "years": [
+        1995,
+        2000
+      ]
+    },
+    {
+      "name": "No Man's Land",
+      "totalYears": 2,
+      "years": [
+        2003,
+        2004
+      ]
+    },
+    {
+      "name": "No Motiv",
+      "totalYears": 1,
+      "years": [
+        2001
+      ]
+    },
+    {
+      "name": "No Use for a Name",
+      "totalYears": 4,
+      "years": [
+        1995,
+        1998,
+        2002,
+        2005
+      ]
+    },
+    {
+      "name": "Noelle Sucks",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "NOFX",
+      "totalYears": 8,
+      "years": [
+        1996,
+        1998,
+        2000,
+        2002,
+        2004,
+        2006,
+        2009,
+        2019
+      ]
+    },
+    {
+      "name": "Nonpoint",
+      "totalYears": 1,
+      "years": [
+        2005
+      ]
+    },
+    {
+      "name": "Norma Jean",
+      "totalYears": 2,
+      "years": [
+        2007,
+        2008
+      ]
+    },
+    {
+      "name": "Not Enough Space",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Not Ur Girlfrenz",
+      "totalYears": 1,
+      "years": [
+        2019
+      ]
+    },
+    {
+      "name": "Nothing, Nowhere.",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Nothington",
+      "totalYears": 1,
+      "years": [
+        2007
+      ]
+    },
+    {
+      "name": "Nova Twins",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Now On",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Obtik",
+      "totalYears": 1,
+      "years": [
+        2001
+      ]
+    },
+    {
+      "name": "Oceana",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Oceans Ate Alaska",
+      "totalYears": 1,
+      "years": [
+        2016
+      ]
+    },
+    {
+      "name": "Of Mice & Men",
+      "totalYears": 5,
+      "years": [
+        2010,
+        2011,
+        2012,
+        2014,
+        2025
+      ]
+    },
+    {
+      "name": "Off!",
+      "totalYears": 1,
+      "years": [
+        2019
+      ]
+    },
+    {
+      "name": "Oh No Fiasco",
+      "totalYears": 1,
+      "years": [
+        2012
+      ]
+    },
+    {
+      "name": "Oh, Sleeper",
+      "totalYears": 1,
+      "years": [
+        2013
+      ]
+    },
+    {
+      "name": "Old Wounds",
+      "totalYears": 1,
+      "years": [
+        2016
+      ]
+    },
+    {
+      "name": "On Broken Wings",
+      "totalYears": 1,
+      "years": [
+        2006
+      ]
+    },
+    {
+      "name": "On The Surface",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "One Last Shot",
+      "totalYears": 1,
+      "years": [
+        2017
+      ]
+    },
+    {
+      "name": "One Man Army",
+      "totalYears": 2,
+      "years": [
+        2000,
+        2003
+      ]
+    },
+    {
+      "name": "One Minute Silence",
+      "totalYears": 2,
+      "years": [
+        1999,
+        2000
+      ]
+    },
+    {
+      "name": "One Ok Rock",
+      "totalYears": 2,
+      "years": [
+        2014,
+        2019
+      ]
+    },
+    {
+      "name": "Oneyedjacks",
+      "totalYears": 1,
+      "years": [
+        2005
+      ]
+    },
+    {
+      "name": "Only Crime",
+      "totalYears": 1,
+      "years": [
+        2007
+      ]
+    },
+    {
+      "name": "Onward, Etc.",
+      "totalYears": 1,
+      "years": [
+        2015
+      ]
+    },
+    {
+      "name": "Orange 9mm",
+      "totalYears": 3,
+      "years": [
+        1995,
+        1997,
+        1999
+      ]
+    },
+    {
+      "name": "Oreskaband",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Origami Angel",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Othello",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Our Last Night",
+      "totalYears": 2,
+      "years": [
+        2015,
+        2017
+      ]
+    },
+    {
+      "name": "Outasight",
+      "totalYears": 1,
+      "years": [
+        2013
+      ]
+    },
+    {
+      "name": "Over It",
+      "totalYears": 3,
+      "years": [
+        2004,
+        2005,
+        2006
+      ]
+    },
+    {
+      "name": "Owen Plant",
+      "totalYears": 2,
+      "years": [
+        2012,
+        2013
+      ]
+    },
+    {
+      "name": "Oxymorrons",
+      "totalYears": 2,
+      "years": [
+        2019,
+        2025
+      ]
+    },
+    {
+      "name": "Ozma",
+      "totalYears": 1,
+      "years": [
+        2002
+      ]
+    },
+    {
+      "name": "Ozomatli",
+      "totalYears": 2,
+      "years": [
+        1998,
+        2019
+      ]
+    },
+    {
+      "name": "P.O.S",
+      "totalYears": 1,
+      "years": [
+        2009
+      ]
+    },
+    {
+      "name": "Pacific Dub",
+      "totalYears": 2,
+      "years": [
+        2013,
+        2014
+      ]
+    },
+    {
+      "name": "Paige Wood",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Palaye Royale",
+      "totalYears": 2,
+      "years": [
+        2016,
+        2018
+      ]
+    },
+    {
+      "name": "Palisades",
+      "totalYears": 1,
+      "years": [
+        2015
+      ]
+    },
+    {
+      "name": "Panima",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Papa Roach",
+      "totalYears": 1,
+      "years": [
+        2000
+      ]
+    },
+    {
+      "name": "Paramore",
+      "totalYears": 6,
+      "years": [
+        2005,
+        2006,
+        2007,
+        2008,
+        2009,
+        2011
+      ]
+    },
+    {
+      "name": "Parkway Drive",
+      "totalYears": 3,
+      "years": [
+        2007,
+        2010,
+        2014
+      ]
+    },
+    {
+      "name": "Passafire",
+      "totalYears": 1,
+      "years": [
+        2011
+      ]
+    },
+    {
+      "name": "Patent Pending",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Pathway To Providence",
+      "totalYears": 1,
+      "years": [
+        2006
+      ]
+    },
+    {
+      "name": "Pato",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Peelander-Z",
+      "totalYears": 1,
+      "years": [
+        2011
+      ]
+    },
+    {
+      "name": "Pendleton",
+      "totalYears": 1,
+      "years": [
+        2007
+      ]
+    },
+    {
+      "name": "Pennywise",
+      "totalYears": 11,
+      "years": [
+        1996,
+        1997,
+        1998,
+        1999,
+        2001,
+        2003,
+        2007,
+        2008,
+        2010,
+        2018,
+        2025
+      ]
+    },
+    {
+      "name": "People R Ugly",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Pepper",
+      "totalYears": 6,
+      "years": [
+        2001,
+        2003,
+        2004,
+        2007,
+        2011,
+        2016
+      ]
+    },
+    {
+      "name": "Permanent Bastards",
+      "totalYears": 1,
+      "years": [
+        2011
+      ]
+    },
+    {
+      "name": "Peter DiStefano",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Peter McPoland and the Haps",
+      "totalYears": 1,
+      "years": [
+        2019
+      ]
+    },
+    {
+      "name": "Phathom",
+      "totalYears": 4,
+      "years": [
+        2006,
+        2007,
+        2008,
+        2009
+      ]
+    },
+    {
+      "name": "Phinehas",
+      "totalYears": 1,
+      "years": [
+        2018
+      ]
+    },
+    {
+      "name": "Picturesque",
+      "totalYears": 1,
+      "years": [
+        2018
+      ]
+    },
+    {
+      "name": "Pierce the Veil",
+      "totalYears": 4,
+      "years": [
+        2008,
+        2010,
+        2012,
+        2015
+      ]
+    },
+    {
+      "name": "Piotta",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Pistolita",
+      "totalYears": 2,
+      "years": [
+        2006,
+        2007
+      ]
+    },
+    {
+      "name": "PJ Bond",
+      "totalYears": 1,
+      "years": [
+        2014
+      ]
+    },
+    {
+      "name": "Places And Numbers",
+      "totalYears": 1,
+      "years": [
+        2011
+      ]
+    },
+    {
+      "name": "Places to Park",
+      "totalYears": 1,
+      "years": [
+        2003
+      ]
+    },
+    {
+      "name": "Plague Vendor",
+      "totalYears": 2,
+      "years": [
+        2014,
+        2019
+      ]
+    },
+    {
+      "name": "Plain White T's",
+      "totalYears": 4,
+      "years": [
+        2005,
+        2006,
+        2017,
+        2025
+      ]
+    },
+    {
+      "name": "Plastique",
+      "totalYears": 1,
+      "years": [
+        1998
+      ]
+    },
+    {
+      "name": "Playboy Manbaby",
+      "totalYears": 1,
+      "years": [
+        2017
+      ]
+    },
+    {
+      "name": "PlayRadioPlay",
+      "totalYears": 1,
+      "years": [
+        2007
+      ]
+    },
+    {
+      "name": "Point North",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Poison the Well",
+      "totalYears": 2,
+      "years": [
+        2003,
+        2007
+      ]
+    },
+    {
+      "name": "Polar Bear Club",
+      "totalYears": 1,
+      "years": [
+        2012
+      ]
+    },
+    {
+      "name": "Porn Flakes",
+      "totalYears": 1,
+      "years": [
+        1999
+      ]
+    },
+    {
+      "name": "Portrait of Poverty",
+      "totalYears": 1,
+      "years": [
+        1998
+      ]
+    },
+    {
+      "name": "Pour Habit",
+      "totalYears": 1,
+      "years": [
+        2011
+      ]
+    },
+    {
+      "name": "Pressure 4-5",
+      "totalYears": 1,
+      "years": [
+        2001
+      ]
+    },
+    {
+      "name": "Preston",
+      "totalYears": 1,
+      "years": [
+        2005
+      ]
+    },
+    {
+      "name": "Prof",
+      "totalYears": 1,
+      "years": [
+        2016
+      ]
+    },
+    {
+      "name": "Prophets of Rage",
+      "totalYears": 2,
+      "years": [
+        2018,
+        2019
+      ]
+    },
+    {
+      "name": "Protein",
+      "totalYears": 1,
+      "years": [
+        1997
+      ]
+    },
+    {
+      "name": "Protest The Hero",
+      "totalYears": 3,
+      "years": [
+        2006,
+        2007,
+        2008
+      ]
+    },
+    {
+      "name": "Psycho White",
+      "totalYears": 1,
+      "years": [
+        2013
+      ]
+    },
+    {
+      "name": "Psychotic 4",
+      "totalYears": 1,
+      "years": [
+        2006
+      ]
+    },
+    {
+      "name": "Pucker Up",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Pull The Pin",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Punk Rock Karaoke",
+      "totalYears": 1,
+      "years": [
+        1998
+      ]
+    },
+    {
+      "name": "PUP",
+      "totalYears": 1,
+      "years": [
+        2015
+      ]
+    },
+    {
+      "name": "PVRIS",
+      "totalYears": 4,
+      "years": [
+        2013,
+        2014,
+        2015,
+        2016
+      ]
+    },
+    {
+      "name": "Quarashi",
+      "totalYears": 1,
+      "years": [
+        2002
+      ]
+    },
+    {
+      "name": "Quicksand",
+      "totalYears": 2,
+      "years": [
+        1995,
+        2019
+      ]
+    },
+    {
+      "name": "R I L E Y",
+      "totalYears": 2,
+      "years": [
+        2018,
+        2019
+      ]
+    },
+    {
+      "name": "Railroad To Alaska",
+      "totalYears": 2,
+      "years": [
+        2011,
+        2012
+      ]
+    },
+    {
+      "name": "Rain City Drive",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Rancid",
+      "totalYears": 3,
+      "years": [
+        1998,
+        2001,
+        2003
+      ]
+    },
+    {
+      "name": "Rapid Decline",
+      "totalYears": 1,
+      "years": [
+        2011
+      ]
+    },
+    {
+      "name": "RDGLDGRN",
+      "totalYears": 1,
+      "years": [
+        2013
+      ]
+    },
+    {
+      "name": "Real Friends",
+      "totalYears": 4,
+      "years": [
+        2013,
+        2014,
+        2016,
+        2018
+      ]
+    },
+    {
+      "name": "Real McKenzies",
+      "totalYears": 1,
+      "years": [
+        2007
+      ]
+    },
+    {
+      "name": "Reckless Serenade",
+      "totalYears": 1,
+      "years": [
+        2016
+      ]
+    },
+    {
+      "name": "Red Car Wire",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Red Five",
+      "totalYears": 2,
+      "years": [
+        1995,
+        1996
+      ]
+    },
+    {
+      "name": "Reel Big Fish",
+      "totalYears": 11,
+      "years": [
+        1996,
+        1997,
+        1998,
+        2002,
+        2008,
+        2009,
+        2010,
+        2013,
+        2016,
+        2018,
+        2019
+      ]
+    },
+    {
+      "name": "Reggie and the Full Effect",
+      "totalYears": 1,
+      "years": [
+        2005
+      ]
+    },
+    {
+      "name": "Rehab",
+      "totalYears": 1,
+      "years": [
+        2001
+      ]
+    },
+    {
+      "name": "Relient K",
+      "totalYears": 4,
+      "years": [
+        2005,
+        2008,
+        2011,
+        2013
+      ]
+    },
+    {
+      "name": "Remsa and Event",
+      "totalYears": 1,
+      "years": [
+        2007
+      ]
+    },
+    {
+      "name": "Rev 9",
+      "totalYears": 1,
+      "years": [
+        2003
+      ]
+    },
+    {
+      "name": "Reverend Horton Heat",
+      "totalYears": 1,
+      "years": [
+        1998
+      ]
+    },
+    {
+      "name": "Revolution Mother",
+      "totalYears": 2,
+      "years": [
+        2007,
+        2008
+      ]
+    },
+    {
+      "name": "Riff Raff",
+      "totalYears": 1,
+      "years": [
+        2015
+      ]
+    },
+    {
+      "name": "Ringpop!",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Rise Against",
+      "totalYears": 5,
+      "years": [
+        2003,
+        2004,
+        2006,
+        2008,
+        2012
+      ]
+    },
+    {
+      "name": "Rise To Remain",
+      "totalYears": 1,
+      "years": [
+        2012
+      ]
+    },
+    {
+      "name": "Rivals",
+      "totalYears": 1,
+      "years": [
+        2018
+      ]
+    },
+    {
+      "name": "River City Extension",
+      "totalYears": 1,
+      "years": [
+        2011
+      ]
+    },
+    {
+      "name": "River City High",
+      "totalYears": 1,
+      "years": [
+        2001
+      ]
+    },
+    {
+      "name": "River City Rebels",
+      "totalYears": 1,
+      "years": [
+        2001
+      ]
+    },
+    {
+      "name": "Rivers Monroe",
+      "totalYears": 1,
+      "years": [
+        2015
+      ]
+    },
+    {
+      "name": "Roam",
+      "totalYears": 1,
+      "years": [
+        2016
+      ]
+    },
+    {
+      "name": "Rob Lynch",
+      "totalYears": 1,
+      "years": [
+        2014
+      ]
+    },
+    {
+      "name": "Rocket from the Crypt",
+      "totalYears": 1,
+      "years": [
+        1996
+      ]
+    },
+    {
+      "name": "Roger Miret and the Disasters",
+      "totalYears": 1,
+      "years": [
+        2005
+      ]
+    },
+    {
+      "name": "Rogue's March",
+      "totalYears": 1,
+      "years": [
+        2001
+      ]
+    },
+    {
+      "name": "Rollins Band",
+      "totalYears": 1,
+      "years": [
+        2001
+      ]
+    },
+    {
+      "name": "Roses Are Red",
+      "totalYears": 2,
+      "years": [
+        2004,
+        2005
+      ]
+    },
+    {
+      "name": "Royal & The Serpent",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Royal Crown Revue",
+      "totalYears": 3,
+      "years": [
+        1997,
+        1998,
+        1999
+      ]
+    },
+    {
+      "name": "Rufio",
+      "totalYears": 3,
+      "years": [
+        2003,
+        2004,
+        2005
+      ]
+    },
+    {
+      "name": "Run DMT",
+      "totalYears": 1,
+      "years": [
+        2013
+      ]
+    },
+    {
+      "name": "Rx Bandits",
+      "totalYears": 1,
+      "years": [
+        2002
+      ]
+    },
+    {
+      "name": "Ryan Cassata",
+      "totalYears": 1,
+      "years": [
+        2013
+      ]
+    },
+    {
+      "name": "S.T.U.N.",
+      "totalYears": 1,
+      "years": [
+        2003
+      ]
+    },
+    {
+      "name": "Sace6",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Safe To Say",
+      "totalYears": 1,
+      "years": [
+        2016
+      ]
+    },
+    {
+      "name": "Saint Alvia",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Samiam",
+      "totalYears": 1,
+      "years": [
+        1996
+      ]
+    },
+    {
+      "name": "Sammy Adams",
+      "totalYears": 1,
+      "years": [
+        2017
+      ]
+    },
+    {
+      "name": "Saosin",
+      "totalYears": 3,
+      "years": [
+        2005,
+        2009,
+        2025
+      ]
+    },
+    {
+      "name": "Sarah and the Safe Word",
+      "totalYears": 1,
+      "years": [
+        2017
+      ]
+    },
+    {
+      "name": "Saturdays At Your Place",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Save Face",
+      "totalYears": 1,
+      "years": [
+        2019
+      ]
+    },
+    {
+      "name": "Save Ferris",
+      "totalYears": 4,
+      "years": [
+        1998,
+        2000,
+        2017,
+        2019
+      ]
+    },
+    {
+      "name": "Saves the Day",
+      "totalYears": 3,
+      "years": [
+        2000,
+        2006,
+        2014
+      ]
+    },
+    {
+      "name": "Saving Grace",
+      "totalYears": 1,
+      "years": [
+        2009
+      ]
+    },
+    {
+      "name": "Say Anything",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Say No More",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Say When",
+      "totalYears": 1,
+      "years": [
+        2009
+      ]
+    },
+    {
+      "name": "SayWeCanFly",
+      "totalYears": 2,
+      "years": [
+        2015,
+        2016
+      ]
+    },
+    {
+      "name": "Scare Don't Fear",
+      "totalYears": 1,
+      "years": [
+        2014
+      ]
+    },
+    {
+      "name": "Scary Kids Scaring Kids",
+      "totalYears": 4,
+      "years": [
+        2005,
+        2007,
+        2009,
+        2025
+      ]
+    },
+    {
+      "name": "Scene Queen",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Seaway",
+      "totalYears": 1,
+      "years": [
+        2015
+      ]
+    },
+    {
+      "name": "Seaweed",
+      "totalYears": 1,
+      "years": [
+        1995
+      ]
+    },
+    {
+      "name": "Secret Broadcast",
+      "totalYears": 1,
+      "years": [
+        2007
+      ]
+    },
+    {
+      "name": "SECRETS",
+      "totalYears": 3,
+      "years": [
+        2013,
+        2014,
+        2016
+      ]
+    },
+    {
+      "name": "Selfish Sons",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Send Request",
+      "totalYears": 2,
+      "years": [
+        2014,
+        2017
+      ]
+    },
+    {
+      "name": "Sense Field",
+      "totalYears": 3,
+      "years": [
+        1995,
+        1996,
+        2017
+      ]
+    },
+    {
+      "name": "Senses Fail",
+      "totalYears": 8,
+      "years": [
+        2004,
+        2005,
+        2006,
+        2009,
+        2012,
+        2015,
+        2018,
+        2025
+      ]
+    },
+    {
+      "name": "Separations",
+      "totalYears": 1,
+      "years": [
+        2017
+      ]
+    },
+    {
+      "name": "Set It Off",
+      "totalYears": 5,
+      "years": [
+        2013,
+        2015,
+        2016,
+        2018,
+        2019
+      ]
+    },
+    {
+      "name": "Set Your Goals",
+      "totalYears": 7,
+      "years": [
+        2007,
+        2008,
+        2010,
+        2011,
+        2015,
+        2016,
+        2019
+      ]
+    },
+    {
+      "name": "Settings",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Sevendust",
+      "totalYears": 1,
+      "years": [
+        1999
+      ]
+    },
+    {
+      "name": "Sexpod",
+      "totalYears": 1,
+      "years": [
+        1996
+      ]
+    },
+    {
+      "name": "Shad",
+      "totalYears": 1,
+      "years": [
+        2009
+      ]
+    },
+    {
+      "name": "Sharks",
+      "totalYears": 1,
+      "years": [
+        2011
+      ]
+    },
+    {
+      "name": "Sharptooth",
+      "totalYears": 1,
+      "years": [
+        2018
+      ]
+    },
+    {
+      "name": "Shattered Sun",
+      "totalYears": 1,
+      "years": [
+        2017
+      ]
+    },
+    {
+      "name": "Shinobi Ninja",
+      "totalYears": 2,
+      "years": [
+        2011,
+        2014
+      ]
+    },
+    {
+      "name": "Shira",
+      "totalYears": 1,
+      "years": [
+        2011
+      ]
+    },
+    {
+      "name": "Shiragirl",
+      "totalYears": 7,
+      "years": [
+        2004,
+        2005,
+        2006,
+        2014,
+        2015,
+        2018,
+        2019
+      ]
+    },
+    {
+      "name": "Shooter Jennings",
+      "totalYears": 1,
+      "years": [
+        2009
+      ]
+    },
+    {
+      "name": "Shot In The Dark",
+      "totalYears": 1,
+      "years": [
+        2014
+      ]
+    },
+    {
+      "name": "Showoff",
+      "totalYears": 1,
+      "years": [
+        2001
+      ]
+    },
+    {
+      "name": "Shut Up And Deal",
+      "totalYears": 1,
+      "years": [
+        2011
+      ]
+    },
+    {
+      "name": "Shwayze",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Shy KidX",
+      "totalYears": 1,
+      "years": [
+        2013
+      ]
+    },
+    {
+      "name": "Sick City",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Sick of It All",
+      "totalYears": 3,
+      "years": [
+        1995,
+        1997,
+        2017
+      ]
+    },
+    {
+      "name": "Sick of Sarah",
+      "totalYears": 2,
+      "years": [
+        2011,
+        2012
+      ]
+    },
+    {
+      "name": "Silent Planet",
+      "totalYears": 3,
+      "years": [
+        2016,
+        2017,
+        2019
+      ]
+    },
+    {
+      "name": "Silly Goose",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Silverstein",
+      "totalYears": 11,
+      "years": [
+        2004,
+        2005,
+        2006,
+        2009,
+        2012,
+        2013,
+        2015,
+        2017,
+        2018,
+        2019,
+        2025
+      ]
+    },
+    {
+      "name": "Simple Plan",
+      "totalYears": 14,
+      "years": [
+        1999,
+        2000,
+        2001,
+        2002,
+        2003,
+        2004,
+        2005,
+        2010,
+        2011,
+        2012,
+        2015,
+        2018,
+        2019,
+        2025
+      ]
+    },
+    {
+      "name": "Sing It Loud",
+      "totalYears": 1,
+      "years": [
+        2009
+      ]
+    },
+    {
+      "name": "Single File",
+      "totalYears": 2,
+      "years": [
+        2006,
+        2008
+      ]
+    },
+    {
+      "name": "Sirens and Sailors",
+      "totalYears": 1,
+      "years": [
+        2015
+      ]
+    },
+    {
+      "name": "Six Feet Under",
+      "totalYears": 1,
+      "years": [
+        2000
+      ]
+    },
+    {
+      "name": "Skarhead",
+      "totalYears": 1,
+      "years": [
+        2000
+      ]
+    },
+    {
+      "name": "Skating Polly",
+      "totalYears": 1,
+      "years": [
+        2019
+      ]
+    },
+    {
+      "name": "Skavoovie and the Epitones",
+      "totalYears": 1,
+      "years": [
+        1998
+      ]
+    },
+    {
+      "name": "Skeet Skeet",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Skindred",
+      "totalYears": 1,
+      "years": [
+        2005
+      ]
+    },
+    {
+      "name": "Skinny Lister",
+      "totalYears": 1,
+      "years": [
+        2012
+      ]
+    },
+    {
+      "name": "Skip The Foreplay",
+      "totalYears": 1,
+      "years": [
+        2012
+      ]
+    },
+    {
+      "name": "Sky Eats Airplane",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Slaughter To Prevail",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Slaves",
+      "totalYears": 1,
+      "years": [
+        2015
+      ]
+    },
+    {
+      "name": "Sleep On It",
+      "totalYears": 1,
+      "years": [
+        2018
+      ]
+    },
+    {
+      "name": "Sleeper Agent",
+      "totalYears": 1,
+      "years": [
+        2014
+      ]
+    },
+    {
+      "name": "Sleeper Set Sail",
+      "totalYears": 1,
+      "years": [
+        2005
+      ]
+    },
+    {
+      "name": "Sleeping with Sirens",
+      "totalYears": 6,
+      "years": [
+        2012,
+        2013,
+        2014,
+        2015,
+        2016,
+        2019
+      ]
+    },
+    {
+      "name": "Sleepwalker",
+      "totalYears": 1,
+      "years": [
+        2012
+      ]
+    },
+    {
+      "name": "Slick Shoes",
+      "totalYears": 1,
+      "years": [
+        2003
+      ]
+    },
+    {
+      "name": "Slightly Stoopid",
+      "totalYears": 1,
+      "years": [
+        2001
+      ]
+    },
+    {
+      "name": "Slimer",
+      "totalYears": 1,
+      "years": [
+        1999
+      ]
+    },
+    {
+      "name": "Sloth",
+      "totalYears": 1,
+      "years": [
+        1998
+      ]
+    },
+    {
+      "name": "Small Talks[63]",
+      "totalYears": 1,
+      "years": [
+        2018
+      ]
+    },
+    {
+      "name": "Snapcase",
+      "totalYears": 2,
+      "years": [
+        1998,
+        2000
+      ]
+    },
+    {
+      "name": "Snot",
+      "totalYears": 1,
+      "years": [
+        1997
+      ]
+    },
+    {
+      "name": "So Abused",
+      "totalYears": 1,
+      "years": [
+        2005
+      ]
+    },
+    {
+      "name": "So Long Arletta",
+      "totalYears": 0,
+      "years": []
+    },
+    {
+      "name": "So Much Hope, Buried.",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "So They Say",
+      "totalYears": 2,
+      "years": [
+        2006,
+        2007
+      ]
+    },
+    {
+      "name": "Social Distortion",
+      "totalYears": 1,
+      "years": [
+        1997
+      ]
+    },
+    {
+      "name": "Soda",
+      "totalYears": 1,
+      "years": [
+        1996
+      ]
+    },
+    {
+      "name": "Someday Never",
+      "totalYears": 2,
+      "years": [
+        2005,
+        2006
+      ]
+    },
+    {
+      "name": "Somerset",
+      "totalYears": 1,
+      "years": [
+        2002
+      ]
+    },
+    {
+      "name": "Something Corporate",
+      "totalYears": 3,
+      "years": [
+        2002,
+        2003,
+        2005
+      ]
+    },
+    {
+      "name": "Sonic Boom Six",
+      "totalYears": 1,
+      "years": [
+        2017
+      ]
+    },
+    {
+      "name": "Sophie Powers",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Speak Low If You Speak Love",
+      "totalYears": 1,
+      "years": [
+        2015
+      ]
+    },
+    {
+      "name": "Speed Of Light",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Splitbreed",
+      "totalYears": 1,
+      "years": [
+        2015
+      ]
+    },
+    {
+      "name": "Spray Allen",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Spring Heeled Jack",
+      "totalYears": 1,
+      "years": [
+        1999
+      ]
+    },
+    {
+      "name": "Sprout",
+      "totalYears": 1,
+      "years": [
+        2001
+      ]
+    },
+    {
+      "name": "Sprung Monkey",
+      "totalYears": 1,
+      "years": [
+        1998
+      ]
+    },
+    {
+      "name": "Stacked Like Pancakes",
+      "totalYears": 4,
+      "years": [
+        2015,
+        2017,
+        2018,
+        2019
+      ]
+    },
+    {
+      "name": "Staind",
+      "totalYears": 1,
+      "years": [
+        1998
+      ]
+    },
+    {
+      "name": "State Champs",
+      "totalYears": 5,
+      "years": [
+        2013,
+        2014,
+        2016,
+        2018,
+        2025
+      ]
+    },
+    {
+      "name": "Staylefish",
+      "totalYears": 2,
+      "years": [
+        2008,
+        2009
+      ]
+    },
+    {
+      "name": "Stepdad",
+      "totalYears": 1,
+      "years": [
+        2012
+      ]
+    },
+    {
+      "name": "Stephan Jacobs",
+      "totalYears": 1,
+      "years": [
+        2013
+      ]
+    },
+    {
+      "name": "Stephen Jerzak",
+      "totalYears": 1,
+      "years": [
+        2011
+      ]
+    },
+    {
+      "name": "Stick to Your Guns",
+      "totalYears": 3,
+      "years": [
+        2008,
+        2013,
+        2017
+      ]
+    },
+    {
+      "name": "Still Remains",
+      "totalYears": 1,
+      "years": [
+        2007
+      ]
+    },
+    {
+      "name": "Story of the Year",
+      "totalYears": 8,
+      "years": [
+        2002,
+        2003,
+        2004,
+        2005,
+        2008,
+        2013,
+        2018,
+        2025
+      ]
+    },
+    {
+      "name": "Story Untold",
+      "totalYears": 1,
+      "years": [
+        2018
+      ]
+    },
+    {
+      "name": "Strangers You Know",
+      "totalYears": 2,
+      "years": [
+        2014,
+        2015
+      ]
+    },
+    {
+      "name": "Stratejacket",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Strawberry Blondes",
+      "totalYears": 1,
+      "years": [
+        2013
+      ]
+    },
+    {
+      "name": "Stray from the Path",
+      "totalYears": 2,
+      "years": [
+        2014,
+        2025
+      ]
+    },
+    {
+      "name": "Straylight Run",
+      "totalYears": 1,
+      "years": [
+        2007
+      ]
+    },
+    {
+      "name": "Street Dogs",
+      "totalYears": 3,
+      "years": [
+        2008,
+        2011,
+        2017
+      ]
+    },
+    {
+      "name": "Street Drum Corps",
+      "totalYears": 3,
+      "years": [
+        2007,
+        2008,
+        2019
+      ]
+    },
+    {
+      "name": "Streetlight Manifesto",
+      "totalYears": 5,
+      "years": [
+        2009,
+        2010,
+        2012,
+        2017,
+        2025
+      ]
+    },
+    {
+      "name": "Stretch Armstrong",
+      "totalYears": 1,
+      "years": [
+        2004
+      ]
+    },
+    {
+      "name": "Strike Anywhere",
+      "totalYears": 1,
+      "years": [
+        2005
+      ]
+    },
+    {
+      "name": "Strung Out",
+      "totalYears": 6,
+      "years": [
+        1996,
+        1997,
+        1998,
+        2004,
+        2005,
+        2017
+      ]
+    },
+    {
+      "name": "Stutterfly",
+      "totalYears": 1,
+      "years": [
+        2005
+      ]
+    },
+    {
+      "name": "Sublime",
+      "totalYears": 2,
+      "years": [
+        1995,
+        2025
+      ]
+    },
+    {
+      "name": "Suburban Delinquents",
+      "totalYears": 1,
+      "years": [
+        1997
+      ]
+    },
+    {
+      "name": "Suburban Legends",
+      "totalYears": 1,
+      "years": [
+        2005
+      ]
+    },
+    {
+      "name": "Sueco",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Sugar Ray",
+      "totalYears": 1,
+      "years": [
+        1997
+      ]
+    },
+    {
+      "name": "Sugarcult",
+      "totalYears": 2,
+      "years": [
+        2001,
+        2004
+      ]
+    },
+    {
+      "name": "Suicidal Tendencies",
+      "totalYears": 1,
+      "years": [
+        1999
+      ]
+    },
+    {
+      "name": "Suicide Silence",
+      "totalYears": 1,
+      "years": [
+        2010
+      ]
+    },
+    {
+      "name": "Sum 41",
+      "totalYears": 10,
+      "years": [
+        2000,
+        2001,
+        2003,
+        2007,
+        2009,
+        2010,
+        2011,
+        2016,
+        2018,
+        2019
+      ]
+    },
+    {
+      "name": "Summer Wars",
+      "totalYears": 1,
+      "years": [
+        2018
+      ]
+    },
+    {
+      "name": "Sumo Cyco",
+      "totalYears": 1,
+      "years": [
+        2015
+      ]
+    },
+    {
+      "name": "Sunami",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Sunchild",
+      "totalYears": 2,
+      "years": [
+        1997,
+        1998
+      ]
+    },
+    {
+      "name": "Sunflower",
+      "totalYears": 1,
+      "years": [
+        1996
+      ]
+    },
+    {
+      "name": "Supe",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Super Water Sympathy",
+      "totalYears": 2,
+      "years": [
+        2012,
+        2013
+      ]
+    },
+    {
+      "name": "Supernova",
+      "totalYears": 3,
+      "years": [
+        1995,
+        1996,
+        2007
+      ]
+    },
+    {
+      "name": "Surfer Girl",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Survive This!",
+      "totalYears": 1,
+      "years": [
+        2014
+      ]
+    },
+    {
+      "name": "Svetlanas",
+      "totalYears": 1,
+      "years": [
+        2015
+      ]
+    },
+    {
+      "name": "Sweet Pill",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Swingin' Utters",
+      "totalYears": 2,
+      "years": [
+        1995,
+        1998
+      ]
+    },
+    {
+      "name": "Switched",
+      "totalYears": 2,
+      "years": [
+        2001,
+        2002
+      ]
+    },
+    {
+      "name": "Sworn In",
+      "totalYears": 1,
+      "years": [
+        2017
+      ]
+    },
+    {
+      "name": "Sydney",
+      "totalYears": 1,
+      "years": [
+        2006
+      ]
+    },
+    {
+      "name": "Sykes",
+      "totalYears": 1,
+      "years": [
+        2016
+      ]
+    },
+    {
+      "name": "Sylar",
+      "totalYears": 1,
+      "years": [
+        2017
+      ]
+    },
+    {
+      "name": "Symposium",
+      "totalYears": 1,
+      "years": [
+        1998
+      ]
+    },
+    {
+      "name": "T. Mills",
+      "totalYears": 1,
+      "years": [
+        2012
+      ]
+    },
+    {
+      "name": "T.S.O.L.",
+      "totalYears": 3,
+      "years": [
+        2000,
+        2008,
+        2017
+      ]
+    },
+    {
+      "name": "Taking Back Sunday",
+      "totalYears": 5,
+      "years": [
+        2003,
+        2004,
+        2012,
+        2018,
+        2019
+      ]
+    },
+    {
+      "name": "Talib Kweli",
+      "totalYears": 1,
+      "years": [
+        2006
+      ]
+    },
+    {
+      "name": "TAT",
+      "totalYears": 4,
+      "years": [
+        2006,
+        2008,
+        2009,
+        2015
+      ]
+    },
+    {
+      "name": "Tatiana DeMaria",
+      "totalYears": 2,
+      "years": [
+        2018,
+        2019
+      ]
+    },
+    {
+      "name": "Taylor Acorn",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Taylor Thrash",
+      "totalYears": 1,
+      "years": [
+        2012
+      ]
+    },
+    {
+      "name": "Teenage Bottlerocket",
+      "totalYears": 3,
+      "years": [
+        2014,
+        2016,
+        2019
+      ]
+    },
+    {
+      "name": "Ten Second Epic",
+      "totalYears": 1,
+      "years": [
+        2012
+      ]
+    },
+    {
+      "name": "Ten56.",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Terrible Things",
+      "totalYears": 1,
+      "years": [
+        2011
+      ]
+    },
+    {
+      "name": "Terror",
+      "totalYears": 1,
+      "years": [
+        2014
+      ]
+    },
+    {
+      "name": "Terror Reid",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Tess Dunn",
+      "totalYears": 7,
+      "years": [
+        2009,
+        2010,
+        2011,
+        2012,
+        2013,
+        2014,
+        2015
+      ]
+    },
+    {
+      "name": "Texas in July",
+      "totalYears": 1,
+      "years": [
+        2013
+      ]
+    },
+    {
+      "name": "Tha Alkaholiks",
+      "totalYears": 2,
+      "years": [
+        1996,
+        1997
+      ]
+    },
+    {
+      "name": "That's Not My Baby",
+      "totalYears": 1,
+      "years": [
+        2014
+      ]
+    },
+    {
+      "name": "The (International) Noise Conspiracy",
+      "totalYears": 1,
+      "years": [
+        2004
+      ]
+    },
+    {
+      "name": "The Acacia Strain",
+      "totalYears": 2,
+      "years": [
+        2011,
+        2017
+      ]
+    },
+    {
+      "name": "The Academy Is...",
+      "totalYears": 3,
+      "years": [
+        2005,
+        2006,
+        2008
+      ]
+    },
+    {
+      "name": "The Aggrolites",
+      "totalYears": 1,
+      "years": [
+        2011
+      ]
+    },
+    {
+      "name": "The Alarm",
+      "totalYears": 1,
+      "years": [
+        2017
+      ]
+    },
+    {
+      "name": "The All-American Rejects",
+      "totalYears": 7,
+      "years": [
+        2001,
+        2003,
+        2005,
+        2010,
+        2019,
+        2025,
+        2026
+      ]
+    },
+    {
+      "name": "The Almost",
+      "totalYears": 1,
+      "years": [
+        2007
+      ]
+    },
+    {
+      "name": "The American Scene",
+      "totalYears": 1,
+      "years": [
+        2013
+      ]
+    },
+    {
+      "name": "The Amity Affliction",
+      "totalYears": 3,
+      "years": [
+        2013,
+        2015,
+        2018
+      ]
+    },
+    {
+      "name": "The Apex Theory",
+      "totalYears": 1,
+      "years": [
+        2001
+      ]
+    },
+    {
+      "name": "The Aquabats",
+      "totalYears": 5,
+      "years": [
+        1996,
+        1998,
+        2013,
+        2019,
+        2025
+      ]
+    },
+    {
+      "name": "The Arrogant Sons of Bitches",
+      "totalYears": 2,
+      "years": [
+        2003,
+        2004
+      ]
+    },
+    {
+      "name": "The Ataris",
+      "totalYears": 8,
+      "years": [
+        2000,
+        2001,
+        2003,
+        2005,
+        2009,
+        2013,
+        2014,
+        2017
+      ]
+    },
+    {
+      "name": "The Audition",
+      "totalYears": 1,
+      "years": [
+        2007
+      ]
+    },
+    {
+      "name": "The Automatic",
+      "totalYears": 1,
+      "years": [
+        2007
+      ]
+    },
+    {
+      "name": "The Ballroom Charades",
+      "totalYears": 1,
+      "years": [
+        2016
+      ]
+    },
+    {
+      "name": "The Barbarians Of California",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "The Benjamins",
+      "totalYears": 1,
+      "years": [
+        2001
+      ]
+    },
+    {
+      "name": "The Black Dahlia Murder",
+      "totalYears": 1,
+      "years": [
+        2013
+      ]
+    },
+    {
+      "name": "The Black Eyed Peas",
+      "totalYears": 1,
+      "years": [
+        1999
+      ]
+    },
+    {
+      "name": "The Black Halos",
+      "totalYears": 1,
+      "years": [
+        2001
+      ]
+    },
+    {
+      "name": "The Black Pacific",
+      "totalYears": 1,
+      "years": [
+        2011
+      ]
+    },
+    {
+      "name": "The Bled",
+      "totalYears": 3,
+      "years": [
+        2004,
+        2005,
+        2006
+      ]
+    },
+    {
+      "name": "The Bleeding Irish",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "The BOTS",
+      "totalYears": 2,
+      "years": [
+        2010,
+        2011
+      ]
+    },
+    {
+      "name": "The Bouncing Souls",
+      "totalYears": 8,
+      "years": [
+        1997,
+        1998,
+        1999,
+        2001,
+        2004,
+        2006,
+        2008,
+        2009
+      ]
+    },
+    {
+      "name": "The Briggs",
+      "totalYears": 2,
+      "years": [
+        2007,
+        2008
+      ]
+    },
+    {
+      "name": "The Bronx",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "The Bunny the Bear",
+      "totalYears": 1,
+      "years": [
+        2015
+      ]
+    },
+    {
+      "name": "The Burst and Bloom",
+      "totalYears": 1,
+      "years": [
+        2017
+      ]
+    },
+    {
+      "name": "The Business",
+      "totalYears": 1,
+      "years": [
+        2001
+      ]
+    },
+    {
+      "name": "The Cab",
+      "totalYears": 1,
+      "years": [
+        2010
+      ]
+    },
+    {
+      "name": "The Casualties",
+      "totalYears": 5,
+      "years": [
+        2001,
+        2002,
+        2004,
+        2006,
+        2010
+      ]
+    },
+    {
+      "name": "The Chariot",
+      "totalYears": 2,
+      "years": [
+        2007,
+        2013
+      ]
+    },
+    {
+      "name": "The Chop Tops",
+      "totalYears": 2,
+      "years": [
+        2005,
+        2006
+      ]
+    },
+    {
+      "name": "The Classic Crime",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "The Cleopatra Complex",
+      "totalYears": 1,
+      "years": [
+        2013
+      ]
+    },
+    {
+      "name": "The Color Fred",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "The Color Morale",
+      "totalYears": 2,
+      "years": [
+        2014,
+        2016
+      ]
+    },
+    {
+      "name": "The Confession",
+      "totalYears": 1,
+      "years": [
+        2007
+      ]
+    },
+    {
+      "name": "The Constellations",
+      "totalYears": 1,
+      "years": [
+        2012
+      ]
+    },
+    {
+      "name": "The Damned",
+      "totalYears": 1,
+      "years": [
+        2002
+      ]
+    },
+    {
+      "name": "The Dance Party",
+      "totalYears": 1,
+      "years": [
+        2011
+      ]
+    },
+    {
+      "name": "The Dangerous Summer",
+      "totalYears": 1,
+      "years": [
+        2011
+      ]
+    },
+    {
+      "name": "The Dark",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "The Darlings",
+      "totalYears": 1,
+      "years": [
+        2012
+      ]
+    },
+    {
+      "name": "The Dead 60s",
+      "totalYears": 1,
+      "years": [
+        2005
+      ]
+    },
+    {
+      "name": "The Dear & Departed",
+      "totalYears": 1,
+      "years": [
+        2007
+      ]
+    },
+    {
+      "name": "The Devil Wears Prada",
+      "totalYears": 4,
+      "years": [
+        2008,
+        2009,
+        2011,
+        2014
+      ]
+    },
+    {
+      "name": "The Dickies",
+      "totalYears": 5,
+      "years": [
+        2007,
+        2008,
+        2009,
+        2010,
+        2017
+      ]
+    },
+    {
+      "name": "The Dillinger Escape Plan",
+      "totalYears": 4,
+      "years": [
+        2000,
+        2005,
+        2008,
+        2010
+      ]
+    },
+    {
+      "name": "The Dirty Nil",
+      "totalYears": 1,
+      "years": [
+        2015
+      ]
+    },
+    {
+      "name": "The Distillers",
+      "totalYears": 1,
+      "years": [
+        2001
+      ]
+    },
+    {
+      "name": "The Dollyrots",
+      "totalYears": 1,
+      "years": [
+        2019
+      ]
+    },
+    {
+      "name": "The Donnas",
+      "totalYears": 1,
+      "years": [
+        2000
+      ]
+    },
+    {
+      "name": "The Doped Up Dollies",
+      "totalYears": 1,
+      "years": [
+        2019
+      ]
+    },
+    {
+      "name": "The Dukes",
+      "totalYears": 1,
+      "years": [
+        2017
+      ]
+    },
+    {
+      "name": "The Early November",
+      "totalYears": 5,
+      "years": [
+        2002,
+        2003,
+        2004,
+        2006,
+        2013
+      ]
+    },
+    {
+      "name": "The Expendables",
+      "totalYears": 2,
+      "years": [
+        2011,
+        2025
+      ]
+    },
+    {
+      "name": "The Explosion",
+      "totalYears": 2,
+      "years": [
+        2001,
+        2005
+      ]
+    },
+    {
+      "name": "The Exposed",
+      "totalYears": 2,
+      "years": [
+        2011,
+        2013
+      ]
+    },
+    {
+      "name": "The Eyeliners",
+      "totalYears": 2,
+      "years": [
+        2002,
+        2004
+      ]
+    },
+    {
+      "name": "The F-Ups",
+      "totalYears": 1,
+      "years": [
+        2004
+      ]
+    },
+    {
+      "name": "The Fabulous Rudies",
+      "totalYears": 4,
+      "years": [
+        2005,
+        2006,
+        2007,
+        2010
+      ]
+    },
+    {
+      "name": "The Fall of Troy",
+      "totalYears": 3,
+      "years": [
+        2005,
+        2007,
+        2009
+      ]
+    },
+    {
+      "name": "The Fantastic Plastics",
+      "totalYears": 1,
+      "years": [
+        2017
+      ]
+    },
+    {
+      "name": "The Figgs",
+      "totalYears": 1,
+      "years": [
+        1996
+      ]
+    },
+    {
+      "name": "The Fight",
+      "totalYears": 1,
+      "years": [
+        2005
+      ]
+    },
+    {
+      "name": "The Fighting Jacks",
+      "totalYears": 1,
+      "years": [
+        2004
+      ]
+    },
+    {
+      "name": "The Flatliners",
+      "totalYears": 5,
+      "years": [
+        2006,
+        2007,
+        2008,
+        2009,
+        2010
+      ]
+    },
+    {
+      "name": "The Fold",
+      "totalYears": 2,
+      "years": [
+        2007,
+        2011
+      ]
+    },
+    {
+      "name": "The Funeral Portrait",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "The Get Up Kids",
+      "totalYears": 1,
+      "years": [
+        1998
+      ]
+    },
+    {
+      "name": "The Ghost Inside",
+      "totalYears": 2,
+      "years": [
+        2012,
+        2014
+      ]
+    },
+    {
+      "name": "The Gilligans",
+      "totalYears": 1,
+      "years": [
+        2002
+      ]
+    },
+    {
+      "name": "The Goodwill",
+      "totalYears": 1,
+      "years": [
+        2003
+      ]
+    },
+    {
+      "name": "The Gospel Youth",
+      "totalYears": 1,
+      "years": [
+        2017
+      ]
+    },
+    {
+      "name": "The Grabbers",
+      "totalYears": 1,
+      "years": [
+        1995
+      ]
+    },
+    {
+      "name": "The Graduate",
+      "totalYears": 1,
+      "years": [
+        2006
+      ]
+    },
+    {
+      "name": "The Green",
+      "totalYears": 1,
+      "years": [
+        2012
+      ]
+    },
+    {
+      "name": "The Gufs",
+      "totalYears": 1,
+      "years": [
+        2007
+      ]
+    },
+    {
+      "name": "The Heathens",
+      "totalYears": 1,
+      "years": [
+        2003
+      ]
+    },
+    {
+      "name": "The Heirs",
+      "totalYears": 1,
+      "years": [
+        2016
+      ]
+    },
+    {
+      "name": "The Higher",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "The Hippos",
+      "totalYears": 2,
+      "years": [
+        1999,
+        2000
+      ]
+    },
+    {
+      "name": "The Home Team",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "The Human Abstract",
+      "totalYears": 2,
+      "years": [
+        2007,
+        2008
+      ]
+    },
+    {
+      "name": "The Hurt Process",
+      "totalYears": 1,
+      "years": [
+        2004
+      ]
+    },
+    {
+      "name": "The Indecent",
+      "totalYears": 1,
+      "years": [
+        2013
+      ]
+    },
+    {
+      "name": "The Interrupters",
+      "totalYears": 3,
+      "years": [
+        2016,
+        2018,
+        2025
+      ]
+    },
+    {
+      "name": "The Johnstones",
+      "totalYears": 3,
+      "years": [
+        2006,
+        2007,
+        2008
+      ]
+    },
+    {
+      "name": "The Jukebox Romantics",
+      "totalYears": 1,
+      "years": [
+        2012
+      ]
+    },
+    {
+      "name": "The Juliana Theory",
+      "totalYears": 1,
+      "years": [
+        2001
+      ]
+    },
+    {
+      "name": "The Junior Varsity",
+      "totalYears": 2,
+      "years": [
+        2005,
+        2006
+      ]
+    },
+    {
+      "name": "The Karma Killers",
+      "totalYears": 1,
+      "years": [
+        2015
+      ]
+    },
+    {
+      "name": "The Kenneths",
+      "totalYears": 1,
+      "years": [
+        2015
+      ]
+    },
+    {
+      "name": "The Know How[33]",
+      "totalYears": 5,
+      "years": [
+        2000,
+        2001,
+        2002,
+        2003,
+        2005
+      ]
+    },
+    {
+      "name": "The Lawrence Arms",
+      "totalYears": 1,
+      "years": [
+        2004
+      ]
+    },
+    {
+      "name": "The Letters Organize",
+      "totalYears": 1,
+      "years": [
+        2005
+      ]
+    },
+    {
+      "name": "The Living End",
+      "totalYears": 4,
+      "years": [
+        1998,
+        1999,
+        2001,
+        2006
+      ]
+    },
+    {
+      "name": "The Lost Boys",
+      "totalYears": 1,
+      "years": [
+        2014
+      ]
+    },
+    {
+      "name": "The Maine",
+      "totalYears": 7,
+      "years": [
+        2007,
+        2008,
+        2009,
+        2014,
+        2016,
+        2018,
+        2025
+      ]
+    },
+    {
+      "name": "The Mainliners",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "The Managers",
+      "totalYears": 1,
+      "years": [
+        1998
+      ]
+    },
+    {
+      "name": "The Matches",
+      "totalYears": 3,
+      "years": [
+        2004,
+        2005,
+        2007
+      ]
+    },
+    {
+      "name": "The Meices",
+      "totalYears": 1,
+      "years": [
+        1996
+      ]
+    },
+    {
+      "name": "The Menzingers",
+      "totalYears": 2,
+      "years": [
+        2011,
+        2019
+      ]
+    },
+    {
+      "name": "The Mighty Mighty Bosstones",
+      "totalYears": 5,
+      "years": [
+        1996,
+        1997,
+        1998,
+        2000,
+        2002
+      ]
+    },
+    {
+      "name": "The Misfits",
+      "totalYears": 1,
+      "years": [
+        2001
+      ]
+    },
+    {
+      "name": "The Movielife",
+      "totalYears": 1,
+      "years": [
+        2002
+      ]
+    },
+    {
+      "name": "The Muffs",
+      "totalYears": 1,
+      "years": [
+        2000
+      ]
+    },
+    {
+      "name": "The Narrative",
+      "totalYears": 1,
+      "years": [
+        2011
+      ]
+    },
+    {
+      "name": "The New Low",
+      "totalYears": 1,
+      "years": [
+        2016
+      ]
+    },
+    {
+      "name": "The New Sincerity",
+      "totalYears": 1,
+      "years": [
+        2006
+      ]
+    },
+    {
+      "name": "The Offspring",
+      "totalYears": 2,
+      "years": [
+        2005,
+        2019
+      ]
+    },
+    {
+      "name": "The Ones You Forgot",
+      "totalYears": 1,
+      "years": [
+        2019
+      ]
+    },
+    {
+      "name": "The Paradox",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "The Paranoyds",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "The Photo Atlas",
+      "totalYears": 1,
+      "years": [
+        2007
+      ]
+    },
+    {
+      "name": "The Pietasters",
+      "totalYears": 2,
+      "years": [
+        1998,
+        1999
+      ]
+    },
+    {
+      "name": "The Pink Slips",
+      "totalYears": 1,
+      "years": [
+        2016
+      ]
+    },
+    {
+      "name": "The Pink Spiders",
+      "totalYears": 3,
+      "years": [
+        2006,
+        2008,
+        2019
+      ]
+    },
+    {
+      "name": "The Pinker Tones",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "The Planet Smashers",
+      "totalYears": 1,
+      "years": [
+        2011
+      ]
+    },
+    {
+      "name": "The Pretty Reckless",
+      "totalYears": 1,
+      "years": [
+        2010
+      ]
+    },
+    {
+      "name": "The Prissteens",
+      "totalYears": 1,
+      "years": [
+        1998
+      ]
+    },
+    {
+      "name": "The Protomen",
+      "totalYears": 1,
+      "years": [
+        2014
+      ]
+    },
+    {
+      "name": "The Randies",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "The Ready Set",
+      "totalYears": 3,
+      "years": [
+        2011,
+        2014,
+        2015
+      ]
+    },
+    {
+      "name": "The Real McKenzies",
+      "totalYears": 1,
+      "years": [
+        1998
+      ]
+    },
+    {
+      "name": "The Receiving End of Sirens",
+      "totalYears": 1,
+      "years": [
+        2005
+      ]
+    },
+    {
+      "name": "The Recovering",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "The Red Jumpsuit Apparatus",
+      "totalYears": 5,
+      "years": [
+        2005,
+        2006,
+        2007,
+        2018,
+        2025
+      ]
+    },
+    {
+      "name": "The Relapse Symphony",
+      "totalYears": 1,
+      "years": [
+        2015
+      ]
+    },
+    {
+      "name": "The Republic of Wolves",
+      "totalYears": 1,
+      "years": [
+        2015
+      ]
+    },
+    {
+      "name": "The Reverend Peyton's Big Damn Band",
+      "totalYears": 1,
+      "years": [
+        2018
+      ]
+    },
+    {
+      "name": "The Riverboat Gamblers",
+      "totalYears": 2,
+      "years": [
+        2005,
+        2017
+      ]
+    },
+    {
+      "name": "The Rocket Summer",
+      "totalYears": 2,
+      "years": [
+        2007,
+        2010
+      ]
+    },
+    {
+      "name": "The Salads",
+      "totalYears": 4,
+      "years": [
+        2004,
+        2005,
+        2006,
+        2007
+      ]
+    },
+    {
+      "name": "The Scenery",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "The Scissors",
+      "totalYears": 1,
+      "years": [
+        2012
+      ]
+    },
+    {
+      "name": "The Sheds",
+      "totalYears": 2,
+      "years": [
+        2011,
+        2013
+      ]
+    },
+    {
+      "name": "The Silver Comet",
+      "totalYears": 1,
+      "years": [
+        2012
+      ]
+    },
+    {
+      "name": "The Skatalites",
+      "totalYears": 1,
+      "years": [
+        2019
+      ]
+    },
+    {
+      "name": "The Slackers",
+      "totalYears": 1,
+      "years": [
+        2019
+      ]
+    },
+    {
+      "name": "The Sleeping",
+      "totalYears": 1,
+      "years": [
+        2006
+      ]
+    },
+    {
+      "name": "The Smashup",
+      "totalYears": 1,
+      "years": [
+        2006
+      ]
+    },
+    {
+      "name": "The Smooths",
+      "totalYears": 1,
+      "years": [
+        1998
+      ]
+    },
+    {
+      "name": "The Softer Side",
+      "totalYears": 2,
+      "years": [
+        2003,
+        2004
+      ]
+    },
+    {
+      "name": "The Sounds",
+      "totalYears": 2,
+      "years": [
+        2004,
+        2006
+      ]
+    },
+    {
+      "name": "The Specials",
+      "totalYears": 1,
+      "years": [
+        1998
+      ]
+    },
+    {
+      "name": "The Spill Canvas",
+      "totalYears": 1,
+      "years": [
+        2007
+      ]
+    },
+    {
+      "name": "The Spitvalves",
+      "totalYears": 1,
+      "years": [
+        2001
+      ]
+    },
+    {
+      "name": "The Starting Line",
+      "totalYears": 6,
+      "years": [
+        2002,
+        2003,
+        2005,
+        2007,
+        2019,
+        2025
+      ]
+    },
+    {
+      "name": "The Stingrays",
+      "totalYears": 1,
+      "years": [
+        2000
+      ]
+    },
+    {
+      "name": "The Story So Far",
+      "totalYears": 4,
+      "years": [
+        2013,
+        2014,
+        2016,
+        2019
+      ]
+    },
+    {
+      "name": "The Suicide Machines",
+      "totalYears": 7,
+      "years": [
+        1996,
+        1997,
+        2000,
+        2003,
+        2005,
+        2017,
+        2025
+      ]
+    },
+    {
+      "name": "The Suit",
+      "totalYears": 1,
+      "years": [
+        2011
+      ]
+    },
+    {
+      "name": "The Summer Set",
+      "totalYears": 4,
+      "years": [
+        2010,
+        2013,
+        2014,
+        2016
+      ]
+    },
+    {
+      "name": "The Sunstreak",
+      "totalYears": 1,
+      "years": [
+        2006
+      ]
+    },
+    {
+      "name": "The Swellers",
+      "totalYears": 1,
+      "years": [
+        2013
+      ]
+    },
+    {
+      "name": "The Tower and the Fool",
+      "totalYears": 1,
+      "years": [
+        2013
+      ]
+    },
+    {
+      "name": "The Unseen",
+      "totalYears": 3,
+      "years": [
+        2003,
+        2005,
+        2007
+      ]
+    },
+    {
+      "name": "The Urge",
+      "totalYears": 1,
+      "years": [
+        1998
+      ]
+    },
+    {
+      "name": "The Used",
+      "totalYears": 8,
+      "years": [
+        2002,
+        2003,
+        2004,
+        2007,
+        2012,
+        2013,
+        2018,
+        2019
+      ]
+    },
+    {
+      "name": "The Vandals",
+      "totalYears": 10,
+      "years": [
+        1997,
+        1998,
+        1999,
+        2001,
+        2004,
+        2007,
+        2008,
+        2016,
+        2019,
+        2025
+      ]
+    },
+    {
+      "name": "The Vanished",
+      "totalYears": 1,
+      "years": [
+        2005
+      ]
+    },
+    {
+      "name": "The Vincent Black Shadow",
+      "totalYears": 2,
+      "years": [
+        2006,
+        2007
+      ]
+    },
+    {
+      "name": "The Waves",
+      "totalYears": 2,
+      "years": [
+        2017,
+        2025
+      ]
+    },
+    {
+      "name": "The White Noise",
+      "totalYears": 1,
+      "years": [
+        2017
+      ]
+    },
+    {
+      "name": "The White Tie Affair",
+      "totalYears": 1,
+      "years": [
+        2009
+      ]
+    },
+    {
+      "name": "The Wonder Years",
+      "totalYears": 4,
+      "years": [
+        2011,
+        2013,
+        2015,
+        2025
+      ]
+    },
+    {
+      "name": "The Word Alive",
+      "totalYears": 5,
+      "years": [
+        2010,
+        2011,
+        2014,
+        2016,
+        2025
+      ]
+    },
+    {
+      "name": "The World Over",
+      "totalYears": 1,
+      "years": [
+        2019
+      ]
+    },
+    {
+      "name": "The Youth Ahead",
+      "totalYears": 1,
+      "years": [
+        2001
+      ]
+    },
+    {
+      "name": "The Ziggens",
+      "totalYears": 1,
+      "years": [
+        1998
+      ]
+    },
+    {
+      "name": "TheCityShakeUp",
+      "totalYears": 2,
+      "years": [
+        2013,
+        2014
+      ]
+    },
+    {
+      "name": "There For Tomorrow",
+      "totalYears": 1,
+      "years": [
+        2011
+      ]
+    },
+    {
+      "name": "They All Float",
+      "totalYears": 1,
+      "years": [
+        2012
+      ]
+    },
+    {
+      "name": "Thirty Seconds to Mars",
+      "totalYears": 1,
+      "years": [
+        2007
+      ]
+    },
+    {
+      "name": "This Wild Life",
+      "totalYears": 3,
+      "years": [
+        2014,
+        2015,
+        2018
+      ]
+    },
+    {
+      "name": "Thrice",
+      "totalYears": 6,
+      "years": [
+        2001,
+        2002,
+        2003,
+        2005,
+        2008,
+        2019
+      ]
+    },
+    {
+      "name": "Through Caydence",
+      "totalYears": 1,
+      "years": [
+        2007
+      ]
+    },
+    {
+      "name": "Throw The Goat",
+      "totalYears": 1,
+      "years": [
+        2018
+      ]
+    },
+    {
+      "name": "Throwdown",
+      "totalYears": 1,
+      "years": [
+        2007
+      ]
+    },
+    {
+      "name": "Thumb",
+      "totalYears": 1,
+      "years": [
+        1998
+      ]
+    },
+    {
+      "name": "Thursday",
+      "totalYears": 4,
+      "years": [
+        2002,
+        2004,
+        2006,
+        2025
+      ]
+    },
+    {
+      "name": "Tidewater",
+      "totalYears": 1,
+      "years": [
+        2013
+      ]
+    },
+    {
+      "name": "Tiger Army",
+      "totalYears": 3,
+      "years": [
+        2002,
+        2004,
+        2007
+      ]
+    },
+    {
+      "name": "Tillie",
+      "totalYears": 1,
+      "years": [
+        2017
+      ]
+    },
+    {
+      "name": "Tilt",
+      "totalYears": 3,
+      "years": [
+        1995,
+        1996,
+        1998
+      ]
+    },
+    {
+      "name": "Tip the Van",
+      "totalYears": 3,
+      "years": [
+        2005,
+        2006,
+        2010
+      ]
+    },
+    {
+      "name": "Title Fight",
+      "totalYears": 2,
+      "years": [
+        2007,
+        2012
+      ]
+    },
+    {
+      "name": "To The Wind",
+      "totalYears": 1,
+      "years": [
+        2014
+      ]
+    },
+    {
+      "name": "Tomorrow's Bad Seeds",
+      "totalYears": 2,
+      "years": [
+        2011,
+        2012
+      ]
+    },
+    {
+      "name": "Tonight Alive",
+      "totalYears": 4,
+      "years": [
+        2012,
+        2013,
+        2016,
+        2018
+      ]
+    },
+    {
+      "name": "Tony D'Angelo",
+      "totalYears": 1,
+      "years": [
+        2012
+      ]
+    },
+    {
+      "name": "Too Close to Touch",
+      "totalYears": 2,
+      "years": [
+        2016,
+        2017
+      ]
+    },
+    {
+      "name": "Tornado Rider",
+      "totalYears": 1,
+      "years": [
+        2011
+      ]
+    },
+    {
+      "name": "Total Chaos",
+      "totalYears": 1,
+      "years": [
+        2007
+      ]
+    },
+    {
+      "name": "Trading Bryson",
+      "totalYears": 1,
+      "years": [
+        1997
+      ]
+    },
+    {
+      "name": "Traitors",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Transit",
+      "totalYears": 2,
+      "years": [
+        2012,
+        2015
+      ]
+    },
+    {
+      "name": "Transplants",
+      "totalYears": 1,
+      "years": [
+        2005
+      ]
+    },
+    {
+      "name": "Trash Boat",
+      "totalYears": 1,
+      "years": [
+        2018
+      ]
+    },
+    {
+      "name": "Trashing Andi",
+      "totalYears": 1,
+      "years": [
+        2003
+      ]
+    },
+    {
+      "name": "Travie McCoy",
+      "totalYears": 1,
+      "years": [
+        2019
+      ]
+    },
+    {
+      "name": "Travis Alexander",
+      "totalYears": 1,
+      "years": [
+        2013
+      ]
+    },
+    {
+      "name": "Treaty Oak Revival",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Treaty of Paris",
+      "totalYears": 1,
+      "years": [
+        2008
+      ]
+    },
+    {
+      "name": "Treephort",
+      "totalYears": 1,
+      "years": [
+        2003
+      ]
+    },
+    {
+      "name": "Trip 66",
+      "totalYears": 1,
+      "years": [
+        1996
+      ]
+    },
+    {
+      "name": "Trophy Eyes",
+      "totalYears": 3,
+      "years": [
+        2015,
+        2017,
+        2019
+      ]
+    },
+    {
+      "name": "Tropidelic",
+      "totalYears": 1,
+      "years": [
+        2018
+      ]
+    },
+    {
+      "name": "Trust Company",
+      "totalYears": 1,
+      "years": [
+        2002
+      ]
+    },
+    {
+      "name": "Trvis",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Tsunami Bomb",
+      "totalYears": 5,
+      "years": [
+        2002,
+        2003,
+        2005,
+        2016,
+        2019
+      ]
+    },
+    {
+      "name": "Turnstile",
+      "totalYears": 1,
+      "years": [
+        2018
+      ]
+    },
+    {
+      "name": "Twilight Creeps",
+      "totalYears": 1,
+      "years": [
+        2017
+      ]
+    },
+    {
+      "name": "Twin Atlantic",
+      "totalYears": 1,
+      "years": [
+        2012
+      ]
+    },
+    {
+      "name": "Twistin' Tarantulas",
+      "totalYears": 1,
+      "years": [
+        1997
+      ]
+    },
+    {
+      "name": "Twiztid",
+      "totalYears": 3,
+      "years": [
+        2003,
+        2018,
+        2019
+      ]
+    },
+    {
+      "name": "Tx2",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Tyler Matl",
+      "totalYears": 1,
+      "years": [
+        2013
+      ]
+    },
+    {
+      "name": "Underoath",
+      "totalYears": 7,
+      "years": [
+        2003,
+        2004,
+        2005,
+        2006,
+        2007,
+        2008,
+        2018
+      ]
+    },
+    {
+      "name": "Unearth",
+      "totalYears": 1,
+      "years": [
+        2018
+      ]
+    },
+    {
+      "name": "Unleaded",
+      "totalYears": 1,
+      "years": [
+        1998
+      ]
+    },
+    {
+      "name": "Unlocking the Truth",
+      "totalYears": 1,
+      "years": [
+        2014
+      ]
+    },
+    {
+      "name": "Unsane",
+      "totalYears": 1,
+      "years": [
+        1998
+      ]
+    },
+    {
+      "name": "Unwritten Law",
+      "totalYears": 5,
+      "years": [
+        1996,
+        1998,
+        1999,
+        2011,
+        2018
+      ]
+    },
+    {
+      "name": "Upon a Burning Body",
+      "totalYears": 1,
+      "years": [
+        2013
+      ]
+    },
+    {
+      "name": "Urethane",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Urinal Mints",
+      "totalYears": 1,
+      "years": [
+        2005
+      ]
+    },
+    {
+      "name": "Valencia",
+      "totalYears": 3,
+      "years": [
+        2007,
+        2008,
+        2019
+      ]
+    },
+    {
+      "name": "Valient Thorr",
+      "totalYears": 4,
+      "years": [
+        2004,
+        2005,
+        2006,
+        2017
+      ]
+    },
+    {
+      "name": "Vampires Everywhere!",
+      "totalYears": 1,
+      "years": [
+        2012
+      ]
+    },
+    {
+      "name": "Vanna",
+      "totalYears": 4,
+      "years": [
+        2008,
+        2012,
+        2014,
+        2016
+      ]
+    },
+    {
+      "name": "Varials",
+      "totalYears": 2,
+      "years": [
+        2018,
+        2019
+      ]
+    },
+    {
+      "name": "Vaux",
+      "totalYears": 2,
+      "years": [
+        2003,
+        2004
+      ]
+    },
+    {
+      "name": "Veara",
+      "totalYears": 1,
+      "years": [
+        2011
+      ]
+    },
+    {
+      "name": "Veil Of Maya",
+      "totalYears": 1,
+      "years": [
+        2016
+      ]
+    },
+    {
+      "name": "Vended",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Vendetta Red",
+      "totalYears": 3,
+      "years": [
+        2002,
+        2003,
+        2012
+      ]
+    },
+    {
+      "name": "VersaEmerge",
+      "totalYears": 3,
+      "years": [
+        2009,
+        2010,
+        2013
+      ]
+    },
+    {
+      "name": "Versus The Ocean",
+      "totalYears": 3,
+      "years": [
+        2004,
+        2005,
+        2008
+      ]
+    },
+    {
+      "name": "Victory Within",
+      "totalYears": 2,
+      "years": [
+        2004,
+        2006
+      ]
+    },
+    {
+      "name": "Vigil of War",
+      "totalYears": 1,
+      "years": [
+        2019
+      ]
+    },
+    {
+      "name": "Vinnie Caruana",
+      "totalYears": 2,
+      "years": [
+        2012,
+        2013
+      ]
+    },
+    {
+      "name": "Vision of Disorder",
+      "totalYears": 2,
+      "years": [
+        1997,
+        1999
+      ]
+    },
+    {
+      "name": "Vitamin L",
+      "totalYears": 1,
+      "years": [
+        1996
+      ]
+    },
+    {
+      "name": "Volumes",
+      "totalYears": 3,
+      "years": [
+        2013,
+        2014,
+        2016
+      ]
+    },
+    {
+      "name": "Vonnegutt",
+      "totalYears": 1,
+      "years": [
+        2011
+      ]
+    },
+    {
+      "name": "VooDoo Blue",
+      "totalYears": 1,
+      "years": [
+        2005
+      ]
+    },
+    {
+      "name": "Voodoo Glow Skulls",
+      "totalYears": 1,
+      "years": [
+        1998
+      ]
+    },
+    {
+      "name": "Wage War",
+      "totalYears": 4,
+      "years": [
+        2016,
+        2017,
+        2018,
+        2019
+      ]
+    },
+    {
+      "name": "Waka Flocka Flame",
+      "totalYears": 2,
+      "years": [
+        2015,
+        2016
+      ]
+    },
+    {
+      "name": "Wallpaper.",
+      "totalYears": 1,
+      "years": [
+        2013
+      ]
+    },
+    {
+      "name": "Wank",
+      "totalYears": 1,
+      "years": [
+        1998
+      ]
+    },
+    {
+      "name": "War on Women",
+      "totalYears": 1,
+      "years": [
+        2017
+      ]
+    },
+    {
+      "name": "Waterparks",
+      "totalYears": 4,
+      "years": [
+        2013,
+        2015,
+        2016,
+        2018
+      ]
+    },
+    {
+      "name": "Watsky",
+      "totalYears": 2,
+      "years": [
+        2014,
+        2017
+      ]
+    },
+    {
+      "name": "Wax",
+      "totalYears": 1,
+      "years": [
+        2014
+      ]
+    },
+    {
+      "name": "We Are the In Crowd",
+      "totalYears": 3,
+      "years": [
+        2010,
+        2012,
+        2014
+      ]
+    },
+    {
+      "name": "We Are the Ocean",
+      "totalYears": 1,
+      "years": [
+        2012
+      ]
+    },
+    {
+      "name": "We Are the Union",
+      "totalYears": 1,
+      "years": [
+        2009
+      ]
+    },
+    {
+      "name": "We Came as Romans",
+      "totalYears": 3,
+      "years": [
+        2011,
+        2013,
+        2015
+      ]
+    },
+    {
+      "name": "We the Kings",
+      "totalYears": 9,
+      "years": [
+        2008,
+        2009,
+        2010,
+        2012,
+        2014,
+        2016,
+        2018,
+        2019,
+        2025
+      ]
+    },
+    {
+      "name": "We're Doomed",
+      "totalYears": 1,
+      "years": [
+        2011
+      ]
+    },
+    {
+      "name": "weatherPROOF",
+      "totalYears": 1,
+      "years": [
+        2007
+      ]
+    },
+    {
+      "name": "Weerd Science",
+      "totalYears": 1,
+      "years": [
+        2011
+      ]
+    },
+    {
+      "name": "Weezer",
+      "totalYears": 1,
+      "years": [
+        2000
+      ]
+    },
+    {
+      "name": "West Beverly",
+      "totalYears": 1,
+      "years": [
+        2002
+      ]
+    },
+    {
+      "name": "Western Waste",
+      "totalYears": 1,
+      "years": [
+        2003
+      ]
+    },
+    {
+      "name": "While She Sleeps",
+      "totalYears": 2,
+      "years": [
+        2013,
+        2015
+      ]
+    },
+    {
+      "name": "Whiskers of Jess",
+      "totalYears": 1,
+      "years": [
+        2002
+      ]
+    },
+    {
+      "name": "White Kaps",
+      "totalYears": 1,
+      "years": [
+        1997
+      ]
+    },
+    {
+      "name": "Whitechapel",
+      "totalYears": 2,
+      "years": [
+        2010,
+        2016
+      ]
+    },
+    {
+      "name": "Whitney Peyton",
+      "totalYears": 1,
+      "years": [
+        2019
+      ]
+    },
+    {
+      "name": "Wick-It The Instigator",
+      "totalYears": 1,
+      "years": [
+        2012
+      ]
+    },
+    {
+      "name": "William Beckett",
+      "totalYears": 1,
+      "years": [
+        2013
+      ]
+    },
+    {
+      "name": "William Control",
+      "totalYears": 1,
+      "years": [
+        2017
+      ]
+    },
+    {
+      "name": "William Ryan Key",
+      "totalYears": 1,
+      "years": [
+        2018
+      ]
+    },
+    {
+      "name": "Wind In Sails",
+      "totalYears": 1,
+      "years": [
+        2014
+      ]
+    },
+    {
+      "name": "Winds of Plague",
+      "totalYears": 1,
+      "years": [
+        2011
+      ]
+    },
+    {
+      "name": "Windsor Drive",
+      "totalYears": 1,
+      "years": [
+        2011
+      ]
+    },
+    {
+      "name": "Winona Fighter",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "With Confidence",
+      "totalYears": 2,
+      "years": [
+        2016,
+        2018
+      ]
+    },
+    {
+      "name": "Without Self",
+      "totalYears": 1,
+      "years": [
+        2003
+      ]
+    },
+    {
+      "name": "Wizo",
+      "totalYears": 1,
+      "years": [
+        1995
+      ]
+    },
+    {
+      "name": "Woe, Is Me",
+      "totalYears": 2,
+      "years": [
+        2011,
+        2013
+      ]
+    },
+    {
+      "name": "World’S First Cinema",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "X Members",
+      "totalYears": 1,
+      "years": [
+        1996
+      ]
+    },
+    {
+      "name": "Yelawolf",
+      "totalYears": 1,
+      "years": [
+        2011
+      ]
+    },
+    {
+      "name": "Yellowcard",
+      "totalYears": 8,
+      "years": [
+        2002,
+        2003,
+        2004,
+        2007,
+        2012,
+        2014,
+        2016,
+        2025
+      ]
+    },
+    {
+      "name": "You Me at Six",
+      "totalYears": 3,
+      "years": [
+        2009,
+        2010,
+        2012
+      ]
+    },
+    {
+      "name": "You Win Anyways",
+      "totalYears": 5,
+      "years": [
+        2004,
+        2005,
+        2006,
+        2007,
+        2008
+      ]
+    },
+    {
+      "name": "You, Me, and Everyone We Know",
+      "totalYears": 2,
+      "years": [
+        2007,
+        2008
+      ]
+    },
+    {
+      "name": "Young Guns",
+      "totalYears": 1,
+      "years": [
+        2016
+      ]
+    },
+    {
+      "name": "Young London",
+      "totalYears": 2,
+      "years": [
+        2012,
+        2013
+      ]
+    },
+    {
+      "name": "Young Statues",
+      "totalYears": 1,
+      "years": [
+        2014
+      ]
+    },
+    {
+      "name": "Youth In Revolt",
+      "totalYears": 1,
+      "years": [
+        2015
+      ]
+    },
+    {
+      "name": "Yung Gravy",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Yungblud",
+      "totalYears": 2,
+      "years": [
+        2018,
+        2019
+      ]
+    },
+    {
+      "name": "Zao",
+      "totalYears": 1,
+      "years": [
+        2005
+      ]
+    },
+    {
+      "name": "Zebrahead",
+      "totalYears": 2,
+      "years": [
+        1999,
+        2006
+      ]
+    },
+    {
+      "name": "Zero 9:36",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    },
+    {
+      "name": "Zooloft",
+      "totalYears": 1,
+      "years": [
+        2001
+      ]
+    },
+    {
+      "name": "Zulu",
+      "totalYears": 1,
+      "years": [
+        2025
+      ]
+    }
+  ]
+}

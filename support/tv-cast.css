@@ -131,11 +131,16 @@ body {
 
 .tv-cast-video-col {
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
   min-height: 0;
   padding: 0.5rem;
   position: relative;
+}
+
+.tv-cast-video-col .tv-cast-viewport-wrap {
+  align-self: center;
 }
 
 .tv-cast-viewport-wrap {
@@ -171,6 +176,11 @@ body {
 .tv-cast-media {
   position: absolute;
   inset: 0;
+}
+
+.tv-cast-media .tv-embed-host {
+  position: absolute;
+  inset: 0;
   transform-origin: calc(var(--tv-focus-x, 0.5) * 100%) calc(var(--tv-focus-y, 0.5) * 100%);
   transform: scale(var(--tv-scale, 1));
   transition: transform 0.35s ease;
@@ -182,18 +192,92 @@ body {
   width: 100%;
   height: 100%;
   border: 0;
-  object-fit: cover;
 }
 
 .tv-cast-media .embed-shell {
   position: absolute;
   inset: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .tv-cast-media .direct-video {
+  flex: 1 1 auto;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  min-height: 0;
+  object-fit: contain;
+  background: #000;
+}
+
+.tv-cast-playback {
+  flex: 0 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.5rem;
+  width: 100%;
+  margin-top: 0.35rem;
+  padding: 0.35rem 0.45rem;
+  border: 1px solid #2a2a2a;
+  border-radius: 4px;
+  background: #141414;
+  box-sizing: border-box;
+}
+
+.tv-cast-playback[hidden] {
+  display: none;
+}
+
+.tv-cast-playback-btn {
+  margin: 0;
+  padding: 0.25rem 0.55rem;
+  border: 1px solid #3a3a3a;
+  border-radius: 3px;
+  background: #1f1f1f;
+  color: #f5f5f5;
+  font-size: 0.68rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.tv-cast-playback-btn:hover:not(:disabled) {
+  border-color: #7c3aed;
+  background: #2e1065;
+}
+
+.tv-cast-playback-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.tv-cast-playback-seek-wrap {
+  flex: 1 1 8rem;
+  min-width: 5rem;
+  margin: 0;
+}
+
+.tv-cast-playback-seek {
+  width: 100%;
+  margin: 0;
+  accent-color: #a78bfa;
+}
+
+.tv-cast-playback-time {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.62rem;
+  color: #a8a8a8;
+  white-space: nowrap;
+}
+
+.tv-cast-playback-hint {
+  flex: 1 1 100%;
+  margin: 0;
+  font-size: 0.58rem;
+  color: #888;
+}
+
+.tv-cast-playback-hint[hidden] {
+  display: none;
 }
 
 .tv-safe-guides {

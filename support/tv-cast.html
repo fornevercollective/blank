@@ -47,6 +47,16 @@
           </div>
           <div class="tv-safe-guides" aria-hidden="true"></div>
         </div>
+        <div class="tv-cast-playback" id="tv-playback" role="toolbar" aria-label="TV playback">
+          <button type="button" class="tv-cast-playback-btn" id="tv-play-toggle" title="Play / pause">Play</button>
+          <label class="tv-cast-playback-seek-wrap">
+            <span class="sr-only">Seek</span>
+            <input type="range" class="tv-cast-playback-seek" id="tv-playback-seek" min="0" max="1000" value="0" step="1" />
+          </label>
+          <time class="tv-cast-playback-time" id="tv-playback-time">0:00</time>
+          <button type="button" class="tv-cast-playback-btn" id="tv-mute-toggle" title="Mute">Mute</button>
+          <p class="tv-cast-playback-hint" id="tv-playback-hint" hidden>Use controls inside the embedded player.</p>
+        </div>
       </div>
       <aside class="tv-cast-side" id="tv-side" aria-label="Companion data">
         <p class="tv-cast-show" id="tv-show">—</p>

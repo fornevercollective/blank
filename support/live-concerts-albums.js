@@ -7,6 +7,7 @@ import {
   fetchAlbumMeta,
   paintArtistMeta,
   paintAlbumMeta,
+  clearAlbumAccreditation,
 } from "./live-concerts-credits.js";
 
 /** @type {(() => void) | null} */
@@ -56,6 +57,7 @@ export async function paintArtistAlbums(artist, panel, scrollEl, hintEl, progres
       detailEl.hidden = true;
       detailEl.innerHTML = "";
     }
+    clearAlbumAccreditation();
     return;
   }
 
@@ -89,6 +91,46 @@ export async function paintArtistAlbums(artist, panel, scrollEl, hintEl, progres
       detailEl.hidden = true;
       detailEl.innerHTML = "";
     }
+    clearAlbumAccreditation();
+
+    /** @param {{ mbid?: string, title?: string, year?: string|number, coverUrl?: string }} a */
+    const openAlbumDetail = (a) => {
+      const title = a.title || "";
+      const year = a.year != null ? String(a.year) : "";
+      const detailSlot = document.getElementById("live-concerts-album-detail");
+      if (!(detailSlot instanceof HTMLElement) || !a.mbid) return;
+      scrollEl.querySelectorAll(".live-concerts-album").forEach((el) => {
+        const t = el.querySelector(".live-concerts-album-title")?.textContent?.trim();
+        el.classList.toggle("is-selected", t === title);
+      });
+      detailSlot.hidden = false;
+      detailSlot.innerHTML =
+        '<p class="live-concerts-albums-loading">Loading album info & lyrics…</p>';
+      const accredSlot = document.getElementById("live-concerts-album-accred");
+      if (accredSlot instanceof HTMLElement) {
+        accredSlot.hidden = false;
+        accredSlot.innerHTML =
+          '<p class="live-concerts-albums-loading">Loading accreditation…</p>';
+      }
+      const phrase = year && year !== "—" ? `${title} ${year}` : title;
+      const lyric = document.getElementById("live-concerts-lyric");
+      if (lyric instanceof HTMLInputElement && phrase) lyric.value = phrase;
+      void fetchAlbumMeta(a.mbid, currentArtistName)
+        .then((detail) =>
+          paintAlbumMeta(detailSlot, detail, {
+            coverUrl: a.coverUrl,
+            variantUrls: a.variantUrls,
+            artistName: currentArtistName,
+          }),
+        )
+        .catch((err) => {
+          const msg = escapeHtml(err instanceof Error ? err.message : String(err));
+          detailSlot.innerHTML = `<p class="live-concerts-albums-empty">${msg}</p>`;
+          if (accredSlot instanceof HTMLElement) {
+            accredSlot.innerHTML = `<p class="live-concerts-albums-empty">${msg}</p>`;
+          }
+        });
+    };
 
     const metaRoot = document.getElementById("live-concerts-meta");
     const metaWrap = document.getElementById("live-concerts-meta-wrap");
@@ -96,7 +138,12 @@ export async function paintArtistAlbums(artist, panel, scrollEl, hintEl, progres
       metaRoot.innerHTML = '<p class="live-concerts-albums-loading">Loading artist accreditation…</p>';
       if (metaWrap instanceof HTMLDetailsElement) metaWrap.hidden = false;
       void fetchArtistMeta(who, currentArtistMbid || undefined)
-        .then((meta) => paintArtistMeta(metaRoot, meta))
+        .then((meta) =>
+          paintArtistMeta(metaRoot, meta, {
+            albums,
+            onAlbumPick: openAlbumDetail,
+          }),
+        )
         .catch((err) => {
           metaRoot.innerHTML = `<p class="live-concerts-albums-empty">${escapeHtml(err instanceof Error ? err.message : String(err))}</p>`;
         });
@@ -117,26 +164,15 @@ export async function paintArtistAlbums(artist, panel, scrollEl, hintEl, progres
         }
       },
       onTileClick(a, btn) {
-        const title = a.title || "";
-        const year = a.year != null ? String(a.year) : "";
         scrollEl.querySelectorAll(".live-concerts-album").forEach((el) => {
           el.classList.toggle("is-selected", el === btn);
         });
-        const detailSlot = document.getElementById("live-concerts-album-detail");
-        if (!(detailSlot instanceof HTMLElement) || !a.mbid) return;
-        detailSlot.hidden = false;
-        detailSlot.innerHTML =
-          '<p class="live-concerts-albums-loading">Loading album info & lyrics…</p>';
-        const phrase = year && year !== "—" ? `${title} ${year}` : title;
-        const lyric = document.getElementById("live-concerts-lyric");
-        if (lyric instanceof HTMLInputElement && phrase) {
-          lyric.value = phrase;
-        }
-        void fetchAlbumMeta(a.mbid, currentArtistName)
-          .then((detail) => paintAlbumMeta(detailSlot, detail))
-          .catch((err) => {
-            detailSlot.innerHTML = `<p class="live-concerts-albums-empty">${escapeHtml(err instanceof Error ? err.message : String(err))}</p>`;
-          });
+        const metaRoot = document.getElementById("live-concerts-meta");
+        metaRoot?.querySelectorAll(".live-concerts-meta-album").forEach((el) => {
+          const t = el.getAttribute("data-meta-album-title");
+          el.classList.toggle("is-selected", t === (a.title || ""));
+        });
+        openAlbumDetail(a);
       },
     });
   } catch (e) {

@@ -13,6 +13,7 @@ import {
   filterDiscoverEvents,
   queriesForDiscover,
 } from "./live-concerts-genres.mjs";
+import { feedSubregionById } from "./live-concerts-subregions.mjs";
 
 const CACHE_TTL_MS = 3 * 60 * 1000;
 const DISCOVER_TIMEOUT_MS = 90_000;
@@ -27,6 +28,20 @@ const discoverCache = new Map();
 const albumCache = new Map();
 
 let mbLastFetch = 0;
+
+/** Escape Lucene special chars inside a quoted artist:"…" search. */
+function escapeLuceneQuoted(s) {
+  return String(s)
+    .replace(/\\/g, "\\\\")
+    .replace(/"/g, '\\"');
+}
+
+/** @param {string} artistName */
+function artistSearchQuery(artistName) {
+  const trimmed = String(artistName || "").trim();
+  if (!trimmed) return "";
+  return `artist:"${escapeLuceneQuoted(trimmed)}"`;
+}
 
 const DEFAULT_QUERIES = [
   "live concert stream",
@@ -246,7 +261,7 @@ async function flatPlaylistEntries(pageUrl, limit = 20) {
 }
 
 /**
- * @param {{ window?: string, query?: string, genre?: string, region?: string }} opts
+ * @param {{ window?: string, query?: string, genre?: string, region?: string, subregion?: string }} opts
  */
 export async function discoverLiveConcerts(opts = {}) {
   const window = ["now", "hour", "today", "tomorrow"].includes(opts.window)
@@ -255,7 +270,8 @@ export async function discoverLiveConcerts(opts = {}) {
   const userQ = String(opts.query || "").trim();
   const genre = genreTabById(String(opts.genre || "all")).id;
   const region = feedRegionById(String(opts.region || "all")).id;
-  const cacheKey = `${window}\0${genre}\0${region}\0${userQ.toLowerCase()}`;
+  const subregion = String(opts.subregion || "all").trim() || "all";
+  const cacheKey = `${window}\0${genre}\0${region}\0${subregion}\0${userQ.toLowerCase()}`;
   const cached = discoverCache.get(cacheKey);
   if (cached && Date.now() - cached.created < CACHE_TTL_MS) {
     return cached.data;
@@ -265,6 +281,7 @@ export async function discoverLiveConcerts(opts = {}) {
   const queries = queriesForDiscover({
     genreId: genre,
     regionId: region,
+    subregionId: subregion,
     userQ,
     defaultQueries: DEFAULT_QUERIES,
   });
@@ -304,7 +321,7 @@ export async function discoverLiveConcerts(opts = {}) {
     }
   }
 
-  let events = filterDiscoverEvents([...eventMap.values()], genre, region).filter(
+  let events = filterDiscoverEvents([...eventMap.values()], genre, region, subregion).filter(
     (e) => e.feeds.length > 0,
   );
   events = events.sort((a, b) => {
@@ -331,6 +348,9 @@ export async function discoverLiveConcerts(opts = {}) {
     genreLabel: genreTabById(genre).label,
     region,
     regionLabel: feedRegionById(region).label,
+    subregion: subregion !== "all" ? subregion : null,
+    subregionLabel:
+      subregion !== "all" ? feedSubregionById(region, subregion).label : null,
     query: userQ || null,
     fetchedAt: Date.now(),
     bounds: {
@@ -369,6 +389,7 @@ export async function handleLiveConcertsApi(req, res, urlPath) {
         query: typeof parsed.query === "string" ? parsed.query : "",
         genre: typeof parsed.genre === "string" ? parsed.genre : "all",
         region: typeof parsed.region === "string" ? parsed.region : "all",
+        subregion: typeof parsed.subregion === "string" ? parsed.subregion : "all",
       });
       json(res, 200, data);
     } catch (e) {
@@ -388,6 +409,7 @@ export async function handleLiveConcertsApi(req, res, urlPath) {
         query: u.searchParams.get("q") || "",
         genre: u.searchParams.get("genre") || "all",
         region: u.searchParams.get("region") || "all",
+        subregion: u.searchParams.get("subregion") || "all",
       });
       json(res, 200, data);
     } catch (e) {
@@ -429,6 +451,9 @@ export async function handleLiveConcertsApi(req, res, urlPath) {
     }
     return true;
   }
+
+  const { handleLiveLyricsApi } = await import("./live-concerts-lyrics.mjs");
+  if (await handleLiveLyricsApi(req, res, urlPath)) return true;
 
   if (urlPath === "/api/live/album-detail" && (req.method === "GET" || req.method === "HEAD")) {
     const u = new URL(req.url || "/", "http://127.0.0.1");
@@ -481,8 +506,14 @@ export async function fetchArtistAlbums(artistName) {
     return cached.data;
   }
 
+  const q = artistSearchQuery(artistName);
+  if (!q) {
+    const empty = { ok: true, artist: artistName, albums: [] };
+    albumCache.set(key, { created: Date.now(), data: empty });
+    return empty;
+  }
   const search = await mbFetch(
-    `artist/?query=${encodeURIComponent(`artist:"${artistName}"`)}&limit=1&fmt=json`,
+    `artist/?query=${encodeURIComponent(q)}&limit=1&fmt=json`,
   );
   const hit = Array.isArray(search.artists) ? search.artists[0] : null;
   if (!hit?.id) {
