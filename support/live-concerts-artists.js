@@ -40,10 +40,11 @@ export function artistsForLetter(letter) {
  */
 export function autocompleteArtists(q, limit = 12) {
   if (!catalog) return [];
+  const pool = activeLetter ? artistsForLetter(activeLetter) : catalog;
   const needle = q.trim().toLowerCase();
-  if (!needle) return catalog.slice(0, limit);
+  if (!needle) return pool.slice(0, limit);
   const hits = [];
-  for (const row of catalog) {
+  for (const row of pool) {
     if (row.name.toLowerCase().includes(needle)) {
       hits.push(row);
       if (hits.length >= limit) break;

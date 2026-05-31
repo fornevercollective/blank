@@ -342,9 +342,7 @@
           <span class="live-concerts-sub">multi-platform · multi-angle</span>
         </summary>
         <div class="live-concerts-inner">
-          <div class="live-concerts-layout">
-            <div class="live-concerts-main">
-              <div class="live-concerts-toolbar">
+            <div class="live-concerts-toolbar">
                 <div class="live-concerts-windows" role="tablist" aria-label="Time window">
                   <button type="button" class="live-concerts-win is-active" data-live-window="now" aria-selected="true">Now</button>
                   <button type="button" class="live-concerts-win" data-live-window="hour" aria-selected="false">Next hour</button>
@@ -368,6 +366,12 @@
                     />
                     <datalist id="live-concerts-artist-datalist"></datalist>
                     <ul id="live-concerts-ac-list" class="live-concerts-ac" role="listbox" hidden></ul>
+                    <div
+                      class="live-concerts-alpha-inline"
+                      id="live-concerts-alpha-inline"
+                      role="toolbar"
+                      aria-label="Filter artists A–Z"
+                    ></div>
                   </div>
                   <button type="button" class="live-concerts-btn" id="live-concerts-search-btn">Search</button>
                   <button type="button" class="live-concerts-btn" id="live-concerts-refresh" title="Refresh discovery">↻</button>
@@ -388,6 +392,10 @@
                   <button type="button" class="live-concerts-btn" id="live-concerts-lyric-watch" title="Add to Listen for phrases (keyboard below)">Listen</button>
                   <button type="button" class="live-concerts-btn" id="live-concerts-lyric-sync" title="Sync lyric search with phrase keyboard">Sync ↓</button>
                 </div>
+                <div class="live-concerts-albums" id="live-concerts-albums" hidden>
+                  <p class="live-concerts-albums-hint" id="live-concerts-albums-hint">Album art · year order</p>
+                  <div class="live-concerts-albums-scroll" id="live-concerts-albums-scroll" role="list"></div>
+                </div>
                 <div class="live-concerts-actions">
                   <button type="button" class="live-concerts-btn live-concerts-btn--primary" id="live-concerts-multiview">Multi-angle sync</button>
                   <button type="button" class="live-concerts-btn" id="live-concerts-queue">Queue selected</button>
@@ -396,9 +404,6 @@
                 <div class="live-concerts-artist-picks" id="live-concerts-artist-picks" hidden></div>
               </div>
               <div class="live-concerts-list" id="live-concerts-list" role="list"></div>
-            </div>
-            <nav class="live-concerts-alpha" id="live-concerts-alpha" aria-label="Artist A–Z"></nav>
-          </div>
         </div>
       </details>
       <details class="ingest-panel" id="ingest-panel" open>

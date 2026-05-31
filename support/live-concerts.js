@@ -10,6 +10,7 @@ import {
   getActiveLetter,
 } from "./live-concerts-artists.js";
 import { addWatchPhrases, focusPhraseSearch } from "./phrase-search.js";
+import { paintArtistAlbums } from "./live-concerts-albums.js";
 
 const MULTIVIEW_KEY = "blank.live.multiview.v1";
 
@@ -38,6 +39,14 @@ export function initLiveConcerts(onQueue) {
   const multiviewBtn = document.getElementById("live-concerts-multiview");
   const queueBtn = document.getElementById("live-concerts-queue");
   const refreshBtn = document.getElementById("live-concerts-refresh");
+  const albumsPanel = document.getElementById("live-concerts-albums");
+  const albumsScroll = document.getElementById("live-concerts-albums-scroll");
+  const albumsHint = document.getElementById("live-concerts-albums-hint");
+
+  /** @param {string} name */
+  const loadAlbums = (name) => {
+    void paintArtistAlbums(name, albumsPanel, albumsScroll, albumsHint);
+  };
 
   panel.querySelectorAll("[data-live-window]").forEach((btn) => {
     btn.addEventListener("click", () => {
@@ -55,12 +64,14 @@ export function initLiveConcerts(onQueue) {
   searchBtn?.addEventListener("click", () => {
     if (searchInput instanceof HTMLInputElement) {
       state.query = searchInput.value.trim();
+      if (state.query) loadAlbums(state.query);
     }
     void discover(statusEl, listEl);
   });
   searchInput?.addEventListener("keydown", (ev) => {
     if (ev.key === "Enter") {
       state.query = searchInput.value.trim();
+      if (state.query) loadAlbums(state.query);
       void discover(statusEl, listEl);
     }
   });
@@ -79,7 +90,7 @@ export function initLiveConcerts(onQueue) {
 
   multiviewBtn?.addEventListener("click", () => openMultiview());
 
-  initArtistAlpha(panel, searchInput, statusEl);
+  initArtistAlpha(panel, searchInput, statusEl, loadAlbums);
   initLyricBridge(panel);
 
   void discover(statusEl, listEl);
@@ -89,9 +100,10 @@ export function initLiveConcerts(onQueue) {
  * @param {HTMLElement} panel
  * @param {HTMLInputElement | null} searchInput
  * @param {HTMLElement | null} statusEl
+ * @param {(name: string) => void} [onArtistChosen]
  */
-function initArtistAlpha(panel, searchInput, statusEl) {
-  const alphaNav = document.getElementById("live-concerts-alpha");
+function initArtistAlpha(panel, searchInput, statusEl, onArtistChosen) {
+  const alphaNav = document.getElementById("live-concerts-alpha-inline");
   const picksEl = document.getElementById("live-concerts-artist-picks");
   const datalist = document.getElementById("live-concerts-artist-datalist");
   const acList = document.getElementById("live-concerts-ac-list");
@@ -100,7 +112,7 @@ function initArtistAlpha(panel, searchInput, statusEl) {
     .then(() => {
       paintAlphaRail(alphaNav);
       fillDatalist(datalist);
-      if (searchInput) bindAutocomplete(searchInput, acList, statusEl);
+      if (searchInput) bindAutocomplete(searchInput, acList, statusEl, onArtistChosen);
     })
     .catch((e) => {
       if (statusEl) {
@@ -116,7 +128,7 @@ function initArtistAlpha(panel, searchInput, statusEl) {
       `<button type="button" class="live-concerts-alpha-btn${active === null ? " is-active" : ""}" data-alpha="__all__" title="All artists">All</button>`,
     ];
     for (const L of alphaLetters()) {
-      const label = L === "#" ? "#" : L;
+      const label = L === "#" ? "#" : L.toLowerCase();
       parts.push(
         `<button type="button" class="live-concerts-alpha-btn${active === L ? " is-active" : ""}" data-alpha="${L}" title="${L === "#" ? "0–9" : `Artists: ${L}`}">${label}</button>`,
       );
@@ -159,6 +171,7 @@ function initArtistAlpha(panel, searchInput, statusEl) {
         const name = btn.getAttribute("data-artist") || "";
         if (searchInput) searchInput.value = name;
         state.query = name;
+        onArtistChosen?.(name);
         void discover(statusEl, document.getElementById("live-concerts-list"));
       });
     });
@@ -176,8 +189,9 @@ function initArtistAlpha(panel, searchInput, statusEl) {
    * @param {HTMLInputElement} input
    * @param {HTMLElement | null} acList
    * @param {HTMLElement | null} statusEl
+   * @param {(name: string) => void} [onArtistChosen]
    */
-  function bindAutocomplete(input, acList, statusEl) {
+  function bindAutocomplete(input, acList, statusEl, onArtistChosen) {
     let debounce = 0;
     const updateAc = () => {
       if (!(acList instanceof HTMLElement)) return;
@@ -204,6 +218,7 @@ function initArtistAlpha(panel, searchInput, statusEl) {
           input.value = name;
           state.query = name;
           acList.hidden = true;
+          onArtistChosen?.(name);
           void discover(statusEl, document.getElementById("live-concerts-list"));
         });
       });

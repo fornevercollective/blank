@@ -6,9 +6,17 @@ import { spawn } from "node:child_process";
 
 const CACHE_TTL_MS = 3 * 60 * 1000;
 const DISCOVER_TIMEOUT_MS = 90_000;
+const ALBUM_CACHE_TTL_MS = 24 * 60 * 60 * 1000;
+const MB_AGENT = "BlankLiveConcerts/1.0 (+https://github.com/blank-local)";
+const MB_MIN_GAP_MS = 1100;
 
 /** @type {Map<string, { created: number, data: object }>} */
 const discoverCache = new Map();
+
+/** @type {Map<string, { created: number, data: object }>} */
+const albumCache = new Map();
+
+let mbLastFetch = 0;
 
 const DEFAULT_QUERIES = [
   "live concert stream",
@@ -365,7 +373,96 @@ export async function handleLiveConcertsApi(req, res, urlPath) {
     return true;
   }
 
+  if (urlPath === "/api/live/albums" && (req.method === "GET" || req.method === "HEAD")) {
+    const u = new URL(req.url || "/", "http://127.0.0.1");
+    const artist = (u.searchParams.get("artist") || "").trim();
+    try {
+      const data = await fetchArtistAlbums(artist);
+      json(res, 200, data);
+    } catch (e) {
+      json(res, 502, {
+        ok: false,
+        error: e instanceof Error ? e.message : String(e),
+      });
+    }
+    return true;
+  }
+
   return false;
+}
+
+/** @param {string} path */
+async function mbFetch(path) {
+  const gap = Date.now() - mbLastFetch;
+  if (gap < MB_MIN_GAP_MS) {
+    await new Promise((r) => setTimeout(r, MB_MIN_GAP_MS - gap));
+  }
+  mbLastFetch = Date.now();
+  const res = await fetch(`https://musicbrainz.org/ws/2/${path}`, {
+    headers: { "User-Agent": MB_AGENT, Accept: "application/json" },
+  });
+  if (!res.ok) throw new Error(`MusicBrainz ${res.status}`);
+  return res.json();
+}
+
+/** @param {string | undefined} iso */
+function yearFromIso(iso) {
+  if (!iso || iso.length < 4) return null;
+  const y = Number.parseInt(iso.slice(0, 4), 10);
+  return Number.isFinite(y) ? y : null;
+}
+
+/** @param {string} artistName */
+export async function fetchArtistAlbums(artistName) {
+  const key = artistName.trim().toLowerCase();
+  if (!key) {
+    return { ok: true, artist: "", albums: [] };
+  }
+  const cached = albumCache.get(key);
+  if (cached && Date.now() - cached.created < ALBUM_CACHE_TTL_MS) {
+    return cached.data;
+  }
+
+  const search = await mbFetch(
+    `artist/?query=${encodeURIComponent(`artist:"${artistName}"`)}&limit=1&fmt=json`,
+  );
+  const hit = Array.isArray(search.artists) ? search.artists[0] : null;
+  if (!hit?.id) {
+    const empty = { ok: true, artist: artistName, albums: [] };
+    albumCache.set(key, { created: Date.now(), data: empty });
+    return empty;
+  }
+
+  const rgs = await mbFetch(
+    `release-group?artist=${hit.id}&type=album&fmt=json&limit=100`,
+  );
+  const groups = Array.isArray(rgs["release-groups"]) ? rgs["release-groups"] : [];
+  const albums = groups
+    .map((rg) => ({
+      title: String(rg.title || "").trim(),
+      year: yearFromIso(rg["first-release-date"]),
+      mbid: rg.id,
+      coverUrl: rg.id
+        ? `https://coverartarchive.org/release-group/${rg.id}/front-250`
+        : "",
+    }))
+    .filter((a) => a.title && a.mbid)
+    .sort((a, b) => {
+      const ya = a.year ?? 9999;
+      const yb = b.year ?? 9999;
+      if (ya !== yb) return ya - yb;
+      return a.title.localeCompare(b.title);
+    })
+    .slice(0, 32);
+
+  const data = {
+    ok: true,
+    artist: hit.name || artistName,
+    mbid: hit.id,
+    albums,
+  };
+  albumCache.set(key, { created: Date.now(), data });
+  return data;
 }
 
 /** @param {import("node:http").ServerResponse} res @param {number} code @param {object} obj */
