@@ -1,0 +1,2658 @@
+{
+  "version": 2,
+  "count": 663,
+  "artists": [
+    {
+      "name": "A Tribe Called Quest",
+      "letter": "A"
+    },
+    {
+      "name": "ABBA",
+      "letter": "A"
+    },
+    {
+      "name": "AC/DC",
+      "letter": "A"
+    },
+    {
+      "name": "Adele",
+      "letter": "A"
+    },
+    {
+      "name": "Aerosmith",
+      "letter": "A"
+    },
+    {
+      "name": "Air Supply",
+      "letter": "A"
+    },
+    {
+      "name": "Alabama Shakes",
+      "letter": "A"
+    },
+    {
+      "name": "Alice Cooper",
+      "letter": "A"
+    },
+    {
+      "name": "Alicia Keys",
+      "letter": "A"
+    },
+    {
+      "name": "Allman Brothers Band",
+      "letter": "A"
+    },
+    {
+      "name": "Alt-J",
+      "letter": "A"
+    },
+    {
+      "name": "America",
+      "letter": "A"
+    },
+    {
+      "name": "Amy Winehouse",
+      "letter": "A"
+    },
+    {
+      "name": "André 3000",
+      "letter": "A"
+    },
+    {
+      "name": "Andrea Bocelli",
+      "letter": "A"
+    },
+    {
+      "name": "Anthrax",
+      "letter": "A"
+    },
+    {
+      "name": "Aphex Twin",
+      "letter": "A"
+    },
+    {
+      "name": "Arcade Fire",
+      "letter": "A"
+    },
+    {
+      "name": "Arctic Monkeys",
+      "letter": "A"
+    },
+    {
+      "name": "Aretha Franklin",
+      "letter": "A"
+    },
+    {
+      "name": "Ariana Grande",
+      "letter": "A"
+    },
+    {
+      "name": "August Burns Red",
+      "letter": "A"
+    },
+    {
+      "name": "Avicii",
+      "letter": "A"
+    },
+    {
+      "name": "B.B. King",
+      "letter": "B"
+    },
+    {
+      "name": "Backstreet Boys",
+      "letter": "B"
+    },
+    {
+      "name": "Bad Bunny",
+      "letter": "B"
+    },
+    {
+      "name": "Barbra Streisand",
+      "letter": "B"
+    },
+    {
+      "name": "Barry White",
+      "letter": "B"
+    },
+    {
+      "name": "Basement Jaxx",
+      "letter": "B"
+    },
+    {
+      "name": "Beastie Boys",
+      "letter": "B"
+    },
+    {
+      "name": "Beck",
+      "letter": "B"
+    },
+    {
+      "name": "Bee Gees",
+      "letter": "B"
+    },
+    {
+      "name": "Ben Folds",
+      "letter": "B"
+    },
+    {
+      "name": "Benny Goodman",
+      "letter": "B"
+    },
+    {
+      "name": "Beyoncé",
+      "letter": "B"
+    },
+    {
+      "name": "Billie Eilish",
+      "letter": "B"
+    },
+    {
+      "name": "Billy Idol",
+      "letter": "B"
+    },
+    {
+      "name": "Billy Joel",
+      "letter": "B"
+    },
+    {
+      "name": "Björk",
+      "letter": "B"
+    },
+    {
+      "name": "Black Eyed Peas",
+      "letter": "B"
+    },
+    {
+      "name": "Black Sabbath",
+      "letter": "B"
+    },
+    {
+      "name": "Blondie",
+      "letter": "B"
+    },
+    {
+      "name": "Blue Öyster Cult",
+      "letter": "B"
+    },
+    {
+      "name": "Blur",
+      "letter": "B"
+    },
+    {
+      "name": "Bo Diddley",
+      "letter": "B"
+    },
+    {
+      "name": "Bob Dylan",
+      "letter": "B"
+    },
+    {
+      "name": "Bob Marley",
+      "letter": "B"
+    },
+    {
+      "name": "Bon Iver",
+      "letter": "B"
+    },
+    {
+      "name": "Bon Jovi",
+      "letter": "B"
+    },
+    {
+      "name": "Boston",
+      "letter": "B"
+    },
+    {
+      "name": "Boyz II Men",
+      "letter": "B"
+    },
+    {
+      "name": "Brandi Carlile",
+      "letter": "B"
+    },
+    {
+      "name": "Breaking Benjamin",
+      "letter": "B"
+    },
+    {
+      "name": "Bring Me the Horizon",
+      "letter": "B"
+    },
+    {
+      "name": "Britney Spears",
+      "letter": "B"
+    },
+    {
+      "name": "Bruce Springsteen",
+      "letter": "B"
+    },
+    {
+      "name": "Bruno Mars",
+      "letter": "B"
+    },
+    {
+      "name": "Bryan Adams",
+      "letter": "B"
+    },
+    {
+      "name": "BTS",
+      "letter": "B"
+    },
+    {
+      "name": "Buddy Guy",
+      "letter": "B"
+    },
+    {
+      "name": "Buddy Holly",
+      "letter": "B"
+    },
+    {
+      "name": "Burna Boy",
+      "letter": "B"
+    },
+    {
+      "name": "Cage the Elephant",
+      "letter": "C"
+    },
+    {
+      "name": "Calvin Harris",
+      "letter": "C"
+    },
+    {
+      "name": "Camila Cabello",
+      "letter": "C"
+    },
+    {
+      "name": "Cardi B",
+      "letter": "C"
+    },
+    {
+      "name": "Carly Rae Jepsen",
+      "letter": "C"
+    },
+    {
+      "name": "Carole King",
+      "letter": "C"
+    },
+    {
+      "name": "Carpenters",
+      "letter": "C"
+    },
+    {
+      "name": "Cat Stevens",
+      "letter": "C"
+    },
+    {
+      "name": "Celine Dion",
+      "letter": "C"
+    },
+    {
+      "name": "Chaka Khan",
+      "letter": "C"
+    },
+    {
+      "name": "Chance the Rapper",
+      "letter": "C"
+    },
+    {
+      "name": "Charli XCX",
+      "letter": "C"
+    },
+    {
+      "name": "Cher",
+      "letter": "C"
+    },
+    {
+      "name": "Chevelle",
+      "letter": "C"
+    },
+    {
+      "name": "Chicago",
+      "letter": "C"
+    },
+    {
+      "name": "Childish Gambino",
+      "letter": "C"
+    },
+    {
+      "name": "Chris Brown",
+      "letter": "C"
+    },
+    {
+      "name": "Chris Stapleton",
+      "letter": "C"
+    },
+    {
+      "name": "Christina Aguilera",
+      "letter": "C"
+    },
+    {
+      "name": "Christina Perri",
+      "letter": "C"
+    },
+    {
+      "name": "Chuck Berry",
+      "letter": "C"
+    },
+    {
+      "name": "Coheed and Cambria",
+      "letter": "C"
+    },
+    {
+      "name": "Coldplay",
+      "letter": "C"
+    },
+    {
+      "name": "Common",
+      "letter": "C"
+    },
+    {
+      "name": "Counting Crows",
+      "letter": "C"
+    },
+    {
+      "name": "Creedence Clearwater Revival",
+      "letter": "C"
+    },
+    {
+      "name": "Crowded House",
+      "letter": "C"
+    },
+    {
+      "name": "Crystal Castles",
+      "letter": "C"
+    },
+    {
+      "name": "Culture Club",
+      "letter": "C"
+    },
+    {
+      "name": "Cyndi Lauper",
+      "letter": "C"
+    },
+    {
+      "name": "Cypress Hill",
+      "letter": "C"
+    },
+    {
+      "name": "DaBaby",
+      "letter": "D"
+    },
+    {
+      "name": "Daft Punk",
+      "letter": "D"
+    },
+    {
+      "name": "Dashboard Confessional",
+      "letter": "D"
+    },
+    {
+      "name": "Dave Matthews Band",
+      "letter": "D"
+    },
+    {
+      "name": "David Bowie",
+      "letter": "D"
+    },
+    {
+      "name": "Deadmau5",
+      "letter": "D"
+    },
+    {
+      "name": "Death Cab for Cutie",
+      "letter": "D"
+    },
+    {
+      "name": "Deep Purple",
+      "letter": "D"
+    },
+    {
+      "name": "Def Leppard",
+      "letter": "D"
+    },
+    {
+      "name": "Deftones",
+      "letter": "D"
+    },
+    {
+      "name": "Depeche Mode",
+      "letter": "D"
+    },
+    {
+      "name": "Destiny's Child",
+      "letter": "D"
+    },
+    {
+      "name": "Diana Ross",
+      "letter": "D"
+    },
+    {
+      "name": "Diplo",
+      "letter": "D"
+    },
+    {
+      "name": "Dire Straits",
+      "letter": "D"
+    },
+    {
+      "name": "Dixie Chicks",
+      "letter": "D"
+    },
+    {
+      "name": "DMX",
+      "letter": "D"
+    },
+    {
+      "name": "Doja Cat",
+      "letter": "D"
+    },
+    {
+      "name": "Dolly Parton",
+      "letter": "D"
+    },
+    {
+      "name": "Don Henley",
+      "letter": "D"
+    },
+    {
+      "name": "Drake",
+      "letter": "D"
+    },
+    {
+      "name": "Dropkick Murphys",
+      "letter": "D"
+    },
+    {
+      "name": "Dua Lipa",
+      "letter": "D"
+    },
+    {
+      "name": "Duke Ellington",
+      "letter": "D"
+    },
+    {
+      "name": "Duran Duran",
+      "letter": "D"
+    },
+    {
+      "name": "Eagles",
+      "letter": "E"
+    },
+    {
+      "name": "Earth, Wind & Fire",
+      "letter": "E"
+    },
+    {
+      "name": "Ed Sheeran",
+      "letter": "E"
+    },
+    {
+      "name": "Electric Light Orchestra",
+      "letter": "E"
+    },
+    {
+      "name": "Ella Fitzgerald",
+      "letter": "E"
+    },
+    {
+      "name": "Ellie Goulding",
+      "letter": "E"
+    },
+    {
+      "name": "Elton John",
+      "letter": "E"
+    },
+    {
+      "name": "Elvis Presley",
+      "letter": "E"
+    },
+    {
+      "name": "Emeli Sandé",
+      "letter": "E"
+    },
+    {
+      "name": "Eminem",
+      "letter": "E"
+    },
+    {
+      "name": "En Vogue",
+      "letter": "E"
+    },
+    {
+      "name": "Enya",
+      "letter": "E"
+    },
+    {
+      "name": "Eric Church",
+      "letter": "E"
+    },
+    {
+      "name": "Eric Clapton",
+      "letter": "E"
+    },
+    {
+      "name": "Eurythmics",
+      "letter": "E"
+    },
+    {
+      "name": "Evanescence",
+      "letter": "E"
+    },
+    {
+      "name": "Everclear",
+      "letter": "E"
+    },
+    {
+      "name": "Faith Hill",
+      "letter": "F"
+    },
+    {
+      "name": "Faith No More",
+      "letter": "F"
+    },
+    {
+      "name": "Fall Out Boy",
+      "letter": "F"
+    },
+    {
+      "name": "Fatboy Slim",
+      "letter": "F"
+    },
+    {
+      "name": "Fats Domino",
+      "letter": "F"
+    },
+    {
+      "name": "Fela Kuti",
+      "letter": "F"
+    },
+    {
+      "name": "Fitz and the Tantrums",
+      "letter": "F"
+    },
+    {
+      "name": "Fleet Foxes",
+      "letter": "F"
+    },
+    {
+      "name": "Fleetwood Mac",
+      "letter": "F"
+    },
+    {
+      "name": "Florence + The Machine",
+      "letter": "F"
+    },
+    {
+      "name": "Florence and the Machine",
+      "letter": "F"
+    },
+    {
+      "name": "Flyleaf",
+      "letter": "F"
+    },
+    {
+      "name": "Foo Fighters",
+      "letter": "F"
+    },
+    {
+      "name": "Foreigner",
+      "letter": "F"
+    },
+    {
+      "name": "Foster the People",
+      "letter": "F"
+    },
+    {
+      "name": "Fountains of Wayne",
+      "letter": "F"
+    },
+    {
+      "name": "Four Tops",
+      "letter": "F"
+    },
+    {
+      "name": "Frank Ocean",
+      "letter": "F"
+    },
+    {
+      "name": "Frank Sinatra",
+      "letter": "F"
+    },
+    {
+      "name": "Frank Turner",
+      "letter": "F"
+    },
+    {
+      "name": "Frank Zappa",
+      "letter": "F"
+    },
+    {
+      "name": "Franz Ferdinand",
+      "letter": "F"
+    },
+    {
+      "name": "Freddie Mercury",
+      "letter": "F"
+    },
+    {
+      "name": "Fugees",
+      "letter": "F"
+    },
+    {
+      "name": "Future",
+      "letter": "F"
+    },
+    {
+      "name": "Garbage",
+      "letter": "G"
+    },
+    {
+      "name": "Genesis",
+      "letter": "G"
+    },
+    {
+      "name": "George Harrison",
+      "letter": "G"
+    },
+    {
+      "name": "George Michael",
+      "letter": "G"
+    },
+    {
+      "name": "Ghost",
+      "letter": "G"
+    },
+    {
+      "name": "Gin Blossoms",
+      "letter": "G"
+    },
+    {
+      "name": "Gloria Estefan",
+      "letter": "G"
+    },
+    {
+      "name": "Goo Goo Dolls",
+      "letter": "G"
+    },
+    {
+      "name": "Gorillaz",
+      "letter": "G"
+    },
+    {
+      "name": "Grateful Dead",
+      "letter": "G"
+    },
+    {
+      "name": "Green Day",
+      "letter": "G"
+    },
+    {
+      "name": "Greta Van Fleet",
+      "letter": "G"
+    },
+    {
+      "name": "Guns N' Roses",
+      "letter": "G"
+    },
+    {
+      "name": "Haim",
+      "letter": "H"
+    },
+    {
+      "name": "Hall & Oates",
+      "letter": "H"
+    },
+    {
+      "name": "Halsey",
+      "letter": "H"
+    },
+    {
+      "name": "Hank Williams",
+      "letter": "H"
+    },
+    {
+      "name": "Hanson",
+      "letter": "H"
+    },
+    {
+      "name": "Harry Styles",
+      "letter": "H"
+    },
+    {
+      "name": "Heart",
+      "letter": "H"
+    },
+    {
+      "name": "Herbie Hancock",
+      "letter": "H"
+    },
+    {
+      "name": "Hoobastank",
+      "letter": "H"
+    },
+    {
+      "name": "Hootie & the Blowfish",
+      "letter": "H"
+    },
+    {
+      "name": "Hozier",
+      "letter": "H"
+    },
+    {
+      "name": "Huey Lewis and the News",
+      "letter": "H"
+    },
+    {
+      "name": "Hüsker Dü",
+      "letter": "H"
+    },
+    {
+      "name": "Ice Cube",
+      "letter": "I"
+    },
+    {
+      "name": "Iggy Pop",
+      "letter": "I"
+    },
+    {
+      "name": "Imagine Dragons",
+      "letter": "I"
+    },
+    {
+      "name": "Incubus",
+      "letter": "I"
+    },
+    {
+      "name": "Interpol",
+      "letter": "I"
+    },
+    {
+      "name": "INXS",
+      "letter": "I"
+    },
+    {
+      "name": "Iron & Wine",
+      "letter": "I"
+    },
+    {
+      "name": "Iron Maiden",
+      "letter": "I"
+    },
+    {
+      "name": "Isley Brothers",
+      "letter": "I"
+    },
+    {
+      "name": "Jack Harlow",
+      "letter": "J"
+    },
+    {
+      "name": "Jack White",
+      "letter": "J"
+    },
+    {
+      "name": "Jackson 5",
+      "letter": "J"
+    },
+    {
+      "name": "James Bay",
+      "letter": "J"
+    },
+    {
+      "name": "James Blake",
+      "letter": "J"
+    },
+    {
+      "name": "James Brown",
+      "letter": "J"
+    },
+    {
+      "name": "James Taylor",
+      "letter": "J"
+    },
+    {
+      "name": "Jamiroquai",
+      "letter": "J"
+    },
+    {
+      "name": "Janelle Monáe",
+      "letter": "J"
+    },
+    {
+      "name": "Janet Jackson",
+      "letter": "J"
+    },
+    {
+      "name": "Janis Joplin",
+      "letter": "J"
+    },
+    {
+      "name": "Jason Aldean",
+      "letter": "J"
+    },
+    {
+      "name": "Jason Mraz",
+      "letter": "J"
+    },
+    {
+      "name": "Jay-Z",
+      "letter": "J"
+    },
+    {
+      "name": "Jeff Buckley",
+      "letter": "J"
+    },
+    {
+      "name": "Jefferson Airplane",
+      "letter": "J"
+    },
+    {
+      "name": "Jennifer Lopez",
+      "letter": "J"
+    },
+    {
+      "name": "Jeremih",
+      "letter": "J"
+    },
+    {
+      "name": "Jerry Garcia",
+      "letter": "J"
+    },
+    {
+      "name": "Jessie J",
+      "letter": "J"
+    },
+    {
+      "name": "Jethro Tull",
+      "letter": "J"
+    },
+    {
+      "name": "Jewel",
+      "letter": "J"
+    },
+    {
+      "name": "Jill Scott",
+      "letter": "J"
+    },
+    {
+      "name": "Jimi Hendrix",
+      "letter": "J"
+    },
+    {
+      "name": "Jimmy Buffett",
+      "letter": "J"
+    },
+    {
+      "name": "Jimmy Eat World",
+      "letter": "J"
+    },
+    {
+      "name": "Joan Baez",
+      "letter": "J"
+    },
+    {
+      "name": "Joan Jett",
+      "letter": "J"
+    },
+    {
+      "name": "Joe Bonamassa",
+      "letter": "J"
+    },
+    {
+      "name": "Joe Cocker",
+      "letter": "J"
+    },
+    {
+      "name": "John Denver",
+      "letter": "J"
+    },
+    {
+      "name": "John Fogerty",
+      "letter": "J"
+    },
+    {
+      "name": "John Legend",
+      "letter": "J"
+    },
+    {
+      "name": "John Mayer",
+      "letter": "J"
+    },
+    {
+      "name": "John Mellencamp",
+      "letter": "J"
+    },
+    {
+      "name": "Johnny Cash",
+      "letter": "J"
+    },
+    {
+      "name": "Jonas Brothers",
+      "letter": "J"
+    },
+    {
+      "name": "Joni Mitchell",
+      "letter": "J"
+    },
+    {
+      "name": "Jordin Sparks",
+      "letter": "J"
+    },
+    {
+      "name": "Journey",
+      "letter": "J"
+    },
+    {
+      "name": "Joy Division",
+      "letter": "J"
+    },
+    {
+      "name": "Judas Priest",
+      "letter": "J"
+    },
+    {
+      "name": "Juice WRLD",
+      "letter": "J"
+    },
+    {
+      "name": "Julio Iglesias",
+      "letter": "J"
+    },
+    {
+      "name": "Justin Bieber",
+      "letter": "J"
+    },
+    {
+      "name": "Juvenile",
+      "letter": "J"
+    },
+    {
+      "name": "Kacey Musgraves",
+      "letter": "K"
+    },
+    {
+      "name": "Kaleo",
+      "letter": "K"
+    },
+    {
+      "name": "Kansas",
+      "letter": "K"
+    },
+    {
+      "name": "Kanye West",
+      "letter": "K"
+    },
+    {
+      "name": "Kate Bush",
+      "letter": "K"
+    },
+    {
+      "name": "Katy Perry",
+      "letter": "K"
+    },
+    {
+      "name": "Keane",
+      "letter": "K"
+    },
+    {
+      "name": "Kehlani",
+      "letter": "K"
+    },
+    {
+      "name": "Keith Urban",
+      "letter": "K"
+    },
+    {
+      "name": "Kelly Clarkson",
+      "letter": "K"
+    },
+    {
+      "name": "Kendrick Lamar",
+      "letter": "K"
+    },
+    {
+      "name": "Kenny Chesney",
+      "letter": "K"
+    },
+    {
+      "name": "Kenny Rogers",
+      "letter": "K"
+    },
+    {
+      "name": "Kesha",
+      "letter": "K"
+    },
+    {
+      "name": "Khalid",
+      "letter": "K"
+    },
+    {
+      "name": "Khruangbin",
+      "letter": "K"
+    },
+    {
+      "name": "Kid Cudi",
+      "letter": "K"
+    },
+    {
+      "name": "Kid Rock",
+      "letter": "K"
+    },
+    {
+      "name": "King Crimson",
+      "letter": "K"
+    },
+    {
+      "name": "Kings of Convenience",
+      "letter": "K"
+    },
+    {
+      "name": "Kings of Leon",
+      "letter": "K"
+    },
+    {
+      "name": "KISS",
+      "letter": "K"
+    },
+    {
+      "name": "Kool & the Gang",
+      "letter": "K"
+    },
+    {
+      "name": "Korn",
+      "letter": "K"
+    },
+    {
+      "name": "Kraftwerk",
+      "letter": "K"
+    },
+    {
+      "name": "KRS-One",
+      "letter": "K"
+    },
+    {
+      "name": "Kygo",
+      "letter": "K"
+    },
+    {
+      "name": "Lady Gaga",
+      "letter": "L"
+    },
+    {
+      "name": "Lana Del Rey",
+      "letter": "L"
+    },
+    {
+      "name": "Lauryn Hill",
+      "letter": "L"
+    },
+    {
+      "name": "LCD Soundsystem",
+      "letter": "L"
+    },
+    {
+      "name": "Le Tigre",
+      "letter": "L"
+    },
+    {
+      "name": "LeAnn Rimes",
+      "letter": "L"
+    },
+    {
+      "name": "Led Zeppelin",
+      "letter": "L"
+    },
+    {
+      "name": "Leonard Cohen",
+      "letter": "L"
+    },
+    {
+      "name": "Lil Nas X",
+      "letter": "L"
+    },
+    {
+      "name": "Lil Wayne",
+      "letter": "L"
+    },
+    {
+      "name": "Limp Bizkit",
+      "letter": "L"
+    },
+    {
+      "name": "Linda Ronstadt",
+      "letter": "L"
+    },
+    {
+      "name": "Linkin Park",
+      "letter": "L"
+    },
+    {
+      "name": "Lionel Richie",
+      "letter": "L"
+    },
+    {
+      "name": "Little Richard",
+      "letter": "L"
+    },
+    {
+      "name": "Lizzo",
+      "letter": "L"
+    },
+    {
+      "name": "LL Cool J",
+      "letter": "L"
+    },
+    {
+      "name": "Logic",
+      "letter": "L"
+    },
+    {
+      "name": "Lorde",
+      "letter": "L"
+    },
+    {
+      "name": "Los Lobos",
+      "letter": "L"
+    },
+    {
+      "name": "Los Lonely Boys",
+      "letter": "L"
+    },
+    {
+      "name": "Lou Reed",
+      "letter": "L"
+    },
+    {
+      "name": "Louis Armstrong",
+      "letter": "L"
+    },
+    {
+      "name": "Ludacris",
+      "letter": "L"
+    },
+    {
+      "name": "Luke Combs",
+      "letter": "L"
+    },
+    {
+      "name": "Luther Vandross",
+      "letter": "L"
+    },
+    {
+      "name": "Lynyrd Skynyrd",
+      "letter": "L"
+    },
+    {
+      "name": "M.I.A.",
+      "letter": "M"
+    },
+    {
+      "name": "Mac Miller",
+      "letter": "M"
+    },
+    {
+      "name": "Machine Gun Kelly",
+      "letter": "M"
+    },
+    {
+      "name": "Macy Gray",
+      "letter": "M"
+    },
+    {
+      "name": "Madonna",
+      "letter": "M"
+    },
+    {
+      "name": "Manic Street Preachers",
+      "letter": "M"
+    },
+    {
+      "name": "Mariah Carey",
+      "letter": "M"
+    },
+    {
+      "name": "Maroon 5",
+      "letter": "M"
+    },
+    {
+      "name": "Martina McBride",
+      "letter": "M"
+    },
+    {
+      "name": "Marvin Gaye",
+      "letter": "M"
+    },
+    {
+      "name": "Mary J. Blige",
+      "letter": "M"
+    },
+    {
+      "name": "Massive Attack",
+      "letter": "M"
+    },
+    {
+      "name": "Matchbox Twenty",
+      "letter": "M"
+    },
+    {
+      "name": "Maxwell",
+      "letter": "M"
+    },
+    {
+      "name": "Meat Loaf",
+      "letter": "M"
+    },
+    {
+      "name": "Megadeth",
+      "letter": "M"
+    },
+    {
+      "name": "Megan Thee Stallion",
+      "letter": "M"
+    },
+    {
+      "name": "Melanie Martinez",
+      "letter": "M"
+    },
+    {
+      "name": "Merle Haggard",
+      "letter": "M"
+    },
+    {
+      "name": "Metallica",
+      "letter": "M"
+    },
+    {
+      "name": "Method Man",
+      "letter": "M"
+    },
+    {
+      "name": "MGMT",
+      "letter": "M"
+    },
+    {
+      "name": "Michael Bublé",
+      "letter": "M"
+    },
+    {
+      "name": "Michael Jackson",
+      "letter": "M"
+    },
+    {
+      "name": "Michelle Branch",
+      "letter": "M"
+    },
+    {
+      "name": "Migos",
+      "letter": "M"
+    },
+    {
+      "name": "Miles Davis",
+      "letter": "M"
+    },
+    {
+      "name": "Miley Cyrus",
+      "letter": "M"
+    },
+    {
+      "name": "Miranda Lambert",
+      "letter": "M"
+    },
+    {
+      "name": "Missy Elliott",
+      "letter": "M"
+    },
+    {
+      "name": "Mitski",
+      "letter": "M"
+    },
+    {
+      "name": "Moby",
+      "letter": "M"
+    },
+    {
+      "name": "Modest Mouse",
+      "letter": "M"
+    },
+    {
+      "name": "Monica",
+      "letter": "M"
+    },
+    {
+      "name": "Morgan Wallen",
+      "letter": "M"
+    },
+    {
+      "name": "Morrissey",
+      "letter": "M"
+    },
+    {
+      "name": "Mötley Crüe",
+      "letter": "M"
+    },
+    {
+      "name": "Motörhead",
+      "letter": "M"
+    },
+    {
+      "name": "Mumford & Sons",
+      "letter": "M"
+    },
+    {
+      "name": "Muse",
+      "letter": "M"
+    },
+    {
+      "name": "My Chemical Romance",
+      "letter": "M"
+    },
+    {
+      "name": "My Morning Jacket",
+      "letter": "M"
+    },
+    {
+      "name": "Nas",
+      "letter": "N"
+    },
+    {
+      "name": "Nat King Cole",
+      "letter": "N"
+    },
+    {
+      "name": "Natasha Bedingfield",
+      "letter": "N"
+    },
+    {
+      "name": "Ne-Yo",
+      "letter": "N"
+    },
+    {
+      "name": "Neil Diamond",
+      "letter": "N"
+    },
+    {
+      "name": "Neil Young",
+      "letter": "N"
+    },
+    {
+      "name": "Neutral Milk Hotel",
+      "letter": "N"
+    },
+    {
+      "name": "New Kids on the Block",
+      "letter": "N"
+    },
+    {
+      "name": "New Order",
+      "letter": "N"
+    },
+    {
+      "name": "Nick Cave and the Bad Seeds",
+      "letter": "N"
+    },
+    {
+      "name": "Nicki Minaj",
+      "letter": "N"
+    },
+    {
+      "name": "Nico",
+      "letter": "N"
+    },
+    {
+      "name": "Nightwish",
+      "letter": "N"
+    },
+    {
+      "name": "Nina Kraviz",
+      "letter": "N"
+    },
+    {
+      "name": "Nina Simone",
+      "letter": "N"
+    },
+    {
+      "name": "Nine Inch Nails",
+      "letter": "N"
+    },
+    {
+      "name": "Nirvana",
+      "letter": "N"
+    },
+    {
+      "name": "No Doubt",
+      "letter": "N"
+    },
+    {
+      "name": "Noah Kahan",
+      "letter": "N"
+    },
+    {
+      "name": "Norah Jones",
+      "letter": "N"
+    },
+    {
+      "name": "O.A.R.",
+      "letter": "O"
+    },
+    {
+      "name": "Oasis",
+      "letter": "O"
+    },
+    {
+      "name": "Ocean Alley",
+      "letter": "O"
+    },
+    {
+      "name": "Of Monsters and Men",
+      "letter": "O"
+    },
+    {
+      "name": "OK Go",
+      "letter": "O"
+    },
+    {
+      "name": "Old Dominion",
+      "letter": "O"
+    },
+    {
+      "name": "Olivia Newton-John",
+      "letter": "O"
+    },
+    {
+      "name": "Olivia Rodrigo",
+      "letter": "O"
+    },
+    {
+      "name": "OMC",
+      "letter": "O"
+    },
+    {
+      "name": "One Direction",
+      "letter": "O"
+    },
+    {
+      "name": "One OK Rock",
+      "letter": "O"
+    },
+    {
+      "name": "OneRepublic",
+      "letter": "O"
+    },
+    {
+      "name": "Opeth",
+      "letter": "O"
+    },
+    {
+      "name": "Orbital",
+      "letter": "O"
+    },
+    {
+      "name": "Os Mutantes",
+      "letter": "O"
+    },
+    {
+      "name": "Otis Redding",
+      "letter": "O"
+    },
+    {
+      "name": "OutKast",
+      "letter": "O"
+    },
+    {
+      "name": "Ozzy Osbourne",
+      "letter": "O"
+    },
+    {
+      "name": "P.O.D.",
+      "letter": "P"
+    },
+    {
+      "name": "Panic! at the Disco",
+      "letter": "P"
+    },
+    {
+      "name": "Paramore",
+      "letter": "P"
+    },
+    {
+      "name": "Parliament-Funkadelic",
+      "letter": "P"
+    },
+    {
+      "name": "Passenger",
+      "letter": "P"
+    },
+    {
+      "name": "Pat Benatar",
+      "letter": "P"
+    },
+    {
+      "name": "Patti LaBelle",
+      "letter": "P"
+    },
+    {
+      "name": "Patti Smith",
+      "letter": "P"
+    },
+    {
+      "name": "Paul McCartney",
+      "letter": "P"
+    },
+    {
+      "name": "Paul Simon",
+      "letter": "P"
+    },
+    {
+      "name": "Paula Abdul",
+      "letter": "P"
+    },
+    {
+      "name": "Pavement",
+      "letter": "P"
+    },
+    {
+      "name": "Pearl Jam",
+      "letter": "P"
+    },
+    {
+      "name": "Peggy Lee",
+      "letter": "P"
+    },
+    {
+      "name": "Pentatonix",
+      "letter": "P"
+    },
+    {
+      "name": "Pet Shop Boys",
+      "letter": "P"
+    },
+    {
+      "name": "Peter Frampton",
+      "letter": "P"
+    },
+    {
+      "name": "Peter Gabriel",
+      "letter": "P"
+    },
+    {
+      "name": "Pharrell Williams",
+      "letter": "P"
+    },
+    {
+      "name": "Phil Collins",
+      "letter": "P"
+    },
+    {
+      "name": "Phish",
+      "letter": "P"
+    },
+    {
+      "name": "Phoenix",
+      "letter": "P"
+    },
+    {
+      "name": "Pierce the Veil",
+      "letter": "P"
+    },
+    {
+      "name": "Pink",
+      "letter": "P"
+    },
+    {
+      "name": "Pink Floyd",
+      "letter": "P"
+    },
+    {
+      "name": "Pitbull",
+      "letter": "P"
+    },
+    {
+      "name": "Pixies",
+      "letter": "P"
+    },
+    {
+      "name": "PJ Harvey",
+      "letter": "P"
+    },
+    {
+      "name": "Placebo",
+      "letter": "P"
+    },
+    {
+      "name": "Playboi Carti",
+      "letter": "P"
+    },
+    {
+      "name": "Poco",
+      "letter": "P"
+    },
+    {
+      "name": "Portishead",
+      "letter": "P"
+    },
+    {
+      "name": "Post Malone",
+      "letter": "P"
+    },
+    {
+      "name": "Preservation Hall Jazz Band",
+      "letter": "P"
+    },
+    {
+      "name": "Primus",
+      "letter": "P"
+    },
+    {
+      "name": "Prince",
+      "letter": "P"
+    },
+    {
+      "name": "Public Enemy",
+      "letter": "P"
+    },
+    {
+      "name": "Puddle of Mudd",
+      "letter": "P"
+    },
+    {
+      "name": "Puff Daddy",
+      "letter": "P"
+    },
+    {
+      "name": "Puscifer",
+      "letter": "P"
+    },
+    {
+      "name": "Queen",
+      "letter": "Q"
+    },
+    {
+      "name": "Queens of the Stone Age",
+      "letter": "Q"
+    },
+    {
+      "name": "Queensrÿche",
+      "letter": "Q"
+    },
+    {
+      "name": "Quincy Jones",
+      "letter": "Q"
+    },
+    {
+      "name": "R.E.M.",
+      "letter": "R"
+    },
+    {
+      "name": "Radiohead",
+      "letter": "R"
+    },
+    {
+      "name": "Rage Against the Machine",
+      "letter": "R"
+    },
+    {
+      "name": "Rammstein",
+      "letter": "R"
+    },
+    {
+      "name": "Randy Travis",
+      "letter": "R"
+    },
+    {
+      "name": "Ray Charles",
+      "letter": "R"
+    },
+    {
+      "name": "Ray LaMontagne",
+      "letter": "R"
+    },
+    {
+      "name": "Reba McEntire",
+      "letter": "R"
+    },
+    {
+      "name": "Rebelution",
+      "letter": "R"
+    },
+    {
+      "name": "Red Hot Chili Peppers",
+      "letter": "R"
+    },
+    {
+      "name": "Regina Spektor",
+      "letter": "R"
+    },
+    {
+      "name": "REM",
+      "letter": "R"
+    },
+    {
+      "name": "Ricky Martin",
+      "letter": "R"
+    },
+    {
+      "name": "Rihanna",
+      "letter": "R"
+    },
+    {
+      "name": "Rise Against",
+      "letter": "R"
+    },
+    {
+      "name": "Rob Zombie",
+      "letter": "R"
+    },
+    {
+      "name": "Robert Palmer",
+      "letter": "R"
+    },
+    {
+      "name": "Robin Thicke",
+      "letter": "R"
+    },
+    {
+      "name": "Rod Stewart",
+      "letter": "R"
+    },
+    {
+      "name": "Rodgers and Hammerstein",
+      "letter": "R"
+    },
+    {
+      "name": "Roger Miller",
+      "letter": "R"
+    },
+    {
+      "name": "Roger Waters",
+      "letter": "R"
+    },
+    {
+      "name": "Rosalía",
+      "letter": "R"
+    },
+    {
+      "name": "Roxette",
+      "letter": "R"
+    },
+    {
+      "name": "Roy Orbison",
+      "letter": "R"
+    },
+    {
+      "name": "Royksopp",
+      "letter": "R"
+    },
+    {
+      "name": "Rufus Wainwright",
+      "letter": "R"
+    },
+    {
+      "name": "Run-D.M.C.",
+      "letter": "R"
+    },
+    {
+      "name": "Rush",
+      "letter": "R"
+    },
+    {
+      "name": "Sabaton",
+      "letter": "S"
+    },
+    {
+      "name": "Sabrina Carpenter",
+      "letter": "S"
+    },
+    {
+      "name": "Sam Cooke",
+      "letter": "S"
+    },
+    {
+      "name": "Sam Hunt",
+      "letter": "S"
+    },
+    {
+      "name": "Sam Smith",
+      "letter": "S"
+    },
+    {
+      "name": "Sammy Hagar",
+      "letter": "S"
+    },
+    {
+      "name": "Santana",
+      "letter": "S"
+    },
+    {
+      "name": "Santigold",
+      "letter": "S"
+    },
+    {
+      "name": "Sarah Bareilles",
+      "letter": "S"
+    },
+    {
+      "name": "Sarah McLachlan",
+      "letter": "S"
+    },
+    {
+      "name": "Scissor Sisters",
+      "letter": "S"
+    },
+    {
+      "name": "Scorpions",
+      "letter": "S"
+    },
+    {
+      "name": "Seether",
+      "letter": "S"
+    },
+    {
+      "name": "Selena",
+      "letter": "S"
+    },
+    {
+      "name": "Selena Gomez",
+      "letter": "S"
+    },
+    {
+      "name": "Sepultura",
+      "letter": "S"
+    },
+    {
+      "name": "Sex Pistols",
+      "letter": "S"
+    },
+    {
+      "name": "Shaggy",
+      "letter": "S"
+    },
+    {
+      "name": "Shakira",
+      "letter": "S"
+    },
+    {
+      "name": "Shania Twain",
+      "letter": "S"
+    },
+    {
+      "name": "Shawn Mendes",
+      "letter": "S"
+    },
+    {
+      "name": "Sheryl Crow",
+      "letter": "S"
+    },
+    {
+      "name": "Shinedown",
+      "letter": "S"
+    },
+    {
+      "name": "Sia",
+      "letter": "S"
+    },
+    {
+      "name": "Sigur Rós",
+      "letter": "S"
+    },
+    {
+      "name": "Silversun Pickups",
+      "letter": "S"
+    },
+    {
+      "name": "Simon & Garfunkel",
+      "letter": "S"
+    },
+    {
+      "name": "Simple Minds",
+      "letter": "S"
+    },
+    {
+      "name": "Sister Hazel",
+      "letter": "S"
+    },
+    {
+      "name": "Skillet",
+      "letter": "S"
+    },
+    {
+      "name": "Skrillex",
+      "letter": "S"
+    },
+    {
+      "name": "Slayer",
+      "letter": "S"
+    },
+    {
+      "name": "Slipknot",
+      "letter": "S"
+    },
+    {
+      "name": "Smash Mouth",
+      "letter": "S"
+    },
+    {
+      "name": "Smashing Pumpkins",
+      "letter": "S"
+    },
+    {
+      "name": "Smokey Robinson",
+      "letter": "S"
+    },
+    {
+      "name": "Snoop Dogg",
+      "letter": "S"
+    },
+    {
+      "name": "Snow Patrol",
+      "letter": "S"
+    },
+    {
+      "name": "Social Distortion",
+      "letter": "S"
+    },
+    {
+      "name": "Solange",
+      "letter": "S"
+    },
+    {
+      "name": "Son Volt",
+      "letter": "S"
+    },
+    {
+      "name": "Soul Asylum",
+      "letter": "S"
+    },
+    {
+      "name": "Soundgarden",
+      "letter": "S"
+    },
+    {
+      "name": "Spice Girls",
+      "letter": "S"
+    },
+    {
+      "name": "Spoon",
+      "letter": "S"
+    },
+    {
+      "name": "Staind",
+      "letter": "S"
+    },
+    {
+      "name": "Static X",
+      "letter": "S"
+    },
+    {
+      "name": "Steely Dan",
+      "letter": "S"
+    },
+    {
+      "name": "Steppenwolf",
+      "letter": "S"
+    },
+    {
+      "name": "Steve Earle",
+      "letter": "S"
+    },
+    {
+      "name": "Steve Winwood",
+      "letter": "S"
+    },
+    {
+      "name": "Stevie Ray Vaughan",
+      "letter": "S"
+    },
+    {
+      "name": "Stevie Wonder",
+      "letter": "S"
+    },
+    {
+      "name": "Sting",
+      "letter": "S"
+    },
+    {
+      "name": "Stone Sour",
+      "letter": "S"
+    },
+    {
+      "name": "Stone Temple Pilots",
+      "letter": "S"
+    },
+    {
+      "name": "Stray Cats",
+      "letter": "S"
+    },
+    {
+      "name": "Sturgill Simpson",
+      "letter": "S"
+    },
+    {
+      "name": "Styx",
+      "letter": "S"
+    },
+    {
+      "name": "Sublime",
+      "letter": "S"
+    },
+    {
+      "name": "Sum 41",
+      "letter": "S"
+    },
+    {
+      "name": "Supertramp",
+      "letter": "S"
+    },
+    {
+      "name": "Switchfoot",
+      "letter": "S"
+    },
+    {
+      "name": "System of a Down",
+      "letter": "S"
+    },
+    {
+      "name": "SZA",
+      "letter": "S"
+    },
+    {
+      "name": "T-Pain",
+      "letter": "T"
+    },
+    {
+      "name": "Talking Heads",
+      "letter": "T"
+    },
+    {
+      "name": "Tame Impala",
+      "letter": "T"
+    },
+    {
+      "name": "Taylor Swift",
+      "letter": "T"
+    },
+    {
+      "name": "Tears for Fears",
+      "letter": "T"
+    },
+    {
+      "name": "Tegan and Sara",
+      "letter": "T"
+    },
+    {
+      "name": "Temple of the Dog",
+      "letter": "T"
+    },
+    {
+      "name": "Tesla",
+      "letter": "T"
+    },
+    {
+      "name": "The 1975",
+      "letter": "T"
+    },
+    {
+      "name": "The All-American Rejects",
+      "letter": "T"
+    },
+    {
+      "name": "The Band",
+      "letter": "T"
+    },
+    {
+      "name": "The Beach Boys",
+      "letter": "T"
+    },
+    {
+      "name": "The Beatles",
+      "letter": "T"
+    },
+    {
+      "name": "The Black Keys",
+      "letter": "T"
+    },
+    {
+      "name": "The Chainsmokers",
+      "letter": "T"
+    },
+    {
+      "name": "The Clash",
+      "letter": "T"
+    },
+    {
+      "name": "The Cranberries",
+      "letter": "T"
+    },
+    {
+      "name": "The Damned",
+      "letter": "T"
+    },
+    {
+      "name": "The Decemberists",
+      "letter": "T"
+    },
+    {
+      "name": "The Doobie Brothers",
+      "letter": "T"
+    },
+    {
+      "name": "The Doors",
+      "letter": "T"
+    },
+    {
+      "name": "The Flaming Lips",
+      "letter": "T"
+    },
+    {
+      "name": "The Fray",
+      "letter": "T"
+    },
+    {
+      "name": "The Gaslight Anthem",
+      "letter": "T"
+    },
+    {
+      "name": "The Goo Goo Dolls",
+      "letter": "T"
+    },
+    {
+      "name": "The Head and the Heart",
+      "letter": "T"
+    },
+    {
+      "name": "The Human League",
+      "letter": "T"
+    },
+    {
+      "name": "The Jam",
+      "letter": "T"
+    },
+    {
+      "name": "The Jesus and Mary Chain",
+      "letter": "T"
+    },
+    {
+      "name": "The Killers",
+      "letter": "T"
+    },
+    {
+      "name": "The Kinks",
+      "letter": "T"
+    },
+    {
+      "name": "The Lumineers",
+      "letter": "T"
+    },
+    {
+      "name": "The Mamas & the Papas",
+      "letter": "T"
+    },
+    {
+      "name": "The Mars Volta",
+      "letter": "T"
+    },
+    {
+      "name": "The Monkees",
+      "letter": "T"
+    },
+    {
+      "name": "The National",
+      "letter": "T"
+    },
+    {
+      "name": "The Notorious B.I.G.",
+      "letter": "T"
+    },
+    {
+      "name": "The Offspring",
+      "letter": "T"
+    },
+    {
+      "name": "The Pointer Sisters",
+      "letter": "T"
+    },
+    {
+      "name": "The Police",
+      "letter": "T"
+    },
+    {
+      "name": "The Pretenders",
+      "letter": "T"
+    },
+    {
+      "name": "The Prodigy",
+      "letter": "T"
+    },
+    {
+      "name": "The Psychedelic Furs",
+      "letter": "T"
+    },
+    {
+      "name": "The Raconteurs",
+      "letter": "T"
+    },
+    {
+      "name": "The Ramones",
+      "letter": "T"
+    },
+    {
+      "name": "The Replacements",
+      "letter": "T"
+    },
+    {
+      "name": "The Rolling Stones",
+      "letter": "T"
+    },
+    {
+      "name": "The Script",
+      "letter": "T"
+    },
+    {
+      "name": "The Shins",
+      "letter": "T"
+    },
+    {
+      "name": "The Smashing Pumpkins",
+      "letter": "T"
+    },
+    {
+      "name": "The Specials",
+      "letter": "T"
+    },
+    {
+      "name": "The Stone Roses",
+      "letter": "T"
+    },
+    {
+      "name": "The Stranglers",
+      "letter": "T"
+    },
+    {
+      "name": "The Strokes",
+      "letter": "T"
+    },
+    {
+      "name": "The Sundays",
+      "letter": "T"
+    },
+    {
+      "name": "The Supremes",
+      "letter": "T"
+    },
+    {
+      "name": "The Temptations",
+      "letter": "T"
+    },
+    {
+      "name": "The Ting Tings",
+      "letter": "T"
+    },
+    {
+      "name": "The Velvet Underground",
+      "letter": "T"
+    },
+    {
+      "name": "The Verve",
+      "letter": "T"
+    },
+    {
+      "name": "The War on Drugs",
+      "letter": "T"
+    },
+    {
+      "name": "The Weeknd",
+      "letter": "T"
+    },
+    {
+      "name": "The White Stripes",
+      "letter": "T"
+    },
+    {
+      "name": "The Who",
+      "letter": "T"
+    },
+    {
+      "name": "The xx",
+      "letter": "T"
+    },
+    {
+      "name": "Thin Lizzy",
+      "letter": "T"
+    },
+    {
+      "name": "Third Eye Blind",
+      "letter": "T"
+    },
+    {
+      "name": "Thirty Seconds to Mars",
+      "letter": "T"
+    },
+    {
+      "name": "Three Days Grace",
+      "letter": "T"
+    },
+    {
+      "name": "Tiësto",
+      "letter": "T"
+    },
+    {
+      "name": "Tiesto",
+      "letter": "T"
+    },
+    {
+      "name": "Timbaland",
+      "letter": "T"
+    },
+    {
+      "name": "Tina Turner",
+      "letter": "T"
+    },
+    {
+      "name": "Tinashe",
+      "letter": "T"
+    },
+    {
+      "name": "TLC",
+      "letter": "T"
+    },
+    {
+      "name": "Toby Keith",
+      "letter": "T"
+    },
+    {
+      "name": "TobyMac",
+      "letter": "T"
+    },
+    {
+      "name": "Tokio Hotel",
+      "letter": "T"
+    },
+    {
+      "name": "Tom Jones",
+      "letter": "T"
+    },
+    {
+      "name": "Tom Morello",
+      "letter": "T"
+    },
+    {
+      "name": "Tom Petty",
+      "letter": "T"
+    },
+    {
+      "name": "Tom Waits",
+      "letter": "T"
+    },
+    {
+      "name": "Toni Braxton",
+      "letter": "T"
+    },
+    {
+      "name": "Tony Bennett",
+      "letter": "T"
+    },
+    {
+      "name": "Tool",
+      "letter": "T"
+    },
+    {
+      "name": "Tori Amos",
+      "letter": "T"
+    },
+    {
+      "name": "Toto",
+      "letter": "T"
+    },
+    {
+      "name": "Tower of Power",
+      "letter": "T"
+    },
+    {
+      "name": "Tracy Chapman",
+      "letter": "T"
+    },
+    {
+      "name": "Train",
+      "letter": "T"
+    },
+    {
+      "name": "Trapt",
+      "letter": "T"
+    },
+    {
+      "name": "Travis Scott",
+      "letter": "T"
+    },
+    {
+      "name": "Trivium",
+      "letter": "T"
+    },
+    {
+      "name": "Troye Sivan",
+      "letter": "T"
+    },
+    {
+      "name": "Tupac Shakur",
+      "letter": "T"
+    },
+    {
+      "name": "Turnstile",
+      "letter": "T"
+    },
+    {
+      "name": "Twenty One Pilots",
+      "letter": "T"
+    },
+    {
+      "name": "Two Door Cinema Club",
+      "letter": "T"
+    },
+    {
+      "name": "Tycho",
+      "letter": "T"
+    },
+    {
+      "name": "Tyler, the Creator",
+      "letter": "T"
+    },
+    {
+      "name": "U2",
+      "letter": "U"
+    },
+    {
+      "name": "UB40",
+      "letter": "U"
+    },
+    {
+      "name": "Underworld",
+      "letter": "U"
+    },
+    {
+      "name": "Usher",
+      "letter": "U"
+    },
+    {
+      "name": "Vampire Weekend",
+      "letter": "V"
+    },
+    {
+      "name": "Van Halen",
+      "letter": "V"
+    },
+    {
+      "name": "Van Morrison",
+      "letter": "V"
+    },
+    {
+      "name": "Vanessa Carlton",
+      "letter": "V"
+    },
+    {
+      "name": "Village People",
+      "letter": "V"
+    },
+    {
+      "name": "Vince Gill",
+      "letter": "V"
+    },
+    {
+      "name": "Violent Femmes",
+      "letter": "V"
+    },
+    {
+      "name": "Wale",
+      "letter": "W"
+    },
+    {
+      "name": "Walk the Moon",
+      "letter": "W"
+    },
+    {
+      "name": "War",
+      "letter": "W"
+    },
+    {
+      "name": "Weezer",
+      "letter": "W"
+    },
+    {
+      "name": "Wet Leg",
+      "letter": "W"
+    },
+    {
+      "name": "Wham!",
+      "letter": "W"
+    },
+    {
+      "name": "White Stripes",
+      "letter": "W"
+    },
+    {
+      "name": "Whitney Houston",
+      "letter": "W"
+    },
+    {
+      "name": "Wilco",
+      "letter": "W"
+    },
+    {
+      "name": "Will Young",
+      "letter": "W"
+    },
+    {
+      "name": "Willie Nelson",
+      "letter": "W"
+    },
+    {
+      "name": "Wilson Pickett",
+      "letter": "W"
+    },
+    {
+      "name": "Wings",
+      "letter": "W"
+    },
+    {
+      "name": "Within Temptation",
+      "letter": "W"
+    },
+    {
+      "name": "Wiz Khalifa",
+      "letter": "W"
+    },
+    {
+      "name": "Wolf Alice",
+      "letter": "W"
+    },
+    {
+      "name": "Wolfgang Amadeus Mozart",
+      "letter": "W"
+    },
+    {
+      "name": "Wu-Tang Clan",
+      "letter": "W"
+    },
+    {
+      "name": "Wyclef Jean",
+      "letter": "W"
+    },
+    {
+      "name": "X Ambassadors",
+      "letter": "X"
+    },
+    {
+      "name": "XXXTentacion",
+      "letter": "X"
+    },
+    {
+      "name": "Xzibit",
+      "letter": "X"
+    },
+    {
+      "name": "Ye",
+      "letter": "Y"
+    },
+    {
+      "name": "Yeah Yeah Yeahs",
+      "letter": "Y"
+    },
+    {
+      "name": "Yellowcard",
+      "letter": "Y"
+    },
+    {
+      "name": "Yes",
+      "letter": "Y"
+    },
+    {
+      "name": "Yola",
+      "letter": "Y"
+    },
+    {
+      "name": "Young the Giant",
+      "letter": "Y"
+    },
+    {
+      "name": "Young Thug",
+      "letter": "Y"
+    },
+    {
+      "name": "Yungblud",
+      "letter": "Y"
+    },
+    {
+      "name": "Yusuf / Cat Stevens",
+      "letter": "Y"
+    },
+    {
+      "name": "Zac Brown Band",
+      "letter": "Z"
+    },
+    {
+      "name": "Zach Bryan",
+      "letter": "Z"
+    },
+    {
+      "name": "Zapp & Roger",
+      "letter": "Z"
+    },
+    {
+      "name": "Zara Larsson",
+      "letter": "Z"
+    },
+    {
+      "name": "Zayn",
+      "letter": "Z"
+    },
+    {
+      "name": "Zedd",
+      "letter": "Z"
+    },
+    {
+      "name": "Zucchero",
+      "letter": "Z"
+    },
+    {
+      "name": "ZZ Top",
+      "letter": "Z"
+    }
+  ]
+}

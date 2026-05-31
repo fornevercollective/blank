@@ -1,6 +1,15 @@
 /**
  * Live concert discovery UI — search, time windows, multi-angle queue / multiview.
  */
+import {
+  loadArtistCatalog,
+  alphaLetters,
+  artistsForLetter,
+  autocompleteArtists,
+  setActiveLetter,
+  getActiveLetter,
+} from "./live-concerts-artists.js";
+import { addWatchPhrases, focusPhraseSearch } from "./phrase-search.js";
 
 const MULTIVIEW_KEY = "blank.live.multiview.v1";
 
@@ -70,7 +79,188 @@ export function initLiveConcerts(onQueue) {
 
   multiviewBtn?.addEventListener("click", () => openMultiview());
 
+  initArtistAlpha(panel, searchInput, statusEl);
+  initLyricBridge(panel);
+
   void discover(statusEl, listEl);
+}
+
+/**
+ * @param {HTMLElement} panel
+ * @param {HTMLInputElement | null} searchInput
+ * @param {HTMLElement | null} statusEl
+ */
+function initArtistAlpha(panel, searchInput, statusEl) {
+  const alphaNav = document.getElementById("live-concerts-alpha");
+  const picksEl = document.getElementById("live-concerts-artist-picks");
+  const datalist = document.getElementById("live-concerts-artist-datalist");
+  const acList = document.getElementById("live-concerts-ac-list");
+
+  void loadArtistCatalog()
+    .then(() => {
+      paintAlphaRail(alphaNav);
+      fillDatalist(datalist);
+      if (searchInput) bindAutocomplete(searchInput, acList, statusEl);
+    })
+    .catch((e) => {
+      if (statusEl) {
+        statusEl.textContent = `Artist catalog: ${e instanceof Error ? e.message : String(e)}`;
+      }
+    });
+
+  /** @param {HTMLElement | null} nav */
+  function paintAlphaRail(nav) {
+    if (!nav) return;
+    const active = getActiveLetter();
+    const parts = [
+      `<button type="button" class="live-concerts-alpha-btn${active === null ? " is-active" : ""}" data-alpha="__all__" title="All artists">All</button>`,
+    ];
+    for (const L of alphaLetters()) {
+      const label = L === "#" ? "#" : L;
+      parts.push(
+        `<button type="button" class="live-concerts-alpha-btn${active === L ? " is-active" : ""}" data-alpha="${L}" title="${L === "#" ? "0–9" : `Artists: ${L}`}">${label}</button>`,
+      );
+    }
+    nav.innerHTML = parts.join("");
+
+    nav.querySelectorAll("[data-alpha]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const key = btn.getAttribute("data-alpha");
+        const letter = key === "__all__" ? null : key;
+        setActiveLetter(letter);
+        nav.querySelectorAll("[data-alpha]").forEach((b) => {
+          b.classList.toggle("is-active", b === btn);
+        });
+        paintArtistPicks(picksEl, letter);
+      });
+    });
+  }
+
+  /** @param {HTMLElement | null} el @param {string | null} letter */
+  function paintArtistPicks(el, letter) {
+    if (!el) return;
+    const rows = letter === null ? [] : artistsForLetter(letter === "" ? null : letter);
+    if (!letter) {
+      el.hidden = true;
+      el.innerHTML = "";
+      return;
+    }
+    el.hidden = false;
+    const label = letter === "#" ? "0–9" : letter;
+    el.innerHTML = `<p class="live-concerts-picks-label">${label} · ${rows.length} artists — click to search live</p>
+      <div class="live-concerts-picks-scroll">${rows
+        .map(
+          (a) =>
+            `<button type="button" class="live-concerts-pick" data-artist="${escapeHtml(a.name)}">${escapeHtml(a.name)}</button>`,
+        )
+        .join("")}</div>`;
+    el.querySelectorAll("[data-artist]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const name = btn.getAttribute("data-artist") || "";
+        if (searchInput) searchInput.value = name;
+        state.query = name;
+        void discover(statusEl, document.getElementById("live-concerts-list"));
+      });
+    });
+  }
+
+  /** @param {HTMLDataListElement | null} list */
+  function fillDatalist(list) {
+    if (!(list instanceof HTMLDataListElement)) return;
+    list.innerHTML = artistsForLetter(null)
+      .map((a) => `<option value="${escapeHtml(a.name)}"></option>`)
+      .join("");
+  }
+
+  /**
+   * @param {HTMLInputElement} input
+   * @param {HTMLElement | null} acList
+   * @param {HTMLElement | null} statusEl
+   */
+  function bindAutocomplete(input, acList, statusEl) {
+    let debounce = 0;
+    const updateAc = () => {
+      if (!(acList instanceof HTMLElement)) return;
+      const q = input.value.trim();
+      const hits = autocompleteArtists(q, 14);
+      if (!q || !hits.length) {
+        acList.hidden = true;
+        acList.innerHTML = "";
+        input.setAttribute("aria-expanded", "false");
+        return;
+      }
+      acList.hidden = false;
+      input.setAttribute("aria-expanded", "true");
+      acList.innerHTML = hits
+        .map(
+          (a, i) =>
+            `<li role="option" id="live-ac-${i}" data-artist="${escapeHtml(a.name)}">${escapeHtml(a.name)}</li>`,
+        )
+        .join("");
+      acList.querySelectorAll("[data-artist]").forEach((row) => {
+        row.addEventListener("mousedown", (ev) => {
+          ev.preventDefault();
+          const name = row.getAttribute("data-artist") || "";
+          input.value = name;
+          state.query = name;
+          acList.hidden = true;
+          void discover(statusEl, document.getElementById("live-concerts-list"));
+        });
+      });
+    };
+    input.addEventListener("input", () => {
+      window.clearTimeout(debounce);
+      debounce = window.setTimeout(updateAc, 120);
+    });
+    input.addEventListener("blur", () => {
+      window.setTimeout(() => {
+        if (acList) acList.hidden = true;
+      }, 150);
+    });
+  }
+}
+
+/** @param {HTMLElement} panel */
+function initLyricBridge(panel) {
+  const lyricInput = document.getElementById("live-concerts-lyric");
+  const searchBtn = document.getElementById("live-concerts-lyric-search");
+  const watchBtn = document.getElementById("live-concerts-lyric-watch");
+  const syncBtn = document.getElementById("live-concerts-lyric-sync");
+
+  const getLyric = () =>
+    lyricInput instanceof HTMLInputElement ? lyricInput.value.trim() : "";
+
+  searchBtn?.addEventListener("click", () => {
+    const q = getLyric();
+    if (!q) return;
+    focusPhraseSearch(q);
+  });
+
+  watchBtn?.addEventListener("click", () => {
+    const q = getLyric();
+    if (!q) return;
+    addWatchPhrases([q]);
+    const watchSection = panel.closest(".app")?.querySelector(".feed-phrase-watch");
+    if (watchSection instanceof HTMLDetailsElement) {
+      watchSection.open = true;
+      watchSection.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+    focusPhraseSearch(q);
+  });
+
+  syncBtn?.addEventListener("click", () => {
+    const q = getLyric();
+    if (!q) return;
+    focusPhraseSearch(q);
+    addWatchPhrases([q]);
+  });
+
+  lyricInput?.addEventListener("keydown", (ev) => {
+    if (ev.key === "Enter") {
+      const q = getLyric();
+      if (q) focusPhraseSearch(q);
+    }
+  });
 }
 
 async function discover(statusEl, listEl) {

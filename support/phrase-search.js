@@ -592,3 +592,39 @@ export function updatePhraseSearchIntel(intel, pageUrl = "") {
 export function refreshPhraseSearch() {
   globalThis.blankPhraseSearch?.refresh();
 }
+
+/** @param {string[]} phrases */
+export function addWatchPhrases(phrases) {
+  const existing = readWatchPhrases();
+  const next = [...existing];
+  for (const p of phrases) {
+    const t = String(p || "").trim();
+    if (!t || next.includes(t)) continue;
+    next.push(t);
+  }
+  writeWatchPhrases(next.slice(0, 32));
+  globalThis.blankPhraseSearch?.refresh();
+  const ta = document.getElementById("feed-phrase-watch");
+  if (ta instanceof HTMLTextAreaElement) {
+    ta.value = readWatchPhrases().join("\n");
+  }
+}
+
+/**
+ * Run lyric/phrase search and scroll to phrase keyboard section.
+ * @param {string} query
+ */
+export function focusPhraseSearch(query) {
+  const section = document.getElementById("feed-phrase-search");
+  const input = document.getElementById("feed-phrase-input");
+  if (section instanceof HTMLElement) {
+    section.open = true;
+    section.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }
+  if (input instanceof HTMLInputElement && query) {
+    input.value = query;
+    input.dispatchEvent(new Event("input", { bubbles: true }));
+    input.focus();
+  }
+  globalThis.blankPhraseSearch?.refresh();
+}

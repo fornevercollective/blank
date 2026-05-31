@@ -342,25 +342,63 @@
           <span class="live-concerts-sub">multi-platform · multi-angle</span>
         </summary>
         <div class="live-concerts-inner">
-          <div class="live-concerts-toolbar">
-            <div class="live-concerts-windows" role="tablist" aria-label="Time window">
-              <button type="button" class="live-concerts-win is-active" data-live-window="now" aria-selected="true">Now</button>
-              <button type="button" class="live-concerts-win" data-live-window="hour" aria-selected="false">Next hour</button>
-              <button type="button" class="live-concerts-win" data-live-window="today" aria-selected="false">Today</button>
-              <button type="button" class="live-concerts-win" data-live-window="tomorrow" aria-selected="false">Tomorrow</button>
+          <div class="live-concerts-layout">
+            <div class="live-concerts-main">
+              <div class="live-concerts-toolbar">
+                <div class="live-concerts-windows" role="tablist" aria-label="Time window">
+                  <button type="button" class="live-concerts-win is-active" data-live-window="now" aria-selected="true">Now</button>
+                  <button type="button" class="live-concerts-win" data-live-window="hour" aria-selected="false">Next hour</button>
+                  <button type="button" class="live-concerts-win" data-live-window="today" aria-selected="false">Today</button>
+                  <button type="button" class="live-concerts-win" data-live-window="tomorrow" aria-selected="false">Tomorrow</button>
+                </div>
+                <div class="live-concerts-search-row">
+                  <div class="live-concerts-search-wrap">
+                    <label class="sr-only" for="live-concerts-search">Artist search</label>
+                    <input
+                      type="search"
+                      id="live-concerts-search"
+                      class="live-concerts-search"
+                      placeholder="Artist, festival, venue…"
+                      autocomplete="off"
+                      spellcheck="false"
+                      list="live-concerts-artist-datalist"
+                      aria-controls="live-concerts-ac-list"
+                      aria-expanded="false"
+                      aria-autocomplete="list"
+                    />
+                    <datalist id="live-concerts-artist-datalist"></datalist>
+                    <ul id="live-concerts-ac-list" class="live-concerts-ac" role="listbox" hidden></ul>
+                  </div>
+                  <button type="button" class="live-concerts-btn" id="live-concerts-search-btn">Search</button>
+                  <button type="button" class="live-concerts-btn" id="live-concerts-refresh" title="Refresh discovery">↻</button>
+                </div>
+                <div class="live-concerts-lyric-row">
+                  <div class="live-concerts-lyric-wrap">
+                    <label class="sr-only" for="live-concerts-lyric">Lyric phrase search</label>
+                    <input
+                      type="search"
+                      id="live-concerts-lyric"
+                      class="live-concerts-lyric"
+                      placeholder="Lyric line or phrase…"
+                      autocomplete="off"
+                      spellcheck="false"
+                    />
+                  </div>
+                  <button type="button" class="live-concerts-btn" id="live-concerts-lyric-search" title="Search loaded captions / transcript">Search lyrics</button>
+                  <button type="button" class="live-concerts-btn" id="live-concerts-lyric-watch" title="Add to Listen for phrases (keyboard below)">Listen</button>
+                  <button type="button" class="live-concerts-btn" id="live-concerts-lyric-sync" title="Sync lyric search with phrase keyboard">Sync ↓</button>
+                </div>
+                <div class="live-concerts-actions">
+                  <button type="button" class="live-concerts-btn live-concerts-btn--primary" id="live-concerts-multiview">Multi-angle sync</button>
+                  <button type="button" class="live-concerts-btn" id="live-concerts-queue">Queue selected</button>
+                </div>
+                <p class="live-concerts-status" id="live-concerts-status" aria-live="polite">Starting discovery…</p>
+                <div class="live-concerts-artist-picks" id="live-concerts-artist-picks" hidden></div>
+              </div>
+              <div class="live-concerts-list" id="live-concerts-list" role="list"></div>
             </div>
-            <div class="live-concerts-search-row">
-              <input type="search" id="live-concerts-search" class="live-concerts-search" placeholder="Artist, festival, venue…" autocomplete="off" spellcheck="false" />
-              <button type="button" class="live-concerts-btn" id="live-concerts-search-btn">Search</button>
-              <button type="button" class="live-concerts-btn" id="live-concerts-refresh" title="Refresh discovery">↻</button>
-            </div>
-            <div class="live-concerts-actions">
-              <button type="button" class="live-concerts-btn live-concerts-btn--primary" id="live-concerts-multiview">Multi-angle sync</button>
-              <button type="button" class="live-concerts-btn" id="live-concerts-queue">Queue selected</button>
-            </div>
-            <p class="live-concerts-status" id="live-concerts-status" aria-live="polite">Starting discovery…</p>
+            <nav class="live-concerts-alpha" id="live-concerts-alpha" aria-label="Artist A–Z"></nav>
           </div>
-          <div class="live-concerts-list" id="live-concerts-list" role="list"></div>
         </div>
       </details>
       <details class="ingest-panel" id="ingest-panel" open>
