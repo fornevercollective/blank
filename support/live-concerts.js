@@ -3,7 +3,7 @@
  */
 import {
   loadArtistCatalog,
-  alphaLetters,
+  alphaRailHtml,
   artistsForLetter,
   autocompleteArtists,
   setActiveLetter,
@@ -108,9 +108,10 @@ function initArtistAlpha(panel, searchInput, statusEl, onArtistChosen) {
   const datalist = document.getElementById("live-concerts-artist-datalist");
   const acList = document.getElementById("live-concerts-ac-list");
 
+  paintAlphaRail(alphaNav);
+
   void loadArtistCatalog()
     .then(() => {
-      paintAlphaRail(alphaNav);
       fillDatalist(datalist);
       if (searchInput) bindAutocomplete(searchInput, acList, statusEl, onArtistChosen);
     })
@@ -123,18 +124,7 @@ function initArtistAlpha(panel, searchInput, statusEl, onArtistChosen) {
   /** @param {HTMLElement | null} nav */
   function paintAlphaRail(nav) {
     if (!nav) return;
-    const active = getActiveLetter();
-    const parts = [
-      `<button type="button" class="live-concerts-alpha-btn${active === null ? " is-active" : ""}" data-alpha="__all__" title="All artists">All</button>`,
-    ];
-    for (const L of alphaLetters()) {
-      const label = L === "#" ? "#" : L.toLowerCase();
-      parts.push(
-        `<button type="button" class="live-concerts-alpha-btn${active === L ? " is-active" : ""}" data-alpha="${L}" title="${L === "#" ? "0–9" : `Artists: ${L}`}">${label}</button>`,
-      );
-    }
-    nav.innerHTML = parts.join("");
-
+    nav.innerHTML = alphaRailHtml();
     nav.querySelectorAll("[data-alpha]").forEach((btn) => {
       btn.addEventListener("click", () => {
         const key = btn.getAttribute("data-alpha");

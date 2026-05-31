@@ -24,6 +24,21 @@ export function alphaLetters() {
   return letters;
 }
 
+/** @returns {string} */
+export function alphaRailHtml() {
+  const active = activeLetter;
+  const parts = [
+    `<button type="button" class="live-concerts-alpha-btn${active === null ? " is-active" : ""}" data-alpha="__all__" title="All artists">All</button>`,
+  ];
+  for (const L of alphaLetters()) {
+    const label = L === "#" ? "#" : L.toLowerCase();
+    parts.push(
+      `<button type="button" class="live-concerts-alpha-btn${active === L ? " is-active" : ""}" data-alpha="${L}" title="${L === "#" ? "0–9" : `Artists: ${L}`}">${label}</button>`,
+    );
+  }
+  return parts.join("");
+}
+
 /**
  * @param {string | null} letter
  * @returns {{ name: string, letter: string }[]}
