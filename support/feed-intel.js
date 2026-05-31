@@ -1377,6 +1377,61 @@ function setSlotState(slot, state, message = "") {
   }
 }
 
+/** @param {number} n */
+function formatViewerCount(n) {
+  if (!Number.isFinite(n)) return "";
+  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`;
+  if (n >= 1_000) return `${(n / 1_000).toFixed(1)}k`;
+  return String(Math.floor(n));
+}
+
+/**
+ * In-place patch for live broadcast re-pulls so existing scene cards never
+ * flash/disappear. Only updates the live badge counters and per-scene labels +
+ * thumb cache-busters; full DOM rebuild happens only on first render or when
+ * scene count changes.
+ * @param {HTMLElement} slot
+ * @param {object} intel
+ * @param {string} pageUrl
+ * @returns {boolean} true if patched in place; false if a full re-render is required.
+ */
+export function patchIaLiveIntel(slot, intel, pageUrl = "") {
+  if (!intel?.isLive) return false;
+  if (slot.dataset.state !== "ready") return false;
+  if (slot.dataset.pageUrl && slot.dataset.pageUrl !== pageUrl) return false;
+  const stack = slot.querySelector("[data-scene-stack]");
+  if (!(stack instanceof HTMLElement)) return false;
+  const existing = Array.from(stack.querySelectorAll(".card-scene-card"));
+  const scenes = Array.isArray(intel.scenes) ? intel.scenes : [];
+  if (!existing.length || existing.length !== scenes.length) return false;
+
+  const badge = slot.querySelector(".card-intel-live");
+  if (badge instanceof HTMLElement) {
+    const viewers = intel.liveConcurrentViewers
+      ? ` · ${formatViewerCount(intel.liveConcurrentViewers)} watching`
+      : "";
+    badge.textContent = `LIVE${viewers}`;
+  }
+
+  for (let i = 0; i < existing.length; i++) {
+    const card = existing[i];
+    const sc = scenes[i];
+    if (!card || !sc) continue;
+    const title = card.querySelector(".card-title");
+    if (title && sc.title) title.textContent = String(sc.title);
+    const time = card.querySelector(".card-scene-media-cap time");
+    if (time) time.textContent = formatIntelClock(Number(sc.start) || 0);
+    const img = card.querySelector("img.card-scene-frame-img");
+    if (img instanceof HTMLImageElement && sc.thumb) {
+      const fresh = String(sc.thumb);
+      if (img.src !== fresh) img.src = fresh;
+    }
+    if (Number.isFinite(Number(sc.start))) card.dataset.start = String(sc.start);
+    if (Number.isFinite(Number(sc.end))) card.dataset.end = String(sc.end);
+  }
+  return true;
+}
+
 /** @param {HTMLElement} slot @param {object} intel @param {string} pageUrl */
 export async function renderIaIntel(slot, intel, pageUrl = "") {
   slot.dataset.pageUrl = pageUrl;
@@ -1415,10 +1470,19 @@ export async function renderIaIntel(slot, intel, pageUrl = "") {
   const posterFallback = videoPosterFallback(pageUrl, intel);
   const programHtml = descriptionBreakdownHtml(intel);
 
+  const liveBadge = intel.isLive
+    ? `<span class="card-intel-live" title="Live broadcast – scenes roll every ${Math.round(25)}s">LIVE${
+        intel.liveConcurrentViewers
+          ? ` · ${formatViewerCount(intel.liveConcurrentViewers)} watching`
+          : ""
+      }</span>`
+    : "";
+
   slot.innerHTML = `
     <header class="card-intel-head">
       <span class="card-intel-cue" aria-hidden="true">&gt;</span>
       <span class="card-intel-show">${escapeHtml(show)}</span>
+      ${liveBadge}
     </header>
     ${metaHtml}
     <h4 class="card-intel-sub">Program breakdown</h4>
@@ -1928,7 +1992,7 @@ export function renderImplIntel(slot, intel) {
 /**
  * @param {string} pageUrl
  * @param {{ iaSlot: HTMLElement|null, implSlot: HTMLElement|null }} slots
- * @param {{ onIntel?: (intel: object) => void }} [hooks]
+ * @param {{ onIntel?: (intel: object) => void, silent?: boolean }} [hooks]
  */
 export async function refreshFeedIntel(pageUrl, slots, hooks = {}) {
   const apiOk =
@@ -1942,8 +2006,10 @@ export async function refreshFeedIntel(pageUrl, slots, hooks = {}) {
     return null;
   }
 
-  for (const slot of [slots.iaSlot, slots.implSlot, slots.uxSlot, slots.staggerSlot]) {
-    if (slot) setSlotState(slot, "loading");
+  if (!hooks.silent) {
+    for (const slot of [slots.iaSlot, slots.implSlot, slots.uxSlot, slots.staggerSlot]) {
+      if (slot) setSlotState(slot, "loading");
+    }
   }
   try {
     const intel = await requestVideoIntel(pageUrl);

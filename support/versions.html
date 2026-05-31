@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Version hub · blank</title>
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="version-hub.css">
+</head>
+<body class="version-hub-page">
+  <header class="vh-header">
+    <a href="/" class="vh-back" aria-label="Back to workspace">← workspace</a>
+    <div class="vh-title-block">
+      <h1 class="vh-title">Version hub</h1>
+      <p class="vh-sub">git · npm · automation · artifact · plugin · all</p>
+    </div>
+    <div class="vh-actions-top">
+      <button type="button" class="vh-btn" data-bump="patch" title="Plan patch release">patch</button>
+      <button type="button" class="vh-btn" data-bump="minor" title="Plan minor release">minor</button>
+      <button type="button" class="vh-btn vh-btn--strong" data-bump="major" title="Plan major release">major</button>
+      <a href="/staging/" class="vh-btn vh-btn--ghost">staging</a>
+      <button type="button" id="vh-refresh" class="vh-btn vh-btn--ghost" title="Refresh snapshot">↻</button>
+    </div>
+  </header>
+
+  <nav class="vh-tabs" id="vh-tabs" aria-label="Handler kind"></nav>
+
+  <main class="vh-main">
+    <section class="vh-stats" id="vh-stats" aria-live="polite"></section>
+
+    <div class="vh-grid">
+      <section class="vh-panel" aria-labelledby="vh-graph-title">
+        <h2 id="vh-graph-title" class="vh-panel-title">Git graph lane</h2>
+        <pre class="vh-graph" id="vh-graph" aria-live="polite"></pre>
+      </section>
+
+      <section class="vh-panel" aria-labelledby="vh-staged-title">
+        <h2 id="vh-staged-title" class="vh-panel-title">Staged actions</h2>
+        <ol class="vh-staged" id="vh-staged"></ol>
+      </section>
+    </div>
+
+    <div class="vh-grid vh-grid--triple">
+      <section class="vh-panel" aria-labelledby="vh-manifests-title">
+        <h2 id="vh-manifests-title" class="vh-panel-title">Manifests</h2>
+        <ul class="vh-list" id="vh-manifests"></ul>
+      </section>
+      <section class="vh-panel" aria-labelledby="vh-auto-title">
+        <h2 id="vh-auto-title" class="vh-panel-title">Automation</h2>
+        <ul class="vh-list" id="vh-automations"></ul>
+      </section>
+      <section class="vh-panel" aria-labelledby="vh-art-title">
+        <h2 id="vh-art-title" class="vh-panel-title">Artifacts & plugins</h2>
+        <ul class="vh-list" id="vh-artifacts"></ul>
+        <ul class="vh-list" id="vh-plugins"></ul>
+      </section>
+    </div>
+
+    <section class="vh-plan" id="vh-plan" hidden>
+      <h2 class="vh-panel-title">Release plan</h2>
+      <p id="vh-plan-text"></p>
+      <ol class="vh-staged" id="vh-plan-actions"></ol>
+    </section>
+
+    <p class="vh-errors" id="vh-errors" role="alert" hidden></p>
+    <footer class="vh-footer">
+      <span id="vh-stageforge-status">stageforge —</span>
+      <span class="vh-footer-sep">·</span>
+      <code class="vh-footer-cmd">stageforge versions --kind all</code>
+      <span class="vh-footer-sep">·</span>
+      <a href="/">blank workspace</a>
+    </footer>
+  </main>
+
+  <script type="module" src="version-hub-page.js"></script>
+</body>
+</html>

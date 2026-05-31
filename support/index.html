@@ -146,6 +146,8 @@
               <span class="header-chapter" id="header-chapter">00 — Live</span>
               <p class="header-title header-program-caption" id="header-live-caption">
                 Prompts live here; shipped work is below
+                <a href="/versions/" class="header-versions-link" title="Version hub — git, npm, automation">· versions</a>
+                <a href="/staging/" class="header-versions-link" title="Job staging — agent, MCP, LLM">· staging</a>
               </p>
             </div>
           </div>
@@ -295,6 +297,28 @@
             >
               controls
             </button>
+            <button
+              type="button"
+              class="ffplay-tool-btn ffplay-tool-btn--tv"
+              id="ffplay-tv-cast"
+              title="Open TV cast window for Mac AirPlay / Screen Mirroring with social reframe presets"
+            >
+              TV
+            </button>
+            <label class="ffplay-tv-reframe-label" title="Default reframe for TV cast (Grok / Shorts / subject zoom)">
+              <span class="sr-only">TV reframe preset</span>
+              <select id="tv-cast-reframe" class="ffplay-tv-reframe" aria-label="TV reframe preset">
+                <option value="tv">TV 16:9</option>
+                <option value="grok" selected>Grok crop</option>
+                <option value="shorts">9:16 Shorts</option>
+                <option value="reels">Reels</option>
+                <option value="tiktok">TikTok</option>
+                <option value="subject">Subject · IK</option>
+                <option value="portrait">4:5</option>
+                <option value="square">1:1</option>
+                <option value="ots">OTS</option>
+              </select>
+            </label>
           </div>
           <div
             id="ffplay-popout"
@@ -311,6 +335,34 @@
     </header>
 
     <main class="app-main" id="main-scroll">
+      <details class="live-concerts-panel" id="live-concerts-panel" open>
+        <summary class="live-concerts-summary">
+          <span class="live-concerts-chevron" aria-hidden="true"></span>
+          <span class="live-concerts-title">Live concerts</span>
+          <span class="live-concerts-sub">multi-platform · multi-angle</span>
+        </summary>
+        <div class="live-concerts-inner">
+          <div class="live-concerts-toolbar">
+            <div class="live-concerts-windows" role="tablist" aria-label="Time window">
+              <button type="button" class="live-concerts-win is-active" data-live-window="now" aria-selected="true">Now</button>
+              <button type="button" class="live-concerts-win" data-live-window="hour" aria-selected="false">Next hour</button>
+              <button type="button" class="live-concerts-win" data-live-window="today" aria-selected="false">Today</button>
+              <button type="button" class="live-concerts-win" data-live-window="tomorrow" aria-selected="false">Tomorrow</button>
+            </div>
+            <div class="live-concerts-search-row">
+              <input type="search" id="live-concerts-search" class="live-concerts-search" placeholder="Artist, festival, venue…" autocomplete="off" spellcheck="false" />
+              <button type="button" class="live-concerts-btn" id="live-concerts-search-btn">Search</button>
+              <button type="button" class="live-concerts-btn" id="live-concerts-refresh" title="Refresh discovery">↻</button>
+            </div>
+            <div class="live-concerts-actions">
+              <button type="button" class="live-concerts-btn live-concerts-btn--primary" id="live-concerts-multiview">Multi-angle sync</button>
+              <button type="button" class="live-concerts-btn" id="live-concerts-queue">Queue selected</button>
+            </div>
+            <p class="live-concerts-status" id="live-concerts-status" aria-live="polite">Starting discovery…</p>
+          </div>
+          <div class="live-concerts-list" id="live-concerts-list" role="list"></div>
+        </div>
+      </details>
       <details class="ingest-panel" id="ingest-panel" open>
         <summary class="ingest-panel-summary">
           <span class="ingest-panel-chevron" aria-hidden="true"></span>

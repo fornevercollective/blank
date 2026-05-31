@@ -38,6 +38,7 @@ import {
   fetchPresets,
   escapeHtml,
   mountPreview,
+  getPreviewTimeSec,
   initFfplayPreviewViews,
   setPreviewHint,
   onRailPlayback,
@@ -59,7 +60,11 @@ import {
   seekPreview,
   formatIntelClock,
   isStaticPreviewHost,
+  patchIaLiveIntel,
+  requestVideoIntel,
 } from "./feed-intel.js";
+import { initTvCast } from "./tv-cast-bridge.js";
+import { initLiveConcerts } from "./live-concerts.js";
 import { initHeaderRuntimeStats } from "./header-runtime-stats.js";
 import {
   fetchPagesIntel,
@@ -374,6 +379,14 @@ let headerPromptScrollBound = false;
 let intelPullTimer = 0;
 let intelSyncTimer = 0;
 let lastIntelSyncUrl = "";
+let liveIntelTimer = 0;
+/** @type {ReturnType<typeof initTvCast> | null} */
+let tvCastBridge = null;
+
+function getRuntimeHudLine() {
+  const el = document.getElementById("header-runtime-stats");
+  return el?.textContent?.trim() || "";
+}
 
 /** @type {Map<string, object>} */
 const queueIntelByUrl = new Map();
@@ -897,9 +910,11 @@ async function syncFeedIntelNow() {
     }
     return;
   }
+  const cachedIntel = queueIntelByUrl.get(normalizeUrl(pageUrl));
   if (
     pageUrl === lastIntelSyncUrl &&
-    slots.iaSlot?.dataset.state === "ready"
+    slots.iaSlot?.dataset.state === "ready" &&
+    !cachedIntel?.isLive
   ) {
     return;
   }
@@ -919,6 +934,7 @@ async function syncFeedIntelNow() {
         if (slots.implSlot) renderImplIntel(slots.implSlot, cached);
         if (slots.uxSlot) renderUxIntel(slots.uxSlot, cached);
         if (slots.staggerSlot) renderStaggerIntel(slots.staggerSlot, cached, pageUrl);
+        tvCastBridge?.pushCastState?.();
         return;
       }
     } catch {
@@ -928,18 +944,63 @@ async function syncFeedIntelNow() {
     return;
   }
 
+  const wasLive = Boolean(cachedIntel?.isLive);
   lastIntelSyncUrl = pageUrl;
   void refreshFeedIntel(pageUrl, slots, {
+    silent: wasLive,
     onIntel(intel) {
       queueIntelByUrl.set(normalizeUrl(pageUrl), intel);
       syncHeaderPromptsMetaFromIntel(intel);
       updatePhraseSearchIntel(intel, pageUrl);
       if (intel?.title) patchQueueByUrl(pageUrl, { title: intel.title });
       globalThis.blankIngest?.redraw?.(readQueue());
+      scheduleLiveIntelRefresh(intel, pageUrl);
+      tvCastBridge?.pushCastState?.();
     },
   }).catch(() => {
     lastIntelSyncUrl = "";
   });
+}
+
+/** Re-pull intel on a fast cadence for live broadcasts so scenes roll forward,
+ * patching the existing IA panel in place so the cards never disappear. */
+function scheduleLiveIntelRefresh(intel, pageUrl) {
+  if (liveIntelTimer) {
+    window.clearTimeout(liveIntelTimer);
+    liveIntelTimer = 0;
+  }
+  if (!intel?.isLive) return;
+  liveIntelTimer = window.setTimeout(async () => {
+    const slots = getFeedIntelSlots();
+    if (!slots.iaSlot) return;
+    const activeUrl = getWatchUrlForIntel();
+    if (activeUrl !== pageUrl) return;
+    try {
+      const fresh = await requestVideoIntel(pageUrl);
+      if (!fresh?.isLive) {
+        scheduleLiveIntelRefresh(fresh, pageUrl);
+        return;
+      }
+      queueIntelByUrl.set(normalizeUrl(pageUrl), fresh);
+      syncHeaderPromptsMetaFromIntel(fresh);
+      updatePhraseSearchIntel(fresh, pageUrl);
+      const patched = patchIaLiveIntel(slots.iaSlot, fresh, pageUrl);
+      if (!patched) {
+        await refreshFeedIntel(pageUrl, slots, {
+          silent: true,
+          onIntel(intel2) {
+            queueIntelByUrl.set(normalizeUrl(pageUrl), intel2);
+            syncHeaderPromptsMetaFromIntel(intel2);
+            updatePhraseSearchIntel(intel2, pageUrl);
+          },
+        });
+      }
+      scheduleLiveIntelRefresh(fresh, pageUrl);
+      tvCastBridge?.pushCastState?.();
+    } catch {
+      scheduleLiveIntelRefresh(intel, pageUrl);
+    }
+  }, 30_000);
 }
 
 /** Filter chips/drawer/cards; submit adds a live prompt or video URL. */
@@ -1079,7 +1140,15 @@ function isLiveWatchUrl(url) {
   const norm = normalizeUrl(url);
   const path = norm.split(/[?#]/)[0];
   if (/\/live\/?$/i.test(path)) return true;
-  if (/twitch\.tv/i.test(norm) && path.includes("/live")) return true;
+  if (/twitch\.tv/i.test(norm)) {
+    if (path.includes("/live")) return true;
+    try {
+      const parts = new URL(norm).pathname.split("/").filter(Boolean);
+      if (parts.length === 1 && parts[0] !== "videos" && parts[0] !== "clip") return true;
+    } catch {
+      /* noop */
+    }
+  }
   return false;
 }
 
@@ -2164,8 +2233,24 @@ async function main() {
     }
   }
   if (ingest) initHeaderPromptInput(ingest);
+  initLiveConcerts((url) => {
+    if (ingest) ingest.queueUrl(url, { autoResolve: true });
+    else if (globalThis.blankQueueVideoUrl) globalThis.blankQueueVideoUrl(url);
+  });
   initLiveProgram();
   if (ingest) initFfplayMenu(ingest);
+  tvCastBridge = initTvCast({
+    getPageUrl: getWatchUrlForIntel,
+    getQueueItem: () => resolveActiveItem(readQueue()),
+    getIntel: (url) => queueIntelByUrl.get(normalizeUrl(url)),
+    deriveShow: deriveShowFromIntel,
+    enrichScenes,
+    sceneIndexAtTime,
+    formatClock: formatIntelClock,
+    getPreviewTimeSec: () =>
+      getPreviewTimeSec(document.getElementById("ffplay-embed")),
+    getRuntimeLine: getRuntimeHudLine,
+  });
   syncRailUpcoming();
   updateRailLiveFromQueue();
   applyAutomationFromLocation(ingest);

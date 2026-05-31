@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Job staging · blank</title>
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="version-hub.css">
+</head>
+<body class="version-hub-page">
+  <header class="vh-header">
+    <a href="/" class="vh-back">← workspace</a>
+    <div class="vh-title-block">
+      <h1 class="vh-title">Job staging</h1>
+      <p class="vh-sub">agent · mcp · llm · research — provider-agnostic</p>
+    </div>
+    <div class="vh-actions-top">
+      <button type="button" id="stg-refresh" class="vh-btn vh-btn--ghost">↻ refresh</button>
+      <a href="/versions/" class="vh-btn">versions</a>
+    </div>
+  </header>
+
+  <main class="vh-main">
+    <section class="vh-stats" id="stg-stats"></section>
+
+    <div class="vh-grid">
+      <section class="vh-panel">
+        <h2 class="vh-panel-title">Staging graph</h2>
+        <pre class="vh-graph" id="stg-graph"></pre>
+      </section>
+      <section class="vh-panel">
+        <h2 class="vh-panel-title">Job queue</h2>
+        <ol class="vh-staged" id="stg-jobs"></ol>
+      </section>
+    </div>
+
+    <section class="vh-panel" style="margin-top:1rem">
+      <h2 class="vh-panel-title">Integrations (env-driven)</h2>
+      <p class="vh-dim" style="margin:0 0 0.75rem;font-size:0.8rem">
+        Grok 0.1 slot: <code>GROK_RAILWAY_URL=http://127.0.0.1:9472</code> —
+        any user can wire their own LLM/MCP/research endpoints.
+      </p>
+      <ul class="vh-list" id="stg-integrations"></ul>
+    </section>
+
+    <p class="vh-errors" id="stg-errors" hidden></p>
+    <footer class="vh-footer">
+      <code>stageforge up -c stageforge.yaml</code>
+      <span class="vh-footer-sep">·</span>
+      <a href="/versions/">version hub</a>
+    </footer>
+  </main>
+  <script type="module" src="staging-page.js"></script>
+</body>
+</html>

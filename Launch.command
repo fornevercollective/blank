@@ -1,4 +1,5 @@
 #!/bin/bash
-# Double-click this file in Finder: opens Terminal and starts the blank page server.
+# Double-click: Terminal + blank server + one browser tab.
 cd "$(dirname "$0")"
+export BLANK_OPEN_BROWSER=1
 exec ./start.sh

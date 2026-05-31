@@ -20,11 +20,22 @@ npm start
 
 Open **http://127.0.0.1:5173/** (or the URL printed).
 
+**Version hub:** **http://127.0.0.1:5173/versions/** — git-graph staging, npm/automation/artifact/plugin handlers, release bump plans. API: `GET /api/version/snapshot?kind=all`, `GET /api/version/plan?bump=patch`. Also link in the workspace header (**· versions**).
+
 **Custom port:** `PORT=8080 npm start` (from `support/` or with `--prefix support` from the project root).
 
 No npm dependencies—**server.mjs** is plain Node.
 
 ---
+
+### Optional: **Cursor SDK** · `support/cursor-habitat/`
+
+Terminal **“blank-??? · habitat/recipes”** agent (uses `@cursor/sdk` + `CURSOR_API_KEY`). For MuStream ingest parity without copy-pasting ten shells into [Blank](https://fornevercollective.github.io/blank/). Docs: **`cursor-habitat/README.md`**.
+
+Finder: **`../Launch-Habitat.command`** (Blank repo root) → Terminal.app runs **`cursor-habitat/launch-habitat-terminal.sh`** _(Homebrew/`nvm` PATH, npm ensure)_.
+
+**StageForge:** **`../Launch-StageForge.command`** runs `stageforge up` with **`../stageforge.yaml`** (loop deploy + version hub TUI). Build CLI: `make -C ~/dev/stageforge build`.
+
 
 ## Terminal output & networking (busy localhost)
 

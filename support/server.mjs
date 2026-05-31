@@ -24,6 +24,9 @@ import {
   addRuntimeTokensForIngest,
   getRuntimeSnapshot,
 } from "./runtime-stats.mjs";
+import { handleVersionApi } from "./version-hub.mjs";
+import { handleStagingApi } from "./staging-hub.mjs";
+import { handleLiveConcertsApi } from "./live-concerts.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = __dirname;
@@ -187,6 +190,217 @@ const server = http.createServer((req, res) => {
     res.writeHead(400, { "Content-Length": body.length, Connection: "close" });
     res.end(body);
     finalize(400, body.length);
+    return;
+  }
+
+  if (urlPath.startsWith("/api/version/")) {
+    if (method === "OPTIONS") {
+      res.writeHead(204, {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type",
+        Connection: "close",
+      });
+      res.end();
+      finalize(204, 0);
+      return;
+    }
+    if (method === "GET") {
+      handleVersionApi(req, res, urlPath, ROOT)
+        .then((handled) => {
+          if (handled) {
+            if (!finalized) finalize(res.statusCode || 200, 0);
+            return;
+          }
+          const body = Buffer.from("Version API not found\n", "utf8");
+          res.writeHead(404, { "Content-Length": body.length, Connection: "close" });
+          res.end(body);
+          finalize(404, body.length);
+        })
+        .catch((err) => {
+          const msg = Buffer.from(
+            JSON.stringify({ ok: false, error: err instanceof Error ? err.message : String(err) }),
+            "utf8",
+          );
+          if (!res.headersSent) {
+            res.writeHead(500, {
+              "Content-Type": "application/json; charset=utf-8",
+              "Content-Length": msg.length,
+              Connection: "close",
+            });
+            res.end(msg);
+          }
+          finalize(500, msg.length);
+        });
+      return;
+    }
+  }
+
+  if (urlPath.startsWith("/api/staging/")) {
+    if (method === "OPTIONS") {
+      res.writeHead(204, {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type",
+        Connection: "close",
+      });
+      res.end();
+      finalize(204, 0);
+      return;
+    }
+    if (method === "GET") {
+      handleStagingApi(req, res, urlPath, ROOT)
+        .then((handled) => {
+          if (handled) {
+            if (!finalized) finalize(res.statusCode || 200, 0);
+            return;
+          }
+          const body = Buffer.from("Staging API not found\n", "utf8");
+          res.writeHead(404, { "Content-Length": body.length, Connection: "close" });
+          res.end(body);
+          finalize(404, body.length);
+        })
+        .catch((err) => {
+          const msg = Buffer.from(
+            JSON.stringify({ ok: false, error: err instanceof Error ? err.message : String(err) }),
+            "utf8",
+          );
+          if (!res.headersSent) {
+            res.writeHead(500, {
+              "Content-Type": "application/json; charset=utf-8",
+              "Content-Length": msg.length,
+              Connection: "close",
+            });
+            res.end(msg);
+          }
+          finalize(500, msg.length);
+        });
+      return;
+    }
+  }
+
+  if (urlPath === "/staging" || urlPath === "/staging/") {
+    const stagingFile = path.join(ROOT, "staging.html");
+    fs.stat(stagingFile, (err, st) => {
+      if (err || !st.isFile()) {
+        const body = Buffer.from("Not found", "utf8");
+        res.writeHead(404, { "Content-Length": body.length, Connection: "close" });
+        res.end(body);
+        finalize(404, body.length);
+        return;
+      }
+      const size = st.size;
+      res.setHeader("Content-Type", "text/html; charset=utf-8");
+      res.setHeader("Content-Length", size);
+      res.setHeader("Cache-Control", "no-store");
+      if (method === "HEAD") {
+        res.writeHead(200);
+        res.end();
+        finalize(200, 0);
+        return;
+      }
+      const stream = fs.createReadStream(stagingFile);
+      res.writeHead(200);
+      stream.pipe(res);
+      res.once("finish", () => finalize(200, size));
+    });
+    return;
+  }
+
+  if (urlPath === "/versions" || urlPath === "/versions/") {
+    const versionsFile = path.join(ROOT, "versions.html");
+    fs.stat(versionsFile, (err, st) => {
+      if (err || !st.isFile()) {
+        const body = Buffer.from("Not found", "utf8");
+        res.writeHead(404, { "Content-Length": body.length, Connection: "close" });
+        res.end(body);
+        finalize(404, body.length);
+        return;
+      }
+      const size = st.size;
+      res.setHeader("Content-Type", "text/html; charset=utf-8");
+      res.setHeader("Content-Length", size);
+      res.setHeader("Cache-Control", "no-store");
+      if (method === "HEAD") {
+        res.writeHead(200);
+        res.end();
+        finalize(200, 0);
+        return;
+      }
+      const stream = fs.createReadStream(versionsFile);
+      res.writeHead(200);
+      stream.pipe(res);
+      res.once("finish", () => finalize(200, size));
+    });
+    return;
+  }
+
+  if (urlPath.startsWith("/api/live/")) {
+    if (method === "OPTIONS") {
+      res.writeHead(204, {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type",
+        Connection: "close",
+      });
+      res.end();
+      finalize(204, 0);
+      return;
+    }
+    handleLiveConcertsApi(req, res, urlPath)
+      .then((handled) => {
+        if (handled) {
+          if (!finalized) finalize(res.statusCode || 200, 0);
+          return;
+        }
+        const body = Buffer.from("Live API not found\n", "utf8");
+        res.writeHead(404, { "Content-Length": body.length, Connection: "close" });
+        res.end(body);
+        finalize(404, body.length);
+      })
+      .catch((err) => {
+        const msg = Buffer.from(
+          JSON.stringify({ ok: false, error: err instanceof Error ? err.message : String(err) }),
+          "utf8",
+        );
+        if (!res.headersSent) {
+          res.writeHead(500, {
+            "Content-Type": "application/json; charset=utf-8",
+            "Content-Length": msg.length,
+            Connection: "close",
+          });
+          res.end(msg);
+        }
+        finalize(500, msg.length);
+      });
+    return;
+  }
+
+  if (urlPath === "/live-multiview" || urlPath === "/live-multiview/") {
+    const mvFile = path.join(ROOT, "live-multiview.html");
+    fs.stat(mvFile, (err, st) => {
+      if (err || !st.isFile()) {
+        const body = Buffer.from("Not found", "utf8");
+        res.writeHead(404, { "Content-Length": body.length, Connection: "close" });
+        res.end(body);
+        finalize(404, body.length);
+        return;
+      }
+      const size = st.size;
+      res.setHeader("Content-Type", "text/html; charset=utf-8");
+      res.setHeader("Content-Length", size);
+      res.setHeader("Cache-Control", "no-store");
+      if (method === "HEAD") {
+        res.writeHead(200);
+        res.end();
+        finalize(200, 0);
+        return;
+      }
+      const stream = fs.createReadStream(mvFile);
+      res.writeHead(200);
+      stream.pipe(res);
+      res.once("finish", () => finalize(200, size));
+    });
     return;
   }
 

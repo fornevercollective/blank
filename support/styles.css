@@ -671,6 +671,33 @@ body.drawer-open .app {
   box-sizing: border-box;
 }
 
+.ffplay-tool-btn--tv {
+  flex: 0 0 auto;
+  min-width: 2.1rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+}
+
+.ffplay-tv-reframe-label {
+  flex: 0 1 6.5rem;
+  min-width: 0;
+  display: flex;
+  align-items: stretch;
+}
+
+.ffplay-tv-reframe {
+  width: 100%;
+  margin: 0;
+  padding: 0.28rem 0.2rem;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  background: var(--surface);
+  color: var(--ink-soft);
+  font-size: 0.52rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
 .ffplay-tool-btn {
   flex: 1 1 0;
   min-width: 0;
@@ -1041,6 +1068,18 @@ body.drawer-open .app {
   line-height: 1.35;
   color: var(--ink-soft);
   transition: opacity 0.25s ease;
+}
+
+.header-versions-link {
+  margin-left: 0.35rem;
+  color: var(--ink-mute);
+  text-decoration: none;
+  font-size: 0.82rem;
+}
+
+.header-versions-link:hover {
+  color: var(--ink);
+  text-decoration: underline;
 }
 
 .header-title {
@@ -2907,6 +2946,27 @@ body.drawer-open .drawer {
   letter-spacing: 0.06em;
 }
 
+.card-intel-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-left: auto;
+  padding: 0.12rem 0.45rem;
+  border-radius: 999px;
+  background: #dc2626;
+  color: #fff;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  animation: blank-live-pulse 2.4s ease-in-out infinite;
+}
+
+@keyframes blank-live-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.55); }
+  50% { box-shadow: 0 0 0 6px rgba(220, 38, 38, 0); }
+}
+
 .card-intel-headline {
   margin: 0 0 0.45rem;
   font-size: 0.8rem;
@@ -3913,6 +3973,258 @@ body.drawer-open .drawer {
   font-size: 0.68rem;
   white-space: pre-wrap;
   word-break: break-word;
+}
+
+/* —— Live concerts discovery —— */
+.live-concerts-panel {
+  margin: 0;
+  border-bottom: 1px solid var(--line);
+  background: var(--bone-wash);
+}
+
+.live-concerts-panel summary::-webkit-details-marker {
+  display: none;
+}
+
+.live-concerts-summary {
+  list-style: none;
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 0.65rem 0.75rem;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-mute);
+}
+
+.live-concerts-sub {
+  margin-left: auto;
+  font-size: 0.62rem;
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0.02em;
+  color: var(--ink-soft);
+}
+
+.live-concerts-chevron {
+  width: 0.65rem;
+  height: 0.65rem;
+  border-right: 1.5px solid var(--ink-mute);
+  border-bottom: 1.5px solid var(--ink-mute);
+  transform: rotate(-45deg);
+  transition: transform 0.18s ease;
+}
+
+.live-concerts-panel[open] .live-concerts-chevron {
+  transform: rotate(45deg);
+}
+
+.live-concerts-inner {
+  padding: 0 0.75rem 1rem;
+}
+
+.live-concerts-toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 0.65rem;
+}
+
+.live-concerts-windows {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.live-concerts-win {
+  margin: 0;
+  padding: 0.28rem 0.55rem;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  background: var(--surface);
+  font-size: 0.68rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.live-concerts-win.is-active {
+  background: #171717;
+  border-color: #171717;
+  color: #fafafa;
+}
+
+.live-concerts-search-row {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.live-concerts-search {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 0.35rem 0.5rem;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  font-size: 0.78rem;
+}
+
+.live-concerts-btn {
+  margin: 0;
+  padding: 0.32rem 0.55rem;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  background: var(--surface);
+  font-size: 0.68rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.live-concerts-btn--primary {
+  background: #7c3aed;
+  border-color: #6d28d9;
+  color: #fff;
+}
+
+.live-concerts-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.live-concerts-status {
+  margin: 0;
+  font-size: 0.68rem;
+  color: var(--ink-soft);
+}
+
+.live-concerts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  max-height: min(52vh, 28rem);
+  overflow: auto;
+}
+
+.live-concerts-event {
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--surface);
+  padding: 0.5rem 0.55rem;
+}
+
+.live-concerts-event-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+  margin-bottom: 0.4rem;
+}
+
+.live-concerts-event-title {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 700;
+  flex: 1 1 12rem;
+}
+
+.live-concerts-badge {
+  font-size: 0.6rem;
+  font-weight: 700;
+  padding: 0.1rem 0.35rem;
+  border-radius: 3px;
+  background: var(--bone-wash);
+  color: var(--ink-soft);
+}
+
+.live-concerts-mv-btn {
+  font-size: 0.62rem;
+  font-weight: 700;
+  padding: 0.15rem 0.4rem;
+  border: 1px solid #6d28d9;
+  border-radius: 3px;
+  background: #ede9fe;
+  color: #4c1d95;
+  cursor: pointer;
+}
+
+.live-concerts-feeds {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.live-concerts-feed {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.live-concerts-feed-label {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-width: 0;
+  cursor: pointer;
+  font-size: 0.72rem;
+}
+
+.live-concerts-feed-label img,
+.live-concerts-thumb-ph {
+  flex: 0 0 auto;
+  width: 64px;
+  height: 36px;
+  border-radius: 2px;
+  background: #1a1a1a;
+  object-fit: cover;
+}
+
+.live-concerts-feed-meta {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.live-concerts-feed-title {
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.live-concerts-feed-sub {
+  font-size: 0.62rem;
+  color: var(--ink-soft);
+}
+
+.live-concerts-live {
+  color: #dc2626;
+  font-weight: 800;
+  font-size: 0.58rem;
+  letter-spacing: 0.06em;
+}
+
+.live-concerts-feed-queue {
+  flex: 0 0 auto;
+  font-size: 0.62rem;
+  padding: 0.2rem 0.4rem;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  background: var(--bone-wash);
+  cursor: pointer;
+}
+
+.live-concerts-empty {
+  margin: 0;
+  padding: 1rem;
+  text-align: center;
+  font-size: 0.78rem;
+  color: var(--ink-soft);
 }
 
 /* —— Video ingest (video-ingest-hub pattern) —— */

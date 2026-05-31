@@ -6,6 +6,9 @@ import https from "node:https";
 import http from "node:http";
 
 const INTEL_TTL_MS = 30 * 60 * 1000;
+const LIVE_INTEL_TTL_MS = 25 * 1000;
+const LIVE_WINDOW_SEC = 20 * 60;
+const LIVE_STEP_SEC = 90;
 
 const FFMPEG_CONCURRENCY = Math.max(
   1,
@@ -463,16 +466,20 @@ async function loadSceneRgb(pageUrl, tSec, opts = {}) {
   }
 }
 
-/** @param {string} pageUrl @param {number} tSec @param {{ isAborted?: () => boolean }} [opts] */
+/** @param {string} pageUrl @param {number} tSec @param {{ isAborted?: () => boolean, live?: boolean }} [opts] */
 async function captureSceneThumb(pageUrl, tSec, opts = {}) {
   if (opts.isAborted?.()) throw new Error("client aborted");
-  return runFfmpegQueued(() => captureSceneThumbFfmpeg(pageUrl, tSec, opts));
+  const live = opts.live ?? intelIsLive(pageUrl);
+  return runFfmpegQueued(() => captureSceneThumbFfmpeg(pageUrl, tSec, { ...opts, live }));
 }
 
-/** @param {string} pageUrl @param {number} tSec @param {{ isAborted?: () => boolean }} [opts] */
+/** @param {string} pageUrl @param {number} tSec @param {{ isAborted?: () => boolean, live?: boolean }} [opts] */
 async function captureSceneThumbFfmpeg(pageUrl, tSec, opts = {}) {
   const streamUrl = await resolveStreamForThumb(pageUrl);
   if (opts.isAborted?.()) throw new Error("client aborted");
+  const back = opts.live ? liveBackFromT(pageUrl, tSec) : 0;
+  const seekFront = opts.live ? [] : ["-ss", String(Math.max(0, tSec))];
+  const seekEof = opts.live ? ["-sseof", `-${back}`] : [];
   return new Promise((resolve, reject) => {
     const child = spawn(
       "ffmpeg",
@@ -480,8 +487,8 @@ async function captureSceneThumbFfmpeg(pageUrl, tSec, opts = {}) {
         "-hide_banner",
         "-loglevel",
         "error",
-        "-ss",
-        String(Math.max(0, tSec)),
+        ...seekFront,
+        ...seekEof,
         "-i",
         streamUrl,
         "-vframes",
@@ -547,6 +554,25 @@ function heroThumbFromIntelCache(pageUrl) {
     if (key.startsWith(`${pageUrl}\0`) && row.data?.thumb) return row.data.thumb;
   }
   return null;
+}
+
+function intelIsLive(pageUrl) {
+  for (const [key, row] of intelCache.entries()) {
+    if (key.startsWith(`${pageUrl}\0`) && row.data?.isLive) return true;
+  }
+  return false;
+}
+
+/** Convert a scene start (elapsed seconds since broadcast start) to a "seconds back from current live edge" offset. */
+function liveBackFromT(pageUrl, tSec) {
+  for (const [key, row] of intelCache.entries()) {
+    if (key.startsWith(`${pageUrl}\0`) && row.data?.isLive && row.data?.liveStartedAt) {
+      const elapsedNow = (Date.now() - row.data.liveStartedAt) / 1000;
+      const back = Math.max(1, Math.round(elapsedNow - tSec));
+      return back;
+    }
+  }
+  return 1;
 }
 
 function runYtDlp(args, timeoutMs = 90_000) {
@@ -689,6 +715,11 @@ function sceneAudioApiUrl(pageUrl, startSec, durSec) {
 async function captureSceneAudio(pageUrl, tSec, durSec) {
   const streamUrl = await resolveStreamForThumb(pageUrl);
   const dur = Math.max(3, Math.min(45, durSec));
+  const live = intelIsLive(pageUrl);
+  const back = live ? liveBackFromT(pageUrl, tSec) : 0;
+  const seekArgs = live
+    ? ["-sseof", `-${Math.max(back, dur + 1)}`]
+    : ["-ss", String(Math.max(0, tSec))];
   return new Promise((resolve, reject) => {
     const child = spawn(
       "ffmpeg",
@@ -696,8 +727,7 @@ async function captureSceneAudio(pageUrl, tSec, durSec) {
         "-hide_banner",
         "-loglevel",
         "error",
-        "-ss",
-        String(Math.max(0, tSec)),
+        ...seekArgs,
         "-i",
         streamUrl,
         "-t",
@@ -752,6 +782,8 @@ function pickThumbUrl(data) {
   return null;
 }
 
+const NON_VTT_CAPTION_LANGS = new Set(["live_chat", "rechat"]);
+
 function pickSubtitleTrack(data, captionPref = "en-auto") {
   if (captionPref === "none") return null;
   const manual = data.subtitles || {};
@@ -760,9 +792,12 @@ function pickSubtitleTrack(data, captionPref = "en-auto") {
     captionPref === "en"
       ? ["en", "en-US", "en-orig"]
       : captionPref === "all"
-        ? [...Object.keys(manual), ...Object.keys(auto)]
+        ? [...Object.keys(manual), ...Object.keys(auto)].filter(
+            (l) => !NON_VTT_CAPTION_LANGS.has(l),
+          )
         : ["en", "en-US", "en-orig"];
   for (const lang of langOrder) {
+    if (NON_VTT_CAPTION_LANGS.has(lang)) continue;
     const tracks = manual[lang] || auto[lang];
     if (Array.isArray(tracks) && tracks.length) {
       const vtt = tracks.find((t) => /vtt/i.test(t.ext || t.name || ""));
@@ -770,7 +805,9 @@ function pickSubtitleTrack(data, captionPref = "en-auto") {
       if (pick?.url) return { lang, label: pick.name || lang, url: pick.url, ext: pick.ext || "vtt", auto: !manual[lang] };
     }
   }
-  const langs = [...Object.keys(manual), ...Object.keys(auto)];
+  const langs = [...Object.keys(manual), ...Object.keys(auto)].filter(
+    (l) => !NON_VTT_CAPTION_LANGS.has(l),
+  );
   for (const lang of langs) {
     const tracks = manual[lang] || auto[lang];
     if (Array.isArray(tracks) && tracks[0]?.url) {
@@ -790,18 +827,59 @@ function pickSubtitleTrack(data, captionPref = "en-auto") {
 export async function fetchVideoIntel(pageUrl, captionPref = "en-auto") {
   const cacheKey = `${pageUrl}\0${captionPref}`;
   const cached = intelCache.get(cacheKey);
-  if (cached && Date.now() - cached.created < INTEL_TTL_MS) return cached.data;
+  if (cached) {
+    const ttl = cached.data?.isLive ? LIVE_INTEL_TTL_MS : INTEL_TTL_MS;
+    if (Date.now() - cached.created < ttl) return cached.data;
+  }
 
   const raw = await runYtDlpForPage(pageUrl, ["-J", "--no-warnings", "--no-playlist"]);
   const data = JSON.parse(raw);
   const tiktok = /tiktok\.com/i.test(pageUrl);
   const posterThumb = pickThumbUrl(data);
-  const sceneThumbFor = (startSec) =>
-    tiktok && posterThumb ? posterThumb : sceneThumbApiUrl(pageUrl, startSec);
+  const isLive =
+    data.is_live === true ||
+    data.live_status === "is_live" ||
+    data.live_status === "post_live";
+  const livePosterThumb = isLive && data.id
+    ? `https://i.ytimg.com/vi/${data.id}/hqdefault_live.jpg?_=${Math.floor(Date.now() / 30_000)}`
+    : null;
+  const sceneThumbFor = (startSec) => {
+    if (isLive) return livePosterThumb || posterThumb || sceneThumbApiUrl(pageUrl, startSec);
+    return tiktok && posterThumb ? posterThumb : sceneThumbApiUrl(pageUrl, startSec);
+  };
 
   /** @type {{ start: number, end: number, title: string, thumb: string|null }[]} */
   const scenes = [];
-  if (Array.isArray(data.chapters) && data.chapters.length) {
+  if (isLive) {
+    const nowMs = Date.now();
+    const startedMs = data.release_timestamp
+      ? Number(data.release_timestamp) * 1000
+      : nowMs - LIVE_WINDOW_SEC * 1000;
+    const elapsedSec = Math.max(0, Math.floor((nowMs - startedMs) / 1000));
+    const window = Math.min(LIVE_WINDOW_SEC, Math.max(LIVE_STEP_SEC * 4, elapsedSec));
+    const steps = Math.max(1, Math.floor(window / LIVE_STEP_SEC));
+    for (let i = 0; i < steps; i++) {
+      const back = i * LIVE_STEP_SEC;
+      const sceneEnd = Math.max(LIVE_STEP_SEC, elapsedSec - back);
+      const sceneStart = Math.max(0, sceneEnd - LIVE_STEP_SEC);
+      const elapsedLabel = formatClock(sceneEnd);
+      const label =
+        back === 0
+          ? `Live · now (${elapsedLabel})`
+          : `Live −${formatClock(back)} · ${elapsedLabel}`;
+      scenes.push({
+        start: sceneStart,
+        end: sceneEnd,
+        title: label,
+        thumb: sceneThumbFor(sceneStart),
+        live: true,
+        liveOffsetSec: -back,
+        startEpoch: Math.floor(startedMs / 1000) + sceneStart,
+        endEpoch: Math.floor(startedMs / 1000) + sceneEnd,
+        liveEdge: back === 0,
+      });
+    }
+  } else if (Array.isArray(data.chapters) && data.chapters.length) {
     for (const ch of data.chapters) {
       const start = Number(ch.start_time) || 0;
       const end = Number(ch.end_time) || start;
@@ -814,7 +892,7 @@ export async function fetchVideoIntel(pageUrl, captionPref = "en-auto") {
     }
   }
 
-  if (!scenes.length && Number.isFinite(data.duration) && data.duration > 30) {
+  if (!scenes.length && !isLive && Number.isFinite(data.duration) && data.duration > 30) {
     const maxSynthetic = 24;
     const step = Math.max(45, Math.floor(data.duration / maxSynthetic));
     for (let t = 0; t < data.duration; t += step) {
@@ -858,7 +936,18 @@ export async function fetchVideoIntel(pageUrl, captionPref = "en-auto") {
     title: String(data.title || "").trim(),
     description: String(data.description || "").trim(),
     duration: Number(data.duration) || null,
-    durationLabel: Number.isFinite(data.duration) ? formatClock(data.duration) : null,
+    durationLabel: isLive
+      ? "LIVE"
+      : Number.isFinite(data.duration)
+        ? formatClock(data.duration)
+        : null,
+    isLive,
+    liveStatus: data.live_status || (isLive ? "is_live" : null),
+    liveConcurrentViewers: Number(data.concurrent_view_count) || null,
+    liveStartedAt: data.release_timestamp
+      ? Number(data.release_timestamp) * 1000
+      : null,
+    liveFetchedAt: isLive ? Date.now() : null,
     uploader: String(data.uploader || data.channel || "").trim(),
     uploadDate: String(data.upload_date || "").trim(),
     viewCount: data.view_count ?? null,

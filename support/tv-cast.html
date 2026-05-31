@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>blank · TV cast</title>
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="stylesheet" href="tv-cast.css">
+</head>
+<body>
+  <div class="tv-cast" id="tv-cast-root">
+    <header class="tv-cast-bar">
+      <button type="button" class="tv-cast-btn tv-cast-btn--primary" id="tv-fullscreen">
+        Fullscreen · AirPlay
+      </button>
+      <label>
+        Reframe
+        <select id="tv-reframe-preset" aria-label="Social reframe preset"></select>
+      </label>
+      <label>
+        Layout
+        <select id="tv-layout" aria-label="TV layout"></select>
+      </label>
+      <label>
+        Side data
+        <select id="tv-side-mode" aria-label="Side panel content">
+          <option value="intel">Program + captions</option>
+          <option value="scene">Active scene</option>
+          <option value="metrics">Runtime metrics</option>
+          <option value="custom">Custom note</option>
+        </select>
+      </label>
+      <span class="tv-cast-live" id="tv-live-badge" hidden>LIVE</span>
+      <p class="tv-cast-hint" id="tv-airplay-hint">
+        Mac → Control Center → Screen Mirroring to Apple TV, or share this window via AirPlay Display.
+        Use <strong>Fullscreen</strong> first so the TV gets a clean 16:9 stage.
+      </p>
+    </header>
+
+    <main class="tv-cast-stage" id="tv-stage" data-layout="sidecar">
+      <div class="tv-cast-video-col">
+        <div class="tv-cast-viewport-wrap tv-show-safe" id="tv-viewport-wrap">
+          <div class="tv-cast-viewport" id="tv-viewport">
+            <div class="tv-cast-media" id="tv-media">
+              <p class="tv-cast-empty" id="tv-empty">Waiting for feed from blank…</p>
+            </div>
+          </div>
+          <div class="tv-safe-guides" aria-hidden="true"></div>
+        </div>
+      </div>
+      <aside class="tv-cast-side" id="tv-side" aria-label="Companion data">
+        <p class="tv-cast-show" id="tv-show">—</p>
+        <h1 class="tv-cast-headline" id="tv-headline">Queue a live URL in blank</h1>
+        <dl class="tv-cast-meta" id="tv-meta"></dl>
+        <div class="tv-cast-captions" id="tv-captions" role="log" aria-live="polite"></div>
+        <p class="tv-cast-scene" id="tv-scene-est" hidden></p>
+        <textarea
+          id="tv-custom-note"
+          class="tv-cast-custom"
+          hidden
+          rows="4"
+          placeholder="Custom overlay text for TV side panel…"
+          spellcheck="true"
+        ></textarea>
+      </aside>
+    </main>
+    <footer class="tv-cast-ticker" id="tv-ticker" aria-live="polite">blank TV cast · reframing for social feeds</footer>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.7/dist/hls.min.js" crossorigin="anonymous"></script>
+  <script src="tv-cast.js" type="module"></script>
+</body>
+</html>

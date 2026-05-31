@@ -1,0 +1,86 @@
+# StageForge — blank iterative workspace
+# Launch: ./Launch-StageForge.command  OR  stageforge up -c stageforge.yaml
+# Manual browser: BLANK_OPEN_BROWSER=1 ./start.sh
+
+version: 1
+project: blank
+loop:
+  enabled: true
+  mode: health          # health = no re-boot spam; deploy = full re-run each tick
+  watch:
+    - support/**
+    - stageforge.yaml
+  interval: 30s
+  on_fail: retry
+  max_retry: 3
+services:
+  - name: blank
+    command: node support/server.mjs
+    cwd: .
+    port: 5173
+    health: /api/runtime
+    conflict: bump
+    skip_if_healthy: true
+    env:
+      BLANK_HOST: "127.0.0.1"
+      BLANK_NO_OPEN: "1"
+      STAGEFORGE: "1"
+integrations:
+  # Grok build 0.1 — optional; set GROK_RAILWAY_URL or edit base_url
+  - id: grok-0.1
+    label: Grok Railway v0.1
+    version: "0.1"
+    base_url: "env:GROK_RAILWAY_URL"
+    probe: /api/meta
+  # Any OpenAI-compatible local mesh (Ollama, llama.cpp, etc.)
+  - id: llm-mesh
+    label: OpenAI-compatible LLM
+    base_url: "env:OPENAI_COMPATIBLE_BASE_URL"
+    probe: /v1/models
+  # Cursor / MCP — user drops config path in env
+  - id: mcp
+    label: MCP config
+    base_url: "env:MCP_HUB_URL"
+    probe: /
+jobs:
+  - id: plan
+    kind: agent
+    label: Plan & route ticket
+    provider: env:STAGEFORGE_PROVIDER
+    stage: plan
+  - id: mcp-wire
+    kind: mcp
+    label: Wire MCP servers
+    provider: env:MCP_CONFIG
+    stage: boot
+  - id: llm-probe
+    kind: llm
+    label: Probe LLM endpoint
+    provider: env:OPENAI_COMPATIBLE_BASE_URL
+    stage: boot
+  - id: research
+    kind: research
+    label: Index RAG / research corpus
+    provider: env:RAILWAY_RAG_PATHS
+    stage: relay
+  - id: ship
+    kind: agent
+    label: Stage for deploy / HITL
+    provider: stageforge
+    stage: ready
+stages:
+  - id: plan
+    label: Plan
+  - id: ports
+    label: Resolve ports
+    actions:
+      - blank
+  - id: boot
+    label: Boot blank server
+    actions:
+      - blank
+  - id: jobs
+    label: Stage AI/MCP/LLM jobs
+  - id: ready
+    label: Ready — /versions/ /staging/
+    actions: []

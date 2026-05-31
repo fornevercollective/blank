@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>blank · Live multi-angle</title>
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="stylesheet" href="live-multiview.css">
+</head>
+<body>
+  <header class="mv-bar">
+    <h1 class="mv-title" id="mv-event-title">Live multi-angle</h1>
+    <label class="mv-sync-label">
+      <input type="checkbox" id="mv-sync" checked />
+      Sync playheads (sports-style)
+    </label>
+    <label class="mv-master-label">
+      Master
+      <select id="mv-master" aria-label="Master angle for sync"></select>
+    </label>
+    <button type="button" class="mv-btn" id="mv-fullscreen">Fullscreen · TV</button>
+    <button type="button" class="mv-btn" id="mv-close">Close</button>
+  </header>
+  <p class="mv-hint" id="mv-hint">Calibrate angle offsets (ms) when feeds are out of sync — like broadcast camera chains.</p>
+  <div class="mv-grid" id="mv-grid" role="list"></div>
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.7/dist/hls.min.js" crossorigin="anonymous"></script>
+  <script src="live-multiview.js" type="module"></script>
+</body>
+</html>

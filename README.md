@@ -38,7 +38,7 @@ Waveforms, scrubbing, IK pose estimates, and camera-axis telemetry on scene card
 
 ## Run locally
 
-Double-click **`Launch Blank.app`** or **`Launch.command`** in this folder to open Terminal, start the server, and open your browser.
+Double-click **`Launch Blank.app`** or **`Launch.command`** in this folder to open Terminal, start the server, and open your browser. For the **cursor-habitat** agent (same Terminal pattern), double-click **`Launch-Habitat.command`**.
 
 - Keep **`Launch Blank.app`** here (next to **`start.sh`**). It uses your **favicon** as the Finder/Dock icon after you run **`./support/macos/refresh-launcher-icon.sh`** (see **[support/README.md](support/README.md)**).
 - Server, HTML, and package manifest are in **`support/`**. See **[support/README.md](support/README.md)** for `npm`, **per-request logging**, **network/tuning env vars**, rebuilding the app, and **video ingest** (queue, embeds, yt-dlp/mustream commands — same pattern as `mueee-kbatch/video-ingest-hub`).
@@ -47,7 +47,13 @@ Double-click **`Launch Blank.app`** or **`Launch.command`** in this folder to op
 
 **Stop the server:** **Ctrl+C** in the Terminal window that opened.
 
-**First launch (macOS):** If the app is blocked, **right-click → Open** once, or allow it under **System Settings → Privacy & Security**.
+### blank-??? · Cursor SDK _(optional)_
+
+**`support/cursor-habitat/`** is a small **`@cursor/sdk`** script: Blank’s “habitat / recipes” persona for terminal agents (`mustream`, `yt-dlp`, ffmpeg)—see **[support/cursor-habitat/README.md](support/cursor-habitat/README.md)**.
+
+Finder: **`Launch-Habitat.command`** _(repo root)_ opens Terminal.app and starts habitat (same ergonomics as **`Launch.command`** for the static server).
+
+**Launch Blank.app / server first launch:** if macOS blocks the app, **right-click → Open** once, or allow it under **System Settings → Privacy & Security**.
 
 ## GitHub Pages
 

@@ -21,7 +21,7 @@ export const ACTIVE_KEY = "blank.videoIngest.active.v1";
 export const YTDLP_FORMAT = "bv*+ba/b";
 
 /** @typedef {{ id: string, url: string, title?: string, notesHtml?: string, addedAt?: number, playId?: string, streamKind?: string, streamUrl?: string, resolveError?: string }} QueueItem */
-/** @typedef {"youtube"|"vimeo"|"hls"|"direct"|"tiktok"|"page"|"unknown"} VideoKind */
+/** @typedef {"youtube"|"vimeo"|"twitch"|"hls"|"direct"|"tiktok"|"page"|"unknown"} VideoKind */
 /** @typedef {{mustreamDesktop: string, mueeeRoot: string}} Paths */
 
 export function readJson(key, fallback) {
@@ -148,7 +148,12 @@ function canonicalizeWatchUrl(url) {
     }
     const clean = new URL(url);
     for (const key of [...clean.searchParams.keys()]) {
-      if (TRACKING_PARAMS.has(key.toLowerCase()) || key.toLowerCase().startsWith("utm_")) {
+      const low = key.toLowerCase();
+      if (
+        TRACKING_PARAMS.has(low) ||
+        low.startsWith("utm_") ||
+        (/twitch\.tv$/i.test(host) && low.startsWith("tt_"))
+      ) {
         clean.searchParams.delete(key);
       }
     }
@@ -202,9 +207,10 @@ export function displayTitleForUrl(url, kind) {
       return id ? `YT · ${id}` : "YouTube";
     }
     if (/twitch\.tv/i.test(host)) {
-      const ch = u.pathname.split("/").filter(Boolean)[0];
-      if (ch && u.pathname.includes("/live")) return `@${ch} · live`;
-      return ch ? `@${ch}` : "Twitch";
+      const info = twitchEmbedInfo(url);
+      if (info?.type === "channel") return `@${info.id}`;
+      if (info?.type === "video") return `Twitch VOD · ${info.id}`;
+      return "Twitch";
     }
     return host;
   } catch {
@@ -218,6 +224,12 @@ function ingestNotesHtml(kind) {
     return (
       "<p><strong>TikTok</strong> (live/VOD): paste queues and <strong>auto-resolves</strong> into the header preview via local <strong>yt-dlp</strong>.</p>" +
       "<p>MKV archive runs in the background to <code>~/Downloads</code>. Use <strong>controls</strong> for <code>mustream</code> if preview fails.</p>"
+    );
+  }
+  if (kind === "twitch") {
+    return (
+      "<p><strong>Twitch</strong> — inline <code>player.twitch.tv</code> embed (no HLS proxy). " +
+      "Use <strong>resolve</strong> for yt-dlp / ffplay / mustream stream commands.</p>"
     );
   }
   if (kind === "page") {
@@ -255,8 +267,47 @@ export function classifyUrl(normalized) {
   if (/youtube\.com|youtu\.be/i.test(u)) return "youtube";
   if (/vimeo\.com/.test(u)) return "vimeo";
   if (/tiktok\.com|vm\.tiktok\.com/i.test(u)) return "tiktok";
+  if (/twitch\.tv/i.test(u)) return "twitch";
   if (/twitter\.com|x\.com/i.test(u)) return "twitter";
   return "page";
+}
+
+/**
+ * @param {string} raw
+ * @returns {{ type: "channel"|"video"|"clip", id: string } | null}
+ */
+export function twitchEmbedInfo(raw) {
+  try {
+    const u = new URL(normalizeUrl(raw));
+    const host = u.hostname.replace(/^www\./, "").toLowerCase();
+    if (!host.endsWith("twitch.tv")) return null;
+    const parts = u.pathname.split("/").filter(Boolean);
+    if (parts[0] === "videos" && parts[1]) return { type: "video", id: parts[1] };
+    if (parts[0] === "clip" && parts[1]) return { type: "clip", id: parts[1] };
+    const skip = new Set(["directory", "settings", "subscriptions", "inventory", "wallet"]);
+    if (parts[0] && !skip.has(parts[0].toLowerCase())) {
+      return { type: "channel", id: parts[0] };
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+/** Twitch embed requires parent= to match the page hostname. */
+function twitchParentQuery() {
+  /** @type {string[]} */
+  const hosts = [];
+  try {
+    const h = globalThis.location?.hostname;
+    if (h) hosts.push(h);
+  } catch {
+    /* noop */
+  }
+  for (const h of ["localhost", "127.0.0.1"]) {
+    if (!hosts.includes(h)) hosts.push(h);
+  }
+  return hosts.map((h) => `parent=${encodeURIComponent(h)}`).join("&");
 }
 
 export function isIngestUrl(text) {
@@ -354,7 +405,7 @@ function syncPreviewViewBar() {
 }
 
 /** @param {HTMLElement | null} host */
-function getPreviewTimeSec(host) {
+export function getPreviewTimeSec(host) {
   if (!(host instanceof HTMLElement)) return 0;
   const video = host.querySelector("video");
   if (video instanceof HTMLVideoElement && Number.isFinite(video.currentTime)) {
@@ -749,6 +800,33 @@ export function renderEmbed(kind, normalized, hintHost = null) {
     frame.setAttribute(
       "allow",
       "autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media",
+    );
+    return wrapEmbed(frame);
+  }
+  if (kind === "twitch") {
+    const info = twitchEmbedInfo(normalized);
+    if (!info) return null;
+    const parent = twitchParentQuery();
+    const frame = document.createElement("iframe");
+    frame.loading = "lazy";
+    frame.referrerPolicy = "strict-origin-when-cross-origin";
+    frame.allowFullscreen = true;
+    let src = "";
+    if (info.type === "channel") {
+      frame.title = `Twitch @${info.id}`;
+      src = `https://player.twitch.tv/?channel=${encodeURIComponent(info.id)}&${parent}&muted=true`;
+    } else if (info.type === "video") {
+      frame.title = `Twitch video ${info.id}`;
+      src = `https://player.twitch.tv/?video=${encodeURIComponent(info.id)}&${parent}&muted=true`;
+    } else if (info.type === "clip") {
+      frame.title = `Twitch clip ${info.id}`;
+      src = `https://clips.twitch.tv/embed?clip=${encodeURIComponent(info.id)}&${parent}&muted=true`;
+    }
+    if (!src) return null;
+    frame.src = src;
+    frame.setAttribute(
+      "allow",
+      "autoplay; fullscreen; picture-in-picture; encrypted-media",
     );
     return wrapEmbed(frame);
   }
@@ -1154,14 +1232,25 @@ function needsProxiedPlayback(kind) {
   return kind === "hls" || kind === "direct";
 }
 
-/** TikTok / generic pages — not YouTube/Vimeo (those use iframe embed first). */
+/** TikTok / generic pages — not YouTube/Vimeo/Twitch (those use iframe embed first). */
 export function shouldAutoResolve(kind) {
-  if (kind === "youtube" || kind === "vimeo") return false;
+  if (kind === "youtube" || kind === "vimeo" || kind === "twitch") return false;
   return needsPageResolve(kind) || needsProxiedPlayback(kind);
 }
 
 function canEmbedPreview(kind) {
-  return kind === "youtube" || kind === "vimeo" || kind === "hls" || kind === "direct";
+  return (
+    kind === "youtube" ||
+    kind === "vimeo" ||
+    kind === "twitch" ||
+    kind === "hls" ||
+    kind === "direct"
+  );
+}
+
+/** Site iframe embeds beat proxied HLS (Twitch tokens expire quickly). */
+function prefersNativeEmbed(kind) {
+  return kind === "youtube" || kind === "vimeo" || kind === "twitch";
 }
 
 function mustreamPlayCmd(url) {
@@ -1551,6 +1640,22 @@ export function mountPreview(host, item, hintHost = null) {
     applyPreviewView(null, hintHost);
     return;
   }
+  const norm = normalizeUrl(item.url);
+  const kind = classifyUrl(norm);
+  if (!prefersNativeEmbed(kind) && item.resolveError) {
+    setPreviewHint(hintHost, item.resolveError);
+    host.hidden = true;
+    resetRailPlayback();
+    return;
+  }
+  const emb = renderEmbed(kind, norm, hintHost);
+  if (emb) {
+    host.hidden = false;
+    host.appendChild(emb);
+    syncPreviewTelemetry(host);
+    applyPreviewView(item, hintHost);
+    return;
+  }
   if (item.playId) {
     host.hidden = false;
     void playSessionAlive(item.playId).then((alive) => {
@@ -1572,16 +1677,7 @@ export function mountPreview(host, item, hintHost = null) {
     resetRailPlayback();
     return;
   }
-  const norm = normalizeUrl(item.url);
-  const kind = classifyUrl(norm);
-  const emb = renderEmbed(kind, norm, hintHost);
   host.hidden = false;
-  if (emb) {
-    host.appendChild(emb);
-    syncPreviewTelemetry(host);
-    applyPreviewView(item, hintHost);
-    return;
-  }
   if (shouldAutoResolve(kind)) {
     setPreviewHint(
       hintHost,
@@ -1599,6 +1695,8 @@ export function mountPreview(host, item, hintHost = null) {
       hintHost,
       "TikTok live — paste to auto-resolve, or use mustream in controls.",
     );
+  } else if (kind === "twitch") {
+    setPreviewHint(hintHost, "Could not parse Twitch channel — check the URL.");
   } else if (needsPageResolve(kind)) {
     setPreviewHint(
       hintHost,

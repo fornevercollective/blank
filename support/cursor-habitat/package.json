@@ -1,0 +1,17 @@
+{
+  "name": "blank-cursor-habitat",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "blank-??? → Cursor SDK agent shell · habitat/recipes/MuStream haiku dispenser",
+  "engines": {
+    "node": ">=20.11"
+  },
+  "scripts": {
+    "habitat": "node src/blank-habitat.mjs",
+    "start": "node src/blank-habitat.mjs"
+  },
+  "dependencies": {
+    "@cursor/sdk": "^1.0.13"
+  }
+}
