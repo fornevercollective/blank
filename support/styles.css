@@ -1107,6 +1107,31 @@ body.drawer-open .app {
   border-top: 1px solid var(--line-subtle);
 }
 
+/* Kbatch-style phrase keyboard — lives under the main header search, not a second input in the feed */
+.header-phrase-composer {
+  width: 100%;
+  flex: 1 1 100%;
+  min-width: 0;
+  padding: 0.25rem 0 0;
+  border-top: 1px solid var(--line-subtle);
+  box-sizing: border-box;
+}
+
+.header-phrase-kb-host {
+  width: 100%;
+  min-width: 0;
+}
+
+.header-phrase-kb-host .feed-phrase-kb {
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--surface);
+}
+
+.header-phrase-kb-host .feed-phrase-kb-stage {
+  min-height: 7.5rem;
+}
+
 .header-prompt-form .header-prompt-input {
   flex: 1 1 12rem;
   min-width: 8rem;
@@ -4386,9 +4411,23 @@ body.drawer-open .drawer {
 
 .live-concerts-albums-head {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.35rem 0.5rem;
   margin-bottom: 0.4rem;
+}
+
+.live-concerts-btn--vwall {
+  border-color: #6d28d9;
+  background: #ede9fe;
+  color: #4c1d95;
+  font-weight: 700;
+}
+
+.live-concerts-btn--vwall:hover,
+.live-concerts-btn--vwall:focus-visible {
+  background: #ddd6fe;
+  border-color: #5b21b6;
 }
 
 .live-concerts-albums-hint {

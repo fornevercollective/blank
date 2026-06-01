@@ -203,12 +203,13 @@
             id="header-prompt-input"
             class="header-prompt-input"
             name="prompt"
-            placeholder="Search prompts or paste TikTok / live URL…"
+            placeholder='Search lyrics, phrases, prompts… paste URL to queue · Enter — phrase + keyboard'
             autocomplete="off"
             spellcheck="false"
             enterkeyhint="search"
           />
-          <button type="submit" class="header-prompt-send">Add</button>
+          <button type="submit" class="header-prompt-send" title="Add prompt or queue URL (Enter runs phrase search)">Add</button>
+          <button type="button" class="header-prompt-btn" id="header-vwall" title="Open query in VWall image search (album repo when local server runs)">VWall</button>
           <button type="button" class="header-prompt-btn" id="ingest-paste">Paste</button>
           <button type="button" class="header-prompt-btn" id="ingest-clear">Clear</button>
           <button type="button" class="header-prompt-btn" id="ingest-resolve">resolve</button>
@@ -232,6 +233,9 @@
             <div id="ingest-preset-strip" class="ingest-preset-strip"></div>
           </div>
         </form>
+        <div id="header-phrase-composer" class="header-phrase-composer" aria-label="Phrase keyboard search">
+          <div id="header-phrase-kb-host" class="feed-phrase-kb-host header-phrase-kb-host"></div>
+        </div>
       </div>
       <div class="header-end">
         <div class="ffplay-wrap" id="ffplay-wrap">
@@ -368,6 +372,7 @@
                 aria-label="Filter artists by alphabet and script"
               ></nav>
               <button type="button" class="live-concerts-btn" id="live-concerts-search-btn">Search</button>
+              <button type="button" class="live-concerts-btn live-concerts-btn--vwall" id="live-concerts-vwall" title="Open synced album covers in VWall GPU wall">VWall</button>
             </div>
             <div class="live-concerts-lyric-row">
               <div class="live-concerts-lyric-wrap">
@@ -389,6 +394,7 @@
             <div class="live-concerts-albums" id="live-concerts-albums" hidden>
               <div class="live-concerts-albums-head">
                 <p class="live-concerts-albums-hint" id="live-concerts-albums-hint">Album art · year order</p>
+                <button type="button" class="live-concerts-btn live-concerts-btn--vwall" id="live-concerts-albums-vwall" title="Browse this artist's covers on the VWall">VWall covers</button>
                 <progress
                   class="live-concerts-albums-progress"
                   id="live-concerts-albums-progress"

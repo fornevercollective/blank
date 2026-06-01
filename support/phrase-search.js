@@ -298,10 +298,16 @@ function renderCrossLayoutPanel(crossEl, cross, query, index) {
   }
 }
 
-/** @param {HTMLElement} feedEl @param {{ getQueue: () => object[], getThread: () => object[], getPageUrl: () => string | null }} hooks */
-export function initPhraseSearch(feedEl, hooks) {
+/** @param {HTMLElement} feedEl @param {{ getQueue: () => object[], getThread: () => object[], getPageUrl: () => string | null }} hooks @param {{ input?: HTMLInputElement | null, kbHost?: HTMLElement | null }} [composer] */
+export function initPhraseSearch(feedEl, hooks, composer = {}) {
   if (!feedEl || feedEl.dataset.phraseSearch) return;
   feedEl.dataset.phraseSearch = "1";
+
+  const externalInput =
+    composer.input instanceof HTMLInputElement ? composer.input : null;
+  const externalKbHost =
+    composer.kbHost instanceof HTMLElement ? composer.kbHost : null;
+  const unifiedComposer = !!(externalInput && externalKbHost);
 
   let cachedIntel = null;
   let cachedUrl = "";
@@ -313,9 +319,39 @@ export function initPhraseSearch(feedEl, hooks) {
   const section = document.createElement("details");
   section.id = "feed-phrase-search";
   section.className = "feed-phrase-search";
-  section.setAttribute("open", "");
+  section.setAttribute("open", unifiedComposer ? "" : "open");
   section.setAttribute("aria-label", "Phrase search across transcript, scenes, and queue");
-  section.innerHTML = `
+  section.innerHTML = unifiedComposer
+    ? `
+    <summary class="feed-phrase-search-summary">
+      <span class="feed-phrase-search-chevron" aria-hidden="true"></span>
+      <span class="feed-phrase-label">Phrase results</span>
+      <span class="feed-phrase-hint">Transcript · scenes · listen · coverage</span>
+    </summary>
+    <div class="feed-phrase-search-inner feed-phrase-search-inner--unified">
+      <details class="feed-phrase-watch">
+        <summary>Listen for phrases</summary>
+        <p class="feed-phrase-watch-hint">One phrase per line — alerts when a match appears in loaded captions or new intel.</p>
+        <textarea id="feed-phrase-watch" class="feed-phrase-watch-input" rows="3" spellcheck="true"></textarea>
+      </details>
+      <div id="feed-phrase-alerts" class="feed-phrase-alerts" hidden></div>
+      <details id="feed-phrase-results" class="feed-phrase-results" hidden>
+        <summary id="feed-phrase-results-summary" class="feed-phrase-results-summary">Search results</summary>
+        <div id="feed-phrase-results-body" class="feed-phrase-results-body" role="list"></div>
+      </details>
+      <div id="feed-phrase-cross-overlaps" class="feed-phrase-cross-overlaps" hidden></div>
+      <details class="feed-phrase-coverage" id="feed-phrase-coverage">
+        <summary class="feed-phrase-coverage-summary">Coverage packs · camera / geo</summary>
+        <p class="feed-phrase-coverage-hint">Broadcast test: WH lawn &amp; grounds only — ASC lens/support/framing heuristics on scene cards. Open YouTube search or filter the phrase index.</p>
+        <div class="feed-phrase-coverage-actions" id="feed-phrase-coverage-actions"></div>
+        <label class="feed-phrase-coverage-filter-label">
+          <input type="checkbox" id="feed-phrase-coverage-wh-only" class="feed-phrase-coverage-wh-only" />
+          Restrict results to WH lawn / grounds keywords
+        </label>
+      </details>
+    </div>
+  `
+    : `
     <summary class="feed-phrase-search-summary">
       <span class="feed-phrase-search-chevron" aria-hidden="true"></span>
       <span class="feed-phrase-label">Phrase search</span>
@@ -370,7 +406,12 @@ export function initPhraseSearch(feedEl, hooks) {
   else feedEl.prepend(section);
 
   const form = section.querySelector("#feed-phrase-form");
-  const input = section.querySelector("#feed-phrase-input");
+  /** @type {HTMLInputElement | null} */
+  const input =
+    externalInput ||
+    (section.querySelector("#feed-phrase-input") instanceof HTMLInputElement
+      ? section.querySelector("#feed-phrase-input")
+      : null);
   const resultsEl = section.querySelector("#feed-phrase-results");
   const resultsBody = section.querySelector("#feed-phrase-results-body");
   const resultsSummary = section.querySelector("#feed-phrase-results-summary");
@@ -378,7 +419,7 @@ export function initPhraseSearch(feedEl, hooks) {
   const alertsEl = section.querySelector("#feed-phrase-alerts");
   const watchTa = section.querySelector("#feed-phrase-watch");
 
-  if (!(form instanceof HTMLFormElement) || !(input instanceof HTMLInputElement)) return;
+  if (!(input instanceof HTMLInputElement)) return;
   if (
     !(resultsEl instanceof HTMLDetailsElement) ||
     !(resultsBody instanceof HTMLElement) ||
@@ -386,6 +427,7 @@ export function initPhraseSearch(feedEl, hooks) {
   ) {
     return;
   }
+  if (!unifiedComposer && !(form instanceof HTMLFormElement)) return;
 
   watchTa.value = readWatchPhrases().join("\n");
 
@@ -395,7 +437,11 @@ export function initPhraseSearch(feedEl, hooks) {
       thread: hooks.getThread?.() || [],
     });
 
-  const kbHost = section.querySelector("#feed-phrase-kb-host");
+  const kbHost =
+    externalKbHost ||
+    (section.querySelector("#feed-phrase-kb-host") instanceof HTMLElement
+      ? section.querySelector("#feed-phrase-kb-host")
+      : null);
   if (kbHost instanceof HTMLElement) {
     kbViz = mountPhraseKeyboardViz(kbHost, {
       getQuery: () => input.value,
@@ -409,11 +455,19 @@ export function initPhraseSearch(feedEl, hooks) {
   function renderResults(hits, query) {
     if (!hits.length) {
       resultsEl.hidden = false;
-      resultsEl.innerHTML = `<p class="feed-phrase-empty">No matches for <strong>${escapeHtml(query)}</strong>.</p>`;
+      resultsEl.open = true;
+      resultsBody.innerHTML = `<p class="feed-phrase-empty">No matches for <strong>${escapeHtml(query)}</strong>.</p>`;
+      if (resultsSummary instanceof HTMLElement) {
+        resultsSummary.textContent = `No matches (${escapeHtml(query)})`;
+      }
       return;
     }
     resultsEl.hidden = false;
-    resultsEl.innerHTML = hits
+    resultsEl.open = true;
+    if (resultsSummary instanceof HTMLElement) {
+      resultsSummary.textContent = `${hits.length} result${hits.length === 1 ? "" : "s"}`;
+    }
+    resultsBody.innerHTML = hits
       .map((hit) => {
         const snip =
           hit.text.length > 140 ? `${hit.text.slice(0, 137)}…` : hit.text;
@@ -433,7 +487,7 @@ export function initPhraseSearch(feedEl, hooks) {
       })
       .join("");
 
-    resultsEl.querySelectorAll(".feed-phrase-hit").forEach((btn) => {
+    resultsBody.querySelectorAll(".feed-phrase-hit").forEach((btn) => {
       btn.addEventListener("click", () => {
         const sec = Number(btn.getAttribute("data-seek"));
         const sceneIdx = btn.getAttribute("data-scene");
@@ -483,6 +537,17 @@ export function initPhraseSearch(feedEl, hooks) {
     });
   }
 
+  function revealPhraseResults() {
+    section.open = true;
+    if (resultsEl instanceof HTMLDetailsElement && lastSearchHits.length) {
+      resultsEl.hidden = false;
+      resultsEl.open = true;
+    }
+    if (unifiedComposer && lastSearchHits.length) {
+      section.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+  }
+
   function runSearch() {
     const q = input.value.trim();
     kbViz?.repaint();
@@ -507,6 +572,7 @@ export function initPhraseSearch(feedEl, hooks) {
     renderResults(lastSearchHits, q);
     renderCrossLayoutPanel(crossOverlapEl, findCrossLayoutOverlaps(q, index), q, index);
     kbViz?.repaint();
+    if (lastSearchHits.length) revealPhraseResults();
   }
 
   function runWatchScan() {
@@ -555,10 +621,18 @@ export function initPhraseSearch(feedEl, hooks) {
     window.clearTimeout(debounce);
     debounce = window.setTimeout(runSearch, 220);
   });
-  form.addEventListener("submit", (e) => {
+  input.addEventListener("keydown", (e) => {
+    if (e.key !== "Enter" || e.shiftKey || e.isComposing) return;
     e.preventDefault();
+    window.clearTimeout(debounce);
     runSearch();
   });
+  if (form instanceof HTMLFormElement) {
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      runSearch();
+    });
+  }
 
   if (watchTa instanceof HTMLTextAreaElement) {
     watchTa.addEventListener("change", () => {
@@ -575,6 +649,14 @@ export function initPhraseSearch(feedEl, hooks) {
       if (!q) return null;
       const hits = searchPhraseIndex(getIndex(), q);
       return hits[0] || null;
+    },
+    runSearch,
+    setQuery(query) {
+      input.value = String(query || "");
+      runSearch();
+    },
+    getInput() {
+      return input;
     },
     updateIntel(intel, pageUrl) {
       cachedIntel = intel;
@@ -625,15 +707,30 @@ export function addWatchPhrases(phrases) {
  */
 export function focusPhraseSearch(query) {
   const section = document.getElementById("feed-phrase-search");
-  const input = document.getElementById("feed-phrase-input");
-  if (section instanceof HTMLElement) {
+  const input =
+    (globalThis.blankPhraseSearch?.getInput?.() instanceof HTMLInputElement
+      ? globalThis.blankPhraseSearch.getInput()
+      : null) ||
+    (document.getElementById("header-prompt-input") instanceof HTMLInputElement
+      ? document.getElementById("header-prompt-input")
+      : null) ||
+    (document.getElementById("feed-phrase-input") instanceof HTMLInputElement
+      ? document.getElementById("feed-phrase-input")
+      : null);
+  if (section instanceof HTMLDetailsElement) {
     section.open = true;
-    section.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  } else if (section instanceof HTMLElement) {
+    section.open = true;
   }
   if (input instanceof HTMLInputElement && query) {
     input.value = query;
-    input.dispatchEvent(new Event("input", { bubbles: true }));
     input.focus();
+    globalThis.blankPhraseSearch?.setQuery?.(query);
+  } else if (input instanceof HTMLInputElement) {
+    input.focus();
+    globalThis.blankPhraseSearch?.refresh?.();
   }
-  globalThis.blankPhraseSearch?.refresh();
+  if (section instanceof HTMLElement && query) {
+    section.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }
 }

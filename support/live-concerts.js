@@ -497,6 +497,8 @@ function initLyricBridge(panel) {
   syncBtn?.addEventListener("click", () => {
     const q = getLyric();
     if (!q) return;
+    const headerInput = document.getElementById("header-prompt-input");
+    if (headerInput instanceof HTMLInputElement) headerInput.value = q;
     focusPhraseSearch(q);
     addWatchPhrases([q]);
   });
