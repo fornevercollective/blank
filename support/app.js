@@ -68,6 +68,7 @@ import {
 } from "./feed-intel.js";
 import { initTvCast } from "./tv-cast-bridge.js";
 import { initLiveConcerts } from "./live-concerts.js";
+import { initVWallBridge } from "./vwall-bridge.js";
 import { initHeaderRuntimeStats } from "./header-runtime-stats.js";
 import {
   fetchPagesIntel,
@@ -1119,6 +1120,7 @@ function initHeaderPromptInput(ingest) {
       });
       input.value = "";
       applyFilter("");
+      globalThis.blankPhraseSearch?.refresh?.();
       return;
     }
     const existing = currentThread.find(
@@ -1136,6 +1138,7 @@ function initHeaderPromptInput(ingest) {
       bodyHtml: `<p>${escapeHtml(text)}</p>`,
       workLabel: "New prompt",
     });
+    globalThis.blankPhraseSearch?.refresh?.();
   });
 }
 
@@ -2442,6 +2445,9 @@ async function main() {
         getQueue: readQueue,
         getThread: () => currentThread,
         getPageUrl: getWatchUrlForIntel,
+      }, {
+        input: document.getElementById("header-prompt-input"),
+        kbHost: document.getElementById("header-phrase-kb-host"),
       });
     } catch (e) {
       console.error("[blank] phrase search init:", e);
@@ -2456,6 +2462,7 @@ async function main() {
     if (ingest) ingest.queueUrl(url, { autoResolve: true });
     else if (globalThis.blankQueueVideoUrl) globalThis.blankQueueVideoUrl(url);
   });
+  initVWallBridge();
   initLiveProgram();
   if (ingest) initFfplayMenu(ingest);
   tvCastBridge = initTvCast({
