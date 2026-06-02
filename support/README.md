@@ -155,3 +155,5 @@ If you change the favicon, run the script again (or only the script if the `.app
 **`Launch.command`** still uses Terminal’s default icon (macOS doesn’t bundle icons in `.command` files the same way). Use **Launch Blank.app** for the branded launcher.
 
 The project’s main readme is **../README.md** (launchers live next to it).
+
+Related: the GitHub Awesome batch analyzer at `~/dev/MuStream/tools/github-awesome-transcripts` (or MuStream tree) adds stack (lang+topics) + use-case (ai-llm-agents/self-hosted/devtools etc.) tagging + query/sort on top of yt-dlp captions from the channel — useful input for feed-intel, phrase-search, or seeding the live lab with real OSS trends by language/use-case.
