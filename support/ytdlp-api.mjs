@@ -2,6 +2,7 @@
  * Local yt-dlp resolve + HLS proxy for blank preview (TikTok live, watch pages).
  */
 import { spawn } from "node:child_process";
+import fs from "node:fs";
 import http from "node:http";
 import https from "node:https";
 import os from "node:os";
@@ -26,9 +27,19 @@ function expandHome(p) {
   return s;
 }
 
+/** Optional browser cookies for TikTok live / age-gated pages. */
+function cookiesArgs() {
+  const p = process.env.YTDLP_COOKIES || process.env.BLANK_YTDLP_COOKIES || "";
+  if (!p) return [];
+  const expanded = expandHome(p);
+  if (fs.existsSync(expanded)) return ["--cookies", expanded];
+  return [];
+}
+
 function runYtDlp(args, timeoutMs = RESOLVE_TIMEOUT_MS) {
   return new Promise((resolve, reject) => {
-    const child = spawn("yt-dlp", args, { stdio: ["ignore", "pipe", "pipe"] });
+    const full = [...cookiesArgs(), ...args];
+    const child = spawn("yt-dlp", full, { stdio: ["ignore", "pipe", "pipe"] });
     let out = "";
     let err = "";
     const timer = setTimeout(() => {
